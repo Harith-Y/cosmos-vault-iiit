@@ -1,0 +1,4 @@
+- [ ] Equal TM
+- [ ] A TM (Universal TM)
+- [ ] Halting TM
+- [ ] Completeness Theory
