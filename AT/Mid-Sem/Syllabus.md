@@ -31,7 +31,7 @@ kanban-plugin: board
 ## Post-Quiz
 
 - [ ] - [x] [[Turing Machine]] ✅ 2025-09-24
-- [ ] - [ ] Decidability and Reducability
+- [ ] - [x] [[Decidability and Reducibility]] ✅ 2025-09-24
 
 
 
