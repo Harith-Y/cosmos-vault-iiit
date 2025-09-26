@@ -8,55 +8,54 @@ tags:
 
 ## Computability Theory
 
-- [ ] - [ ] Church-Turing Thesis
-- [ ] - [ ] [[Model of Computation (TM)]]
-- [ ] - [ ] Diagonalization
-- [ ] - [ ] Recognizability and Decidability
-- [ ] - [ ] Mapping Reduction
+- [ ] - [x] Church-Turing Thesis ✅ 2025-09-25
+- [ ] - [x] [[Model of Computation (TM)]] ✅ 2025-09-25
+- [ ] - [x] Diagonalization ✅ 2025-09-25
+- [ ] - [x] Recognizability and Decidability ✅ 2025-09-25
+- [ ] - [x] Mapping Reduction ✅ 2025-09-25
 
 
 ## Divide and Conquer
 
-- [ ] - [ ] Merge Sort
-- [ ] - [ ] Integer Multiplicatoin
-- [ ] - [ ] Matrix Multiplication
+- [ ] - [x] Integer Multiplicatoin ✅ 2025-09-25
+- [ ] - [x] Matrix Multiplication ✅ 2025-09-25
 - [ ] - [ ] Polynomial Multiplication
 
 
 ## Searching and Sorting
 
-- [ ] - [ ] Binary Search
-- [ ] - [ ] Counting Sort
-- [ ] - [ ] Radix Sort
-- [ ] - [ ] Merge Sort
-- [ ] - [ ] Master's Theorem
+- [ ] - [x] Binary Search ✅ 2025-09-25
+- [ ] - [x] Counting Sort ✅ 2025-09-25
+- [ ] - [x] Radix Sort ✅ 2025-09-25
+- [ ] - [x] Merge Sort ✅ 2025-09-25
+- [ ] - [x] Master's Theorem ✅ 2025-09-25
 
 
 ## Greedy
 
-- [ ] - [ ] Knapsack
-- [ ] - [ ] Huffman Coding
-- [ ] - [ ] Djikstra's Algorithm
-- [ ] - [ ] Activity Seleciton
-- [ ] - [ ] [[Minimum Spanning Tree]] ^zp4mqn
-- [ ] - [ ] Prim's Algorithm
-- [ ] - [ ] Kruskal's Algorithm
-- [ ] - [ ] Maximum Spanning Tree
+- [ ] - [x] Knapsack ✅ 2025-09-25
+- [ ] - [x] Huffman Coding ✅ 2025-09-25
+- [ ] - [x] Activity Seleciton ✅ 2025-09-25
+- [ ] - [x] [[Minimum Spanning Tree]] ✅ 2025-09-25 ^zp4mqn
+- [ ] - [x] Prim's Algorithm ✅ 2025-09-25
+- [ ] - [x] Kruskal's Algorithm ✅ 2025-09-25
+- [ ] - [x] Maximum Spanning Tree ✅ 2025-09-25
+- [ ] - [x] Djikstra's Algorithm ✅ 2025-09-25
 - [ ] - [ ] Matroid Theorem
+- [ ] - [ ] Maximal Independent set in Tree
 
 
 ## Dynamic Programming
 
-- [ ] - [ ] Shortest Path in DAG
-- [ ] - [ ] Longest Path in DAG
-- [ ] - [ ] Longest Increasing Subsequence
-- [ ] - [ ] Edit Distance
-- [ ] - [ ] All Pair Shortest Path
+- [ ] - [x] Shortest Path in DAG ✅ 2025-09-25
+- [ ] - [x] Longest Path in DAG ✅ 2025-09-25
+- [ ] - [x] Longest Increasing Subsequence ✅ 2025-09-25
+- [ ] - [x] Edit Distance ✅ 2025-09-25
+- [ ] - [x] All Pair Shortest Path ✅ 2025-09-25
 - [ ] - [ ] Shortest Reliable Path
-- [ ] - [ ] Chain Matrix Multiplication
-- [ ] - [ ] [[Knapsack]]
-- [ ] - [ ] Fractional Knapsack
-- [ ] - [ ] Independent set in Tree
+- [ ] - [x] Chain Matrix Multiplication ✅ 2025-09-25
+- [ ] - [x] [[Knapsack]] ✅ 2025-09-25
+- [ ] - [x] Fractional Knapsack ✅ 2025-09-25
 - [ ] - [ ] Polygon Triangulation
 
 
