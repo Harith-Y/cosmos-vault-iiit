@@ -29,7 +29,7 @@ consistently. This indicates a need for improvement in defining concrete action
 plans and measurable objectives to enhance the effectiveness of future
 discussions.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Group Formation for Project Three
      * **Action Plan** | Students to start thinking about group partners for project
        three to avoid blame issues later.

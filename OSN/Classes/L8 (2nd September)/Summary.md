@@ -22,7 +22,7 @@ adhered to its scheduled duration, there were concerns regarding the timing of
 events. Overall, the sentiment remained neutral to positive, focusing on
 technical discussions without significant emotional undertones.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Data Transmission and Acknowledgement
      * **Fact** | The sequence number is always between the sender and receiver,
        independent of client-server roles.

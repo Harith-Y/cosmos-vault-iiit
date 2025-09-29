@@ -21,7 +21,7 @@ concepts, although some areas lacked specific actionable goals. Overall, while
 the meeting fostered engagement and understanding of complex topics, it fell
 short in outlining a concrete action plan.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Recap of Probability Concepts
      * **Key Learnings** | The speaker recapped essential probability concepts
        including sample space, random variables, and probability mass functions.

@@ -21,7 +21,7 @@ completeness scores for the action plan. Overall, while the clarity of goals was
 generally high, the lack of SMART goals and explicit commitments from
 participants indicates areas for improvement in future sessions.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Discussion on Random Variables
      * **Key Learnings** | The discussion covered the definition and significance of
        joint probability and conditional probabilities in random variables.

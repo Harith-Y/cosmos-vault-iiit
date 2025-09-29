@@ -23,7 +23,7 @@ lacked specific, actionable goals, leading to mixed clarity assessments.
 Overall, while engagement and understanding were strong, the absence of a
 defined action plan and measurable goals hindered the meeting's effectiveness.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Final Exam Logistics and Structure
      * **Key Learnings** | The final exam will be a 90-minute exam with a mix of
        easy, medium, and hard questions, including optional bonus questions.

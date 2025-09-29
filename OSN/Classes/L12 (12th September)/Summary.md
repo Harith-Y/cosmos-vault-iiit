@@ -31,7 +31,7 @@ instances of active engagement and others reflecting frustration over student
 participation. Overall, the session highlighted the need for clearer action
 plans and more defined goals to enhance effectiveness and accountability.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Course Policy and Deadlines
      * **Key Learnings** | Students must understand the difference between soft and
        hard deadlines, and the consequences of missing them.

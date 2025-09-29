@@ -25,7 +25,7 @@ indicating a need for improvement in defining actionable objectives. Overall,
 the meeting highlighted strengths in engagement and understanding but fell short
 in creating a structured action plan and clear goals.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Conditioning with Random Variables
      * **Key Learnings** | The discussion covered the concept of conditioning with
        random variables and the importance of sigma algebra in probability

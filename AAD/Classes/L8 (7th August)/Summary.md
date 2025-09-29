@@ -22,7 +22,7 @@ while others remained passive. Overall, the meeting highlighted a need for
 clearer objectives and actionable steps to enhance engagement and commitment
 among participants.
 
-Topics & Highlights
+**Topics & Highlights**
  1. Countability of Languages
     * **Key Learnings** | The discussion covered the concept of countability in
       languages and their representation as binary strings, emphasizing the

@@ -39,7 +39,7 @@ discussion provided clear insights into theoretical concepts, the absence of
 concrete tasks or follow-up actions indicates a need for improvement in
 translating discussions into actionable plans.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Cumulative Distribution Function (CDF)
      * **Key Learnings** | The speaker emphasized the definition and importance of
        the CDF in probability theory, asking students to articulate its meaning.

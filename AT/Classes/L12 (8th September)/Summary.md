@@ -31,7 +31,7 @@ overall constructive dialogue. This suggests that while the discussion was
 intellectually stimulating, it may benefit from clearer actionable outcomes in
 future sessions.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Introduction to Recursive Languages
      * **Fact** | Co-recursively enumerable languages are the reverse of recursively
        enumerable languages, allowing construction of a co-recognizer.

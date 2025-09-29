@@ -37,7 +37,7 @@ although some discussions fell short of establishing specific, measurable goals.
 Overall, the session highlighted both strengths in engagement and clarity,
 alongside opportunities for improvement in action planning.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Tutorial Scheduling Discussion (00:00)
      * **Action Plan** | Student to finalize the tutorial schedule by tomorrow,
        considering options for Friday or Saturday. (00:00)

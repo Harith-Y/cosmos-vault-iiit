@@ -32,7 +32,7 @@ positive, focusing on technical aspects and educational content without strong
 emotional undertones. The meeting adhered to the scheduled duration, indicating
 effective time management.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Quiz One Marks and Assessment
      * **Fact** | Quiz one marks will be published on the model this Friday, with
        paper showing scheduled.

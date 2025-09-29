@@ -6,7 +6,7 @@ multiplication to minimize costs, the impact of different parenthesization metho
 
 The meeting revealed significant shortcomings in the completeness of the action plan, as no specific tasks or deadlines were established, indicating a lack of thoroughness in planning. While the commitment level remained neutral, engagement with feedback was moderate, suggesting some interaction but not a strong drive for collaboration. Goal clarity varied, with some discussions providing clear insights into optimization strategies, while others failed to articulate specific, actionable goals, leading to mixed perceptions of clarity. Overall, the meeting highlighted a need for improved action planning and clearer goal-setting to enhance effectiveness.
 
-Topics & Highlights
+**Topics & Highlights**
  1. Dynamic Programming Concepts
     * **Key Learnings** | Chain matrix multiplication requires determining the
       optimal order of multiplication to minimize costs.

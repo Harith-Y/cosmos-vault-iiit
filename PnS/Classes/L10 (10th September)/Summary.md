@@ -27,7 +27,7 @@ resulting in lower clarity scores. Overall, the meeting highlighted strengths in
 participant engagement and understanding of certain concepts, but also revealed
 areas needing improvement in action planning and goal articulation.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Performance in Science Course
      * **Constructive Feedback** | The instructor emphasized the need for students
        to work harder in the course due to the increasing difficulty of the

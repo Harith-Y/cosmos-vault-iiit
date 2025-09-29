@@ -47,8 +47,7 @@ to its scheduled duration, maintaining timeliness. Sentiment analysis revealed a
 neutral tone, highlighting both concerns regarding complexity and positive
 engagement.
 
-Topics & Highlights
-
+**Topics & Highlights**
  1. Empirical vs Theoretical Validation
     * **Fact** | The 2018 Nobel Prize was awarded for the experimental validation of
       gravitational waves, demonstrating empirical research's significance.
@@ -99,7 +98,7 @@ clear insights into virtualization concepts, yet many lacked articulated,
 actionable goals, leading to an overall impression of insufficient clarity and
 direction.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  TCP and UDP Protocols
      * **Key Learnings** | The discussion covered TCP's three-way handshake and
        UDP's connectionless nature, emphasizing their operational differences.

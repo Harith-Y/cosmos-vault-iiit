@@ -32,7 +32,7 @@ effective time management. Overall, the sentiment reflected a neutral to
 positive atmosphere, focusing on problem-solving and technical explanations,
 fostering a collaborative environment among participants.
 
-Topics & Highlights
+**Topics & Highlights**
  1. Dynamic Programming Concepts
     * **Fact** | Dynamic programming can be used to find the longest path in
       directed acyclic graphs.

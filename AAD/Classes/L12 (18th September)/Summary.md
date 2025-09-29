@@ -23,7 +23,7 @@ problem-solving while others lacked measurable and actionable goals. Overall,
 the meeting highlighted areas for improvement in planning, commitment, and
 clarity of objectives.
 
-Topics & Highlights
+**Topics & Highlights**
  1. Shortest Reliable Path Discussion
     * **Key Learnings** | The discussion included insights on the relationship
       between parts and reliability in graph theory, emphasizing the importance

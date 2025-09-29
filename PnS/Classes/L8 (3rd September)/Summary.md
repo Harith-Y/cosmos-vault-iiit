@@ -26,7 +26,7 @@ While the discussion provided valuable insights into various statistical
 concepts, it fell short in outlining concrete steps for implementation,
 resulting in a mixed outcome regarding the overall effectiveness of the meeting.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Continuous and Discrete Random Variables
      * **Key Learnings** | Mixed random variables can exhibit both discrete and
        continuous characteristics, as illustrated by a coin toss example.

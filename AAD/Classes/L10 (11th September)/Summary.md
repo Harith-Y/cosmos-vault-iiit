@@ -29,7 +29,7 @@ discussions lacked specific measurable outcomes. Overall, the meeting
 highlighted strengths in goal clarity and feedback engagement but fell short in
 action plan development and consistent commitment levels.
 
-Topics & Highlights
+**Topics & Highlights**
  1.  Dynamic Programming Concepts
      * **Key Learnings** | The discussion covered dynamic programming techniques and
        how to identify sub-problems in various algorithms.
