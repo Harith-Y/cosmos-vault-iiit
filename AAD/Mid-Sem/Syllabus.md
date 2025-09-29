@@ -49,7 +49,7 @@ tags:
 
 - [ ] - [x] Shortest Path in DAG ✅ 2025-09-25
 - [ ] - [x] Longest Path in DAG ✅ 2025-09-25
-- [ ] - [x] Longest Increasing Subsequence ✅ 2025-09-25
+- [ ] - [x] [Longest Increasing Subsequence](https://www.youtube.com/watch?v=CE2b_-XfVDk) ✅ 2025-09-29
 - [ ] - [x] Edit Distance ✅ 2025-09-25
 - [ ] - [x] All Pair Shortest Path ✅ 2025-09-25
 - [ ] - [ ] Shortest Reliable Path

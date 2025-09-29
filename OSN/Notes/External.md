@@ -1,0 +1,2 @@
+[Computer Networks](https://youtube.com/playlist?list=PLxCzCOWd7aiGFBD2-2joCpWOLUrDLvVV_&si=96m4Q11CM_8xb1Jc) #cn
+[Operating Systems](https://youtube.com/playlist?list=PLxCzCOWd7aiGz9donHRrE9I3Mwn6XdP8p&si=GWvJca0fppDoXUjG) #os
