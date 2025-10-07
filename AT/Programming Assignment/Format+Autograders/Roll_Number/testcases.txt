@@ -1,0 +1,3 @@
+if else if else
+a 2 sushi 6 123
+2hello
