@@ -9,7 +9,7 @@ tags:
 ## Computability Theory
 
 - [ ] - [x] Church-Turing Thesis ✅ 2025-09-25
-- [ ] - [x] [[Model of Computation (TM)]] ✅ 2025-09-25
+- [ ] - [x] [[Model_of_Computation_(TM)]] ✅ 2025-09-25
 - [ ] - [x] Diagonalization ✅ 2025-09-25
 - [ ] - [x] Recognizability and Decidability ✅ 2025-09-25
 - [ ] - [x] Mapping Reduction ✅ 2025-09-25
@@ -36,7 +36,7 @@ tags:
 - [ ] - [x] Knapsack ✅ 2025-09-25
 - [ ] - [x] Huffman Coding ✅ 2025-09-25
 - [ ] - [x] Activity Seleciton ✅ 2025-09-25
-- [ ] - [x] [[Minimum Spanning Tree]] ✅ 2025-09-25 ^zp4mqn
+- [ ] - [x] [[Minimum_Spanning_Tree]] ✅ 2025-09-25 ^zp4mqn
 - [ ] - [x] Prim's Algorithm ✅ 2025-09-25
 - [ ] - [x] Kruskal's Algorithm ✅ 2025-09-25
 - [ ] - [x] Maximum Spanning Tree ✅ 2025-09-25
