@@ -14,7 +14,7 @@ interactions.
 **Next steps**
  * Speaker 05 to enforce no laptops, no phones, and only one person speaking
    during class to minimize distractions. (10:32)
- * Harith to implement a new grading structure with quizzes, assignments, and
+ * PK sir to implement a new grading structure with quizzes, assignments, and
    projects totaling 100% by the end of the semester. (22:04)
  * Students must communicate with TAs first for any issues before escalating to
    the instructor. (27:30)
@@ -59,7 +59,7 @@ in certain contexts.
        effectiveness. (18:00)
        
  4.  Course Modifications and Grading Structure (22:04)
-     * **Action Plan** | Harith to implement a new grading structure with quizzes,
+     * **Action Plan** | PK sir to implement a new grading structure with quizzes,
        assignments, and projects totaling 100% by the end of the semester.
        (22:04)
        
