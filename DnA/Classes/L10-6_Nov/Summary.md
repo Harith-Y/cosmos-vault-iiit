@@ -49,7 +49,7 @@ Topics & Highlights
  2.  SQL Insert and Update Operations (07:40)
      * **Fact** | Different methods of inserting data include simple inserts, nested
        selection queries, and bulk loading from external files. (12:01)
-     * Task | Participants to ensure that the necessary tables are created
+     * **Task** | Participants to ensure that the necessary tables are created
        before running insert scripts. (08:34)
      * **Fact** | The SQL insert operation can involve selecting tuples from another
        table and inserting them into a new table, resulting in 16 rows being
@@ -100,7 +100,7 @@ Topics & Highlights
  7.  Employee Query and Management (42:26)
      * **Next steps** | Participants to submit results of the second and third
        questions, including the query and the result. (47:22)
-     * Task | Participants to create three joint statements as part of the
+     * **Task** | Participants to create three joint statements as part of the
        activity posted on Moodle with a deadline of 1.15. (44:01)
        
  8.  Query Submission and Results (55:36)
