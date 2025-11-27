@@ -22,4 +22,4 @@ NP - Complete:
 - [NP-Complete](https://youtube.com/playlist?list=PLQfaHkBRINsxngvO_CIM74kUauPd-BGa3&si=5DPJX0FZKeXmY_Ou)
 - [Subset Sum](https://www.youtube.com/watch?v=k8RkYp5KhhU&t=291s)
 - [3 Color](https://www.youtube.com/watch?v=JOZS9_ijZ7o)
-- [Hamiltonian Cycle](https://www.youtube.com/watch?v=rgMrzCWHiNo)
+- [Hamiltonian Cycle](https://www.youtube.com/watch?v=rgMrzCWHiNo) and [Hamiltonian Cycle](https://youtu.be/OHnX-R_SBpM?si=2wbvCJX0El_Bsgh_)
