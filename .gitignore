@@ -9,3 +9,8 @@ Private/
 .obsidian
 contents.base
 
+.ipynb_checkpoints/
+__MACOSX
+.DS_Store
+
+*.xlsx
