@@ -5,6 +5,9 @@ Transcript.md
 Highlights.md
 
 Private/
+Solutions/
+Solution/
+
 
 .obsidian
 contents.base
@@ -14,3 +17,12 @@ __MACOSX
 .DS_Store
 
 *.xlsx
+
+*.toc
+*.out
+*.log
+*.aux
+*.tex
+
+.idea/
+.vscode/
