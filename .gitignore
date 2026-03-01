@@ -1,4 +1,5 @@
 *.m4a
+*.mp3
 
 Index.md
 Transcript.md
@@ -8,6 +9,12 @@ Private/
 Solutions/
 Solution/
 
+*_Summary.md
+*_summary.txt
+*_ExamQuestions.md
+*_KeyPoints.md
+*_data.json
+*_complete.md
 
 .obsidian
 contents.base
@@ -15,6 +22,9 @@ contents.base
 .ipynb_checkpoints/
 __MACOSX
 .DS_Store
+
+copilot-conversations/
+copilot-custom-prompts/
 
 *.xlsx
 
