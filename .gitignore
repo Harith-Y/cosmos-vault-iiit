@@ -27,6 +27,7 @@ copilot-conversations/
 copilot-custom-prompts/
 
 *.xlsx
+~$*
 
 *.toc
 *.out
