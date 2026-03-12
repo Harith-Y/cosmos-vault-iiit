@@ -1,0 +1,1 @@
+Go through the following concepts from this book: Government, Equality, Justice, Liberalism, Rights, Democracy, Citizenship, Power, Authority, Legitimacy
