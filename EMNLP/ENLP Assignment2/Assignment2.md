@@ -2,7 +2,7 @@ This assignment aims to critically examine the relationship between human and au
 
 ## Steps and Guidelines:
 
-1. Task Selection:
+1. **Task Selection:**
     - Choose a single NLP task (e.g., machine translation, text summarization, sentiment analysis etc.).
 
 2. **Model Outputs Collection:**
