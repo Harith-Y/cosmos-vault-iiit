@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sociology Exam Notes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@300;400;600;700&display=swap');
+
+  :root {
+    --ink: #1a1410;
+    --paper: #faf7f2;
+    --parchment: #f0ead8;
+    --accent: #8b4513;
+    --accent-light: #c8762e;
+    --gold: #b8860b;
+    --rule: #d4c4a0;
+    --margin: #e8dfc8;
+    --highlight: #fff3cd;
+    --concept-bg: #fdf6e3;
+    --concept-border: #c8a050;
+    --example-bg: #f0f4f0;
+    --example-border: #5a8a5a;
+    --note-bg: #f5f0f8;
+    --note-border: #8a5a8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* Header */
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    border-bottom: 4px solid var(--gold);
+  }
+  .header h1 {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.4rem;
+  }
+  .header p {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    font-style: italic;
+  }
+  .header .tag {
+    display: inline-block;
+    margin-top: 0.8rem;
+    background: var(--gold);
+    color: var(--ink);
+    padding: 0.2rem 0.8rem;
+    border-radius: 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    margin: 2rem auto;
+    max-width: 860px;
+    padding: 1.5rem 2rem;
+    border-radius: 4px;
+  }
+  .toc h2 {
+    font-family: 'Lora', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .toc ol {
+    padding-left: 1.2rem;
+    column-count: 2;
+    column-gap: 2rem;
+  }
+  .toc li {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+  .toc a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .toc a:hover { text-decoration: underline; }
+
+  /* Main layout */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 1.5rem 4rem;
+  }
+
+  /* Section */
+  .section {
+    margin-bottom: 3rem;
+    border-top: 2px solid var(--rule);
+    padding-top: 2rem;
+  }
+  .section-number {
+    font-family: 'Lora', serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--accent-light);
+    margin-bottom: 0.3rem;
+  }
+  .section h2 {
+    font-family: 'Lora', serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+  .section .subtitle {
+    font-size: 0.88rem;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 1.4rem;
+  }
+
+  /* Sub-headings */
+  h3 {
+    font-family: 'Lora', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 1.8rem 0 0.6rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  h4 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 1.2rem 0 0.4rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  p { margin-bottom: 0.9rem; }
+
+  /* Concept box */
+  .concept {
+    background: var(--concept-bg);
+    border-left: 4px solid var(--concept-border);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .concept strong {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  /* Example box */
+  .example {
+    background: var(--example-bg);
+    border-left: 4px solid var(--example-border);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .example strong {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--example-border);
+    margin-bottom: 0.4rem;
+  }
+
+  /* Remember box */
+  .remember {
+    background: var(--note-bg);
+    border-left: 4px solid var(--note-border);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .remember strong {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--note-border);
+    margin-bottom: 0.4rem;
+  }
+
+  /* Thinker card */
+  .thinker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1.2rem 0;
+  }
+  .thinker-card {
+    background: var(--parchment);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--accent);
+    padding: 1rem;
+    border-radius: 0 0 4px 4px;
+  }
+  .thinker-card h4 {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1rem;
+    color: var(--accent);
+    margin: 0 0 0.3rem;
+    border: none;
+    padding: 0;
+  }
+  .thinker-card .dates {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 0.6rem;
+  }
+  .thinker-card p {
+    font-size: 0.88rem;
+    margin-bottom: 0.4rem;
+    line-height: 1.6;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.2rem 0;
+    font-size: 0.88rem;
+  }
+  .compare-table th {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+  }
+  .compare-table td {
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .compare-table tr:nth-child(even) td { background: var(--parchment); }
+
+  /* Phase timeline */
+  .phases {
+    margin: 1.2rem 0;
+    border-left: 3px solid var(--accent-light);
+    padding-left: 1.5rem;
+  }
+  .phase {
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .phase::before {
+    content: '';
+    position: absolute;
+    left: -1.85rem;
+    top: 0.4rem;
+    width: 12px;
+    height: 12px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    border: 2px solid var(--paper);
+    box-shadow: 0 0 0 1px var(--accent-light);
+  }
+  .phase-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent-light);
+    margin-bottom: 0.2rem;
+  }
+  .phase h4 {
+    margin: 0 0 0.4rem;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1rem;
+    border: none;
+    padding: 0;
+  }
+  .phase p { font-size: 0.9rem; margin-bottom: 0.3rem; }
+
+  /* Divider */
+  .divider {
+    text-align: center;
+    margin: 2rem 0 1rem;
+    color: var(--rule);
+    font-size: 1.2rem;
+    letter-spacing: 0.5em;
+  }
+
+  /* Print */
+  @media print {
+    .toc { page-break-after: always; }
+    .section { page-break-inside: avoid; }
+    body { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <p>Introduction to Human Sciences</p>
+  <h1>Complete Sociology Exam Notes</h1>
+  <p>Lectures 1–3 + Sociological Frameworks + All Readings Synthesized</p>
+  <span class="tag">Exam Ready · Story Flow · Beginner Friendly</span>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#s1">What is Sociology?</a></li>
+    <li><a href="#s2">Sociological Imagination</a></li>
+    <li><a href="#s3">Context: Why Did Sociology Emerge?</a></li>
+    <li><a href="#s4">Auguste Comte & Positivism</a></li>
+    <li><a href="#s5">Karl Marx & Conflict Theory</a></li>
+    <li><a href="#s6">Émile Durkheim & Functionalism</a></li>
+    <li><a href="#s7">Max Weber & Interpretive Sociology</a></li>
+    <li><a href="#s8">Sociological Frameworks & Stratification</a></li>
+    <li><a href="#s9">Social Structure — Concepts & Debates</a></li>
+    <li><a href="#s10">Functionalism, Neo-Functionalism & Parsons</a></li>
+    <li><a href="#s11">Sociology in India — Development</a></li>
+    <li><a href="#s12">Village Studies in India</a></li>
+    <li><a href="#s13">Social Construction of Reality</a></li>
+    <li><a href="#s14">What Makes Someone a Sociologist?</a></li>
+  </ol>
+</div>
+
+<div class="container">
+
+<!-- ============================================================ -->
+<div class="section" id="s1">
+  <div class="section-number">Lecture 1 + Readings</div>
+  <h2>1. What Is Sociology?</h2>
+  <div class="subtitle">The basic definition, scope, and why it's more than common sense</div>
+
+  <p>Sociology, at its simplest, is the scientific study of society — how people live together, how groups and institutions shape their behaviour, and how individuals and society constantly influence each other. It asks big questions: Why do people follow the rules they follow? Why do some groups have power and others don't? Why do revolutions happen?</p>
+
+  <p>But here's an important starting point: is sociology just "common sense"? Most of us already talk about social issues in everyday life, so is sociology just a dressed-up version of gossip? The answer is <em>no</em>. Sociology goes beyond common sense by being <strong>systematic</strong>, <strong>evidence-based</strong>, and <strong>theoretical</strong>. It forces us to question what we take for granted.</p>
+
+  <div class="concept">
+    <strong>Core Definition</strong>
+    Sociology is the study of <em>societies, individuals, groups, and the relationship between them</em>. It looks at social structures (how society is organised), social institutions (family, religion, education, law), and social processes (migration, urbanisation, power, conflict).
+  </div>
+
+  <h3>Key Concerns of Sociology</h3>
+  <p>Sociology doesn't just study one thing — it covers a wide range of topics. These include:</p>
+  <p><strong>Social Institutions:</strong> Caste, Class, Tribe/Ethnicity, Gender, Religion, Family. <strong>Social Processes:</strong> How power and authority work, urbanisation, migration, industrialisation, ecological change, and social movements — struggles for change and resistance to it.</p>
+
+  <div class="example">
+    <strong>Example — The "Drinking Coffee" Exercise</strong>
+    The lecture uses coffee as a way to show sociological thinking. At first, coffee seems like just a drink. But sociologically, it's a <em>symbol</em> of social status (going to a café vs. making instant coffee at home), a <em>ritual</em> (morning routines), a <em>global product</em> (grown by poor farmers in Africa, consumed by rich countries), and part of a social world. When you start seeing ordinary things this way — that's sociology at work.
+  </div>
+
+  <div class="example">
+    <strong>Example — College/University</strong>
+    A university isn't just a building for learning. It is a space that produces and spreads knowledge, a tool for social mobility (a poor student can change their life), a melting pot of cultures, and a space for dissent (students protesting injustice). Sociology helps us see all these layers at once.
+  </div>
+
+  <p>Sociologist Peter Berger called this approach "seeing the general in the particular" — meaning, looking at one individual or event and finding the broader social pattern behind it. For example, when Hurricane Katrina hit New Orleans, it seemed like a natural disaster. But sociology revealed that <em>poor, Black communities suffered far more</em> — showing that "natural" disasters are actually shaped by social inequality. That's sociological thinking.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s2">
+  <div class="section-number">Lecture 1</div>
+  <h2>2. The Sociological Imagination</h2>
+  <div class="subtitle">C. Wright Mills' concept — connecting personal life to social forces</div>
+
+  <p>One of the most important ideas in sociology comes from the American sociologist C. Wright Mills, who said that sociology enables us to understand the link between individual lives and the larger society and history they live in.</p>
+
+  <div class="concept">
+    <strong>The Sociological Imagination (C. Wright Mills)</strong>
+    "Neither the life of an individual nor the history of a society can be understood without understanding both." The sociological imagination means being able to connect your personal troubles to larger public issues. It asks: what role does society play in shaping your individual choices?
+  </div>
+
+  <p>Here's the key insight: we participate in social <em>systems</em> — family, school, religion, economy. These systems shape us through <strong>socialisation</strong> (we learn what is "normal") and through <strong>paths of least resistance</strong> (we tend to follow what society expects, even without being told to). But at the same time, <em>we make social systems happen</em> — by following norms, we keep those systems alive.</p>
+
+  <div class="example">
+    <strong>Example — Unemployment</strong>
+    If one person loses their job, that's a personal problem — maybe they need to work harder. But if millions lose their jobs during an economic recession, that's a public issue, caused by structural forces in the economy. The sociological imagination helps us shift from blaming the individual to understanding the system.
+  </div>
+
+  <p>Sociologist Allan Johnson explained it this way: we are always participating in something larger than ourselves. To understand what happens to people, we must understand what system they're part of and how they participate in it. The sociological perspective helps us see how <em>personal choices are shaped by society</em>, its structures, institutions, and norms.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s3">
+  <div class="section-number">Lecture 2 + Unit 1 Reading</div>
+  <h2>3. Why Did Sociology Emerge? The Historical Context</h2>
+  <div class="subtitle">The revolutions — French, Industrial, Scientific — that made sociology necessary</div>
+
+  <p>Sociology didn't just appear out of thin air. It was born as a response to massive upheavals in 18th and 19th century Europe. To understand the thinkers (Comte, Marx, Durkheim, Weber), we first need to understand the world they were responding to.</p>
+
+  <p>A crucial idea from the readings is that <em>sociological theories are embedded in a particular social context</em>. Every thinker responds to the problems of their time. There is an "inner context" (the thinker's own background and worldview) and an "outer context" (the broader society and events). Both together produce theory.</p>
+
+  <h3>The Key Forces That Created Sociology</h3>
+
+  <div class="phases">
+    <div class="phase">
+      <div class="phase-label">Force 1</div>
+      <h4>The European Enlightenment & Scientific Revolution</h4>
+      <p>Thinkers like Copernicus, Galileo, Newton, Descartes, and Locke introduced the scientific method — using evidence, observation, and experimentation to explain the world. This weakened the power of religion and faith as the only source of truth. New ways of producing knowledge opened up, and people began asking: can we apply this scientific method to <em>society</em>?</p>
+    </div>
+    <div class="phase">
+      <div class="phase-label">Force 2</div>
+      <h4>The French Revolution (1789)</h4>
+      <p>This was a political earthquake. The French people overthrew the monarchy and challenged the old order. Thinkers like Montesquieu, Rousseau, and later Comte were forced to grapple with questions of social order, law, and what holds society together. Comte and Durkheim, in particular, were deeply worried about the social chaos (anarchy) that followed the revolution — and sociology was partly their attempt to restore order scientifically.</p>
+    </div>
+    <div class="phase">
+      <div class="phase-label">Force 3</div>
+      <h4>The Industrial Revolution</h4>
+      <p>This transformed Europe from agriculture-based economies to factory-based ones. People moved from villages to cities. In England, by 1850, over half the population lived in cities. The factory system created a new class of poor workers (proletariat) working long hours for low wages. This created massive inequality, trade unions, and movements to overthrow capitalism. All the major sociologists — Marx, Weber, Durkheim — were trying to understand and respond to these changes.</p>
+    </div>
+    <div class="phase">
+      <div class="phase-label">Force 4</div>
+      <h4>European Colonialism</h4>
+      <p>As Europe conquered new territories, it needed to understand the "other" — the people it was ruling. This is where sociology and anthropology were born in colonies. Colonial officers and missionaries began documenting the languages, customs, and social practices of colonised peoples — but often through a biased lens that saw Western civilization as superior.</p>
+    </div>
+    <div class="phase">
+      <div class="phase-label">Force 5</div>
+      <h4>The Rise of Individualism</h4>
+      <p>The Protestant Reformation (decline of the Catholic Church) shifted focus from inherited status to <em>achieved</em> status — your choices and decisions now mattered. This rise of the individual created new social questions about freedom, responsibility, and how individuals relate to the collective.</p>
+    </div>
+  </div>
+
+  <div class="remember">
+    <strong>Key Point for Exams</strong>
+    The term "Sociology" was coined by Auguste Comte in 1838. He wanted to create a new science of society that was more complex than all other sciences — he called it "the queen of sciences." But the context that made sociology necessary was the triple revolution: Scientific, French, and Industrial.
+  </div>
+
+  <h3>The Enlightenment vs. Counter-Enlightenment</h3>
+  <p>Not everyone welcomed the Enlightenment. Conservative thinkers like De Bonald wanted to return to the medieval period, seeing the revolutions as destructive to harmony, law, and order. They emphasised <em>collectivity</em> over the individual, valued tradition, and opposed change. This tension between the progressive Enlightenment thinkers and the conservative Counter-Enlightenment produced the debates that early sociology was born from.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s4">
+  <div class="section-number">Lecture 2 + Readings</div>
+  <h2>4. Auguste Comte and Positivism</h2>
+  <div class="subtitle">The founder of sociology and his "Law of Three Stages"</div>
+
+  <p>Auguste Comte (1798–1857) is known as the <em>Father of Sociology</em> — not because he wrote the best sociology, but because he first argued that society <em>could and should</em> be studied scientifically, just like physics or chemistry. He coined the very word "sociology" in 1838.</p>
+
+  <p>Comte was deeply worried by the social disorder following the French Revolution. His response was to create a science of society that would bring back stability and order. He divided sociology into two parts: <strong>Social Statics</strong> (how society maintains equilibrium/balance) and <strong>Social Dynamics</strong> (how society changes over time).</p>
+
+  <div class="concept">
+    <strong>Positivism — Comte's Core Philosophy</strong>
+    Positivism holds that society can be studied using the same methods as natural science — through observation, comparison, and experiment. Knowledge is only valid if it is based on evidence. Supernatural or metaphysical explanations are rejected. This idea spread across Europe and influenced all later sociologists.
+  </div>
+
+  <h3>The Law of Three Stages</h3>
+  <p>Comte's most famous contribution is his idea that every society, and indeed all human knowledge, passes through three stages in a fixed order:</p>
+
+  <table class="compare-table">
+    <tr>
+      <th>Stage</th><th>Time Period</th><th>What Explains the World?</th>
+    </tr>
+    <tr>
+      <td><strong>Theological</strong></td>
+      <td>Up to ~1300</td>
+      <td>God, spirits, supernatural powers explain everything. The world is God's creation.</td>
+    </tr>
+    <tr>
+      <td><strong>Metaphysical</strong></td>
+      <td>~1300–1800</td>
+      <td>Abstract forces like "nature" and "reason" replace God, but no scientific laws yet.</td>
+    </tr>
+    <tr>
+      <td><strong>Positivistic (Scientific)</strong></td>
+      <td>1800 onwards</td>
+      <td>Science and empirical laws explain everything. No God or nature, just observable facts.</td>
+    </tr>
+  </table>
+
+  <p>For Comte, it was <em>intellectual confusion</em> — mixing up these stages — that led to social disorder. True order would come only when the positivistic stage fully dominated. He believed sociology, as the highest science, would ultimately guide society toward order and progress.</p>
+
+  <div class="remember">
+    <strong>Remember</strong>
+    Comte stressed the <em>interconnectedness</em> of all parts of society (society as a whole system) and believed in <em>consensus</em> — that people need to agree on basic values for society to function. He was <em>not</em> a supporter of violent revolution.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s5">
+  <div class="section-number">Lecture 3 + Readings</div>
+  <h2>5. Karl Marx — Conflict, Class, and Capitalism</h2>
+  <div class="subtitle">The materialist who saw history as a story of class struggle</div>
+
+  <p>Karl Marx (1818–1883), working alongside Friedrich Engels, gave sociology one of its most powerful frameworks. Unlike Comte, who wanted to preserve order, Marx wanted to understand <em>why</em> society was unjust — and to change it.</p>
+
+  <h3>The Starting Point: Materialism</h3>
+  <p>Marx's whole framework begins with a simple but radical idea called <strong>materialism</strong>: the foundation of any society is not its religion, laws, or ideas — it is the <em>economic base</em>. Specifically, it is how people produce the things they need to survive.</p>
+
+  <div class="concept">
+    <strong>Modes of Production</strong>
+    A "mode of production" is the combination of two things: <strong>Productive Forces</strong> (labour, tools, land, technology — what you use to produce) and <strong>Relations of Production</strong> (who owns what — ownership patterns and power). Together, these form the economic base of society. Everything else — law, politics, religion, family, art, education — is the <em>superstructure</em> built on top of this base.
+  </div>
+
+  <p>Think of it as a building. The economic base is the foundation. The superstructure (laws, religion, politics, culture) is the walls and roof. The superstructure <em>reflects and maintains</em> the base. When the base changes (e.g., feudalism to capitalism), the whole superstructure eventually changes too.</p>
+
+  <h3>Historical Materialism & Class Struggle</h3>
+  <p>Marx saw all of human history as a story of <strong>class struggle</strong> — conflict between those who own the means of production and those who don't:</p>
+  <p>In <em>Slave Society</em>: Masters vs. Slaves. In <em>Feudalism</em>: Feudal lords vs. Serfs. In <em>Capitalism</em>: Bourgeoisie (owners/capitalists) vs. Proletariat (workers).</p>
+
+  <p>Marx saw history as following a dialectical path: Primitive Communism → Feudalism → Capitalism → Socialism → Communism. Each stage contains the seeds of its own destruction through internal contradictions. This is called <strong>dialectical materialism</strong>.</p>
+
+  <h3>Surplus Value and Exploitation</h3>
+  <p>In capitalism, workers are paid wages, but they produce more value than they receive in wages. This extra value — <strong>surplus value</strong> — is taken by the capitalist as profit. This is the root of exploitation. The worker is separated from the product of their own labour.</p>
+
+  <div class="concept">
+    <strong>Alienation</strong>
+    This is a special feature of capitalism. Because workers don't own what they make, they feel disconnected — alienated — from their work, from the product, from other people, from nature, and even from themselves. Alienation affects culture, family, and all of social life.
+  </div>
+
+  <div class="example">
+    <strong>Example — Caste in Marxist Framework</strong>
+    The lecture notes make an important point: caste was not always birth-based. It <em>became</em> a rigid birth-based system through historical processes. Marxists ask: how and why did stratification happen? What economic interests did it serve? Classes are seen as primarily economic in nature — shaped by who owns what.
+  </div>
+
+  <div class="remember">
+    <strong>Marx vs. Hegel</strong>
+    Marx was influenced by the German philosopher Hegel, who used the idea of "dialectics" — that history moves through contradictions. But Hegel focused on <em>ideas</em> (idealism) as the driving force of history. Marx "flipped" this: he said it's <em>material conditions</em> — the economy — that drive history, not ideas. Ideas are shaped by material reality, not the other way around.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s6">
+  <div class="section-number">Lecture 3 + Readings</div>
+  <h2>6. Émile Durkheim — Society as a Force Above Individuals</h2>
+  <div class="subtitle">Social facts, solidarity, and what holds modern society together</div>
+
+  <p>Émile Durkheim (1858–1917) built sociology as an academic discipline in France. He drew from Comte but had a distinct question: <em>what holds society together?</em> In the chaos of industrialisation, when traditional communities were breaking down, what new glue was keeping people connected?</p>
+
+  <h3>Social Facts — The Core Idea</h3>
+
+  <div class="concept">
+    <strong>Social Fact (Durkheim's Definition)</strong>
+    "A social fact is any way of acting, whether fixed or not, capable of exerting over the individual an external constraint." Social facts are external to individuals, coercive (they force conformity), and cannot be explained by reducing them to individual psychology. Examples: divorce rates, crime rates, religious structures, caste divisions, urbanisation rates.
+  </div>
+
+  <p>Durkheim insisted: treat social facts as <em>things</em> (study them objectively, like physical objects) and explain social facts with other social facts (not with individual psychology). This was his way of making sociology a genuine, independent science — separate from psychology or biology.</p>
+
+  <p>He identified two types of social facts: <strong>Material</strong> (bureaucracy, laws — tangible structures) and <strong>Non-Material</strong> (culture, social institutions, norms, values — Durkheim focused mainly on these).</p>
+
+  <h3>Mechanical vs. Organic Solidarity</h3>
+  <p>Durkheim's most important contribution is his explanation of how society changes from pre-modern to modern:</p>
+
+  <table class="compare-table">
+    <tr><th>Feature</th><th>Mechanical Solidarity (Pre-Modern)</th><th>Organic Solidarity (Modern)</th></tr>
+    <tr><td>Type of society</td><td>Simple, small, rural clans</td><td>Complex, industrial, urban</td></tr>
+    <tr><td>Basis of unity</td><td>Everyone is similar — same beliefs, morals, rituals</td><td>People are different but interdependent (division of labour)</td></tr>
+    <tr><td>Collective conscience</td><td>Strong — community identity dominates individual</td><td>Weakened — individual identity grows</td></tr>
+    <tr><td>What holds society together?</td><td>Shared religion and tradition</td><td>Economic and functional interdependence</td></tr>
+  </table>
+
+  <p>Industrialisation broke down the collective conscience of traditional society. The <strong>division of labour</strong> (everyone specialising in different jobs) created a new kind of solidarity — <em>organic</em> — where people needed each other precisely because they were different. A doctor needs a farmer; a teacher needs a plumber. Interdependence replaces similarity.</p>
+
+  <h3>The Problem: Anomie</h3>
+  <p>But this transition wasn't smooth. Durkheim identified a serious danger: <strong>anomie</strong> — a state of normlessness or rootlessness. When the old rules break down and new ones haven't yet replaced them, people feel lost, unregulated, and purposeless. This, Durkheim argued, leads to higher suicide rates, social disorder, and individual suffering.</p>
+
+  <div class="example">
+    <strong>The Suicide Study</strong>
+    In his landmark study of suicide (1897), Durkheim showed that suicide rates vary systematically across social groups — not just individual psychology. Catholics (more socially integrated) had lower suicide rates than Protestants (more individualistic). This proved that social forces shape even the most personal of acts. Durkheim identified types: <em>Egoistic</em> (too little social integration), <em>Altruistic</em> (too much — dying for the group), <em>Anomic</em> (lack of regulation during crisis).
+  </div>
+
+  <p>Durkheim's solution to anomie was to develop new <em>occupational associations</em> — organisations around work that would give people a sense of belonging, solidarity, and mutual help in the modern world.</p>
+
+  <h3>Religion and Society</h3>
+  <p>In his study of religion (The Elementary Forms of Religious Life, 1912), Durkheim made a striking claim: when people worship God or a totem, they are actually worshipping <em>society itself</em>. Religion serves to create social solidarity — it binds people in a "moral community called church." This view is deeply conservative: if society is sacred, it shouldn't be overthrown, only reformed.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s7">
+  <div class="section-number">Lecture 3 + Readings</div>
+  <h2>7. Max Weber — Meaning, Power, and Rationalisation</h2>
+  <div class="subtitle">The "interpretive" sociologist who extended and argued with Marx</div>
+
+  <p>Max Weber (1864–1920) is perhaps the most complex of the three classical theorists. He built much of his work in dialogue with Marx — sometimes agreeing, often disagreeing. His central critique of Marx was that Marx's theory was <strong>uni-causal</strong> (one cause — the economy — drives everything). Weber argued that history and social life have <em>multiple causes</em>, and culture, religion, and ideas can themselves shape the economy.</p>
+
+  <h3>Interpretive Sociology and Verstehen</h3>
+
+  <div class="concept">
+    <strong>Verstehen (Understanding)</strong>
+    Weber argued that studying society is fundamentally different from studying nature. Social action is meaningful — people attach <em>subjective meaning</em> to what they do. So the sociologist must try to <em>understand</em> (verstehen) the meaning actors give to their actions, not just observe external behaviour. There is no objectively "correct" meaning — it depends on context and subjectivity.
+  </div>
+
+  <p>Weber rejected "monocausality" — the idea that one thing explains everything. For him, meaning, context, and the plurality of causes all matter. He noted that most action is not fully conscious — people often act out of habit, emotion, or tradition without fully understanding why.</p>
+
+  <h3>Four Types of Social Action</h3>
+  <table class="compare-table">
+    <tr><th>Type</th><th>Description</th></tr>
+    <tr><td><strong>Instrumentally Rational</strong></td><td>Calculates means and ends logically; acts to achieve specific goals efficiently.</td></tr>
+    <tr><td><strong>Value Rational</strong></td><td>Acts on deeply held values (ethical, religious, aesthetic) regardless of success.</td></tr>
+    <tr><td><strong>Emotional/Affectual</strong></td><td>Driven by feelings and emotions.</td></tr>
+    <tr><td><strong>Traditional</strong></td><td>Follows deeply ingrained habits and customs.</td></tr>
+  </table>
+  <p>Weber observed that modern society is increasingly moving toward <em>instrumental rational</em> behaviour in all spheres — both personal and social.</p>
+
+  <h3>The Protestant Ethic and Capitalism</h3>
+  <p>In his most famous work, Weber showed how <em>religious ideas</em> (not economics) could drive economic behaviour. The Protestant Reformation — especially Calvinist ideas of calling, hard work, and thrift — created a moral environment where accumulating wealth was seen as a sign of God's blessing. This cultural attitude (the "Protestant Ethic") helped create the conditions for capitalism to emerge in Western Europe. This directly challenged Marx's view that economic conditions determine culture.</p>
+
+  <div class="remember">
+    <strong>Weber vs. Marx — The Key Contrast</strong>
+    Marx: Material/economic conditions determine ideas and culture. Weber: Ideas and culture (like religion) can determine economic conditions. They are often seen as complements — both factors matter.
+  </div>
+
+  <h3>Rationalisation and the "Iron Cage"</h3>
+  <p>Weber saw modernity as a process of <strong>rationalisation</strong> — the increasing domination of calculation, efficiency, and formal rules over tradition and emotion in all areas of life. This produced <strong>bureaucracy</strong>: organisations with fixed hierarchies, clear rules, specialised roles, and impersonal authority. Bureaucracy is "domination through knowledge."</p>
+
+  <p>But Weber was deeply ambivalent about this. Rationalisation and bureaucracy create efficiency — but they also create an <strong>"iron cage"</strong>: a technically ordered, rigid, dehumanised society where people become "specialists without spirit, sensualists without heart."</p>
+
+  <h3>Wealth, Power, and Prestige — The Three Dimensions</h3>
+  <p>Unlike Marx (who focused on one dimension — economic class), Weber argued that <strong>social stratification</strong> has three independent dimensions:</p>
+  <p><strong>Wealth</strong> — associated with education, income, and occupation. <strong>Power</strong> — the ability of one party to affect the behaviour of another, tied to membership in organisations (not just economic status). <strong>Prestige</strong> — the distinction or reputation by which people are subjectively evaluated. Together, these three determine "Weberian Class."</p>
+
+  <div class="example">
+    <strong>Indian Example: M.N. Srinivas and "Dominant Caste"</strong>
+    The Weberian framework was used by the Indian sociologist M.N. Srinivas to develop the concept of "dominant caste" — a caste that combines numerical strength, land ownership (wealth), and social prestige to dominate village society. This has been successfully used to explain political trends in India.
+  </div>
+
+  <h3>Three Types of Authority</h3>
+  <p>Weber identified three types of legitimate authority: <strong>Traditional</strong> (authority derived from custom and tradition, like monarchy), <strong>Charismatic</strong> (authority derived from extraordinary personal qualities of a leader), and <strong>Rational-Legal</strong> (authority based on formal rules and procedures — the basis of modern states and bureaucracies). Most modern political systems use rational-legal authority (presidents, prime ministers chosen by formal procedures).</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s8">
+  <div class="section-number">Sociological Frameworks PDF</div>
+  <h2>8. Sociological Frameworks and Social Stratification</h2>
+  <div class="subtitle">How the three frameworks explain inequality differently</div>
+
+  <p>Social stratification — the way society is organised into layers of unequal groups — is one of sociology's central topics. The three major frameworks (Functionalist, Marxist, Weberian) explain it very differently.</p>
+
+  <div class="thinker-grid">
+    <div class="thinker-card">
+      <h4>Structural Functionalism (Durkheim + Merton + Parsons)</h4>
+      <div class="dates">Dominant in India until the 1970s</div>
+      <p>Inequality exists because it is <em>necessary</em> for society to function. Different positions perform different roles; those performing more important roles get more rewards. Various groups <em>consent</em> to stratification because they are organically connected to the system.</p>
+      <p>Critique: This approach ends up <em>rationalising</em> and justifying social inequality rather than questioning it.</p>
+    </div>
+    <div class="thinker-card">
+      <h4>Conflict Theory (Marx)</h4>
+      <div class="dates">Emphasises power and exploitation</div>
+      <p>Stratification is not "natural" or "necessary" — it is the result of specific historical processes driven by conflict and power. The powerful create systems that maintain their dominance (e.g., caste was not always birth-based — it became so). Conflict theories see stratification as an exercise of power.</p>
+    </div>
+    <div class="thinker-card">
+      <h4>Weberian Approach</h4>
+      <div class="dates">Multi-dimensional analysis</div>
+      <p>Uses class, status, and power together to explain stratification. Status distinctions (prestige) can arise independently of economic class. Power is related to membership in organisations, not just wealth. Wealth + Power + Prestige together determine social position.</p>
+    </div>
+  </div>
+
+  <div class="concept">
+    <strong>Bases of Social Stratification (The Three W's)</strong>
+    <strong>Wealth</strong> — associated with education, income, and occupation. <strong>Power</strong> — the ability to influence others' behaviour. <strong>Prestige</strong> — the reputation or distinction by which people are subjectively evaluated by others.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s9">
+  <div class="section-number">Unit 5 Reading</div>
+  <h2>9. Social Structure — What Is It and How Do We Study It?</h2>
+  <div class="subtitle">The great debate: Is structure real, observable, or just a model?</div>
+
+  <p>The concept of "social structure" is fundamental to sociology — but there is no agreement on what it actually means! The readings introduce a fascinating debate among three major thinkers.</p>
+
+  <div class="concept">
+    <strong>Basic Definition of Structure</strong>
+    Structure = the way the parts of an entity are <em>interconnected</em> so that the entity emerges as an integrated whole. In society, the "parts" could be individuals, groups, roles, or institutions — and there is debate about which ones matter most.
+  </div>
+
+  <p>The debate has two core questions: (1) <em>What are the parts</em> among which structural relations exist — individuals? groups? roles? (2) Is structure <em>real and observable</em>, or is it a <em>model/abstraction</em> that the researcher constructs?</p>
+
+  <table class="compare-table">
+    <tr><th>Thinker</th><th>What Is Structure?</th><th>Key Idea</th></tr>
+    <tr>
+      <td><strong>Radcliffe-Brown</strong></td>
+      <td>Social structure is <em>real and observable</em> — "just as real as individual organisms."</td>
+      <td>Structure = the set of actually existing relations between persons at a given moment. Study it like a natural scientist studies biology. Person = complex of social relationships. The "structural form" is the general pattern abstracted from specific instances.</td>
+    </tr>
+    <tr>
+      <td><strong>Evans-Pritchard</strong></td>
+      <td>Structure = relations between <em>groups</em> (not individuals) that have consistency and constancy over time.</td>
+      <td>Individuals come and go, but groups endure. Social structure is the anthropologist's abstraction from reality. Social anthropology is a kind of historiography (like history), not natural science.</td>
+    </tr>
+    <tr>
+      <td><strong>Lévi-Strauss</strong></td>
+      <td>Social structure is a <em>model</em> built by the researcher — it has nothing to do with empirical reality directly.</td>
+      <td>Like a linguist who finds the grammar underlying speech, the structuralist finds the underlying logic beneath social behaviour. Distinguishes between conscious models (how people see themselves) and unconscious models (deeper structures). Also: mechanical models (what people say) vs. statistical models (what people do).</td>
+    </tr>
+  </table>
+
+  <div class="example">
+    <strong>The Music Example (Leach's illustration of Lévi-Strauss)</strong>
+    A piece of music can be transformed into printed notes, finger movements on a piano, sound waves, grooves on a record, electromagnetic signals — all completely different forms. Yet the underlying <em>structure</em> is the same. Similarly, different societies may look very different on the surface but have the same underlying structure. Lévi-Strauss showed this by comparing Australian Aboriginal totemic society and the Indian caste system — they had the same structure!
+  </div>
+
+  <p>A synthesis was attempted by <strong>S.F. Nadel</strong>, who said social structure is neither purely observable nor purely abstract — it is the social reality itself, viewed at a level of abstraction. For him, the components of social structure are <em>roles</em>: patterns of interconnected roles constitute the structure.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s10">
+  <div class="section-number">Units 6 & 7 Reading</div>
+  <h2>10. Functionalism, Neo-Functionalism, and Parsons</h2>
+  <div class="subtitle">How does society hold together? And what's wrong with functionalism?</div>
+
+  <h3>The Core Idea of Functionalism</h3>
+  <p>Functionalism is the approach that sees society as a whole system made of interconnected parts, where each part performs a function (makes a contribution) to the maintenance of the whole. It emerged in the early 20th century, dominated sociology until the 1970s, then faced severe criticism.</p>
+
+  <div class="concept">
+    <strong>Five Core Premises of All Functionalists</strong>
+    1. Society is a system (like a solar or organic system). 2. It consists of interconnected, interdependent parts (institutions, groups, roles). 3. Each part performs a function contributing to the whole. 4. Change in one part affects others. 5. The whole is greater than the sum of its parts — society has its own identity (collective conscience).
+  </div>
+
+  <h3>Radcliffe-Brown vs. Malinowski</h3>
+  <p><strong>Radcliffe-Brown</strong> used a "sociological functionalism" — his key concept was <em>structural continuity</em> of society. He focused on how social institutions maintain integration. He called his approach "structural-functional" because structure is only observable when it functions.</p>
+  <p><strong>Malinowski</strong> started from the <em>individual</em> (psychological functionalism). Individuals have basic biological needs (food, sex, rest, safety) and culture is humanity's way of fulfilling those needs. He set up elaborate tables of biological impulses, cultural responses, and satisfactions. He called his concern with applying anthropology to real-world problems "practical anthropology."</p>
+
+  <h3>Talcott Parsons and the AGIL Model</h3>
+  <p>Parsons (1902–1979) produced the most elaborate functionalist theory. All "action systems" (including society) must solve four problems to survive — summarised in the acronym <strong>AGIL</strong>:</p>
+
+  <table class="compare-table">
+    <tr><th>Letter</th><th>Function</th><th>The Institution in Society</th></tr>
+    <tr><td><strong>A</strong> — Adaptation</td><td>Get resources from the environment</td><td>Economy</td></tr>
+    <tr><td><strong>G</strong> — Goal Attainment</td><td>Set and pursue collective goals; mobilise resources</td><td>Political System (Polity)</td></tr>
+    <tr><td><strong>I</strong> — Integration</td><td>Coordinate and regulate relationships among parts</td><td>Legal System / Courts</td></tr>
+    <tr><td><strong>L</strong> — Latency (Pattern Maintenance)</td><td>Maintain and transmit values; manage internal tensions</td><td>Family, Religion, Education</td></tr>
+  </table>
+
+  <h3>Merton's Corrections to Functionalism</h3>
+  <p>Robert Merton (Parsons' student) was more cautious. He preferred "middle-range theories" (specific, empirically testable) over Parsons' grand theory. He criticised three postulates of earlier functionalists:</p>
+  <p>(1) <em>Functional unity</em> — not all institutions benefit everyone equally. (2) <em>Universal functionalism</em> — not everything in society has a positive function. (3) <em>Indispensability</em> — there are usually "functional alternatives" that can perform the same role.</p>
+
+  <div class="concept">
+    <strong>Merton's Key Concepts</strong>
+    <strong>Function</strong> = consequences that help a system adapt and survive. <strong>Dysfunction</strong> = consequences that harm the system's adaptation. <strong>Manifest functions</strong> = intended, recognised consequences. <strong>Latent functions</strong> = unintended, unrecognised consequences. Example: When people participate in a religious ritual (manifest function = honouring God), they also unintentionally create social solidarity (latent function).
+  </div>
+
+  <h3>Criticisms of Functionalism and Neo-Functionalism</h3>
+  <p>By the 1970s, functionalism faced serious attacks:</p>
+  <p>• It is <em>ahistorical</em> — doesn't deal with the past or historical change. • It <em>freezes society</em> in a static picture, ignoring conflict and transformation. • It has a <em>conservative bias</em> — justifies existing inequalities as "necessary" and supports the status quo. • The <em>individual is passive</em> — just a product of social forces, with no creativity. • It is <em>teleological</em> — assumes everything has a purpose and exists to serve a function.</p>
+
+  <p><strong>Neo-Functionalism</strong> (Jeffrey Alexander, 1985) tried to rescue and revise functionalism. It accepted conflict and change, gave equal weight to individual action and social order, and tried to borrow insights from other theories (including Marxism). But critics argued it was "old wine in new bottles" — the fundamental problems remained.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s11">
+  <div class="section-number">Lecture 2 + India Readings</div>
+  <h2>11. Development of Sociology in India</h2>
+  <div class="subtitle">Colonial roots, national identity, and three phases of growth</div>
+
+  <p>Sociology in India did not emerge organically from Indian society the way it did in Europe. It was imported — shaped first by colonialism, then by nationalism, and later by post-colonial critique. The development has three broad phases.</p>
+
+  <h3>Phase I — Colonial Modernity and Anthropology</h3>
+  <p>When the British colonised India, they had a problem: they didn't understand the people they were ruling. So colonial officers, missionaries, and trained anthropologists began systematically documenting Indian society — its castes, tribes, customs, and languages. The purpose was administrative convenience, not neutral science.</p>
+
+  <p>Two master narratives dominated this phase: (1) The superiority of Western civilisation. (2) The belief in continuous capitalist progress. The "East" was associated with nature, religion, and spirituality; the "West" with history, reason, and science. This was a false and biased distinction.</p>
+
+  <div class="concept">
+    <strong>Anthropology as "Handmaiden of Colonialism"</strong>
+    Colonial anthropology categorised and classified Indian society — using census, ethnography, and even anthropometric tools (measuring skull sizes!) to divide people into races, castes, and tribes. The Ethnographic Survey of India (established 1905) produced District Gazetteers and the Imperial Gazetteer (26 volumes) — vast records of Indian life, but filtered through a colonial gaze.
+  </div>
+
+  <h3>The Indological Approach</h3>
+  <p>One major early approach was to study Indian society through its <em>scriptures</em> (Vedas, Manusmriti, etc.). This was called the <strong>Indological approach</strong>. It benefited Brahmins — who had a monopoly on these texts — by making them the authoritative voice on Indian society. It rationalised the caste hierarchy with Brahmins at the top and Dalits (untouchables) outside the four-fold varna system entirely.</p>
+
+  <h3>The Bombay and Lucknow Schools</h3>
+  <div class="thinker-grid">
+    <div class="thinker-card">
+      <h4>Bombay School</h4>
+      <div class="dates">Led by G.S. Ghurye (first Sociology Dept. in India, 1919)</div>
+      <p>Used the Indological approach. Believed all Indians share a "Hindu" identity based on Hindu civilisation. Focused on caste, kinship, and family. Strong on empirical studies but lack of theoretical perspectives. Helped cement a certain cultural nationalism. Used Eurocentric categories.</p>
+    </div>
+    <div class="thinker-card">
+      <h4>Lucknow School</h4>
+      <div class="dates">Led by Radhakamal Mukerjee & D.P. Mukherji</div>
+      <p>Did <em>not</em> conflate sociology with anthropology. Analytical, empirical, and interdisciplinary. Present- and future-oriented (unlike Bombay's focus on the past). Mukerjee used ecology and regional analysis. D.P. Mukherji used dialectical (Marxist) logic while also engaging Indian tradition.</p>
+    </div>
+  </div>
+
+  <h3>Phase II — Nationalist Sociology</h3>
+  <p>After independence, two major figures shaped Indian sociology in very different ways:</p>
+  <p><strong>M.N. Srinivas</strong> continued the functionalist/structural-anthropological tradition. He studied village India using ethnography, focused on the caste system, and developed key concepts like <em>Sanskritisation</em> (lower castes imitating upper-caste practices to improve status), <em>Westernisation</em> (adopting Western norms), and <em>Dominant Caste</em> (a caste with numerical strength + land + social prestige dominating village politics). However, he has been criticised for naturalising a "Savarna" (upper-caste) view of India and excluding tribes, religious minorities, and emerging groups.</p>
+
+  <p><strong>A.R. Desai</strong> brought the Marxist approach — analysing contemporary social change and its unequal benefits, critiquing mainstream nationalism, studying the nature of the ruling class, and including those left out by dominant interpretations. He used the historical method and political economy.</p>
+
+  <h3>Phase III — Post-1970s: Multiple Challenges</h3>
+  <p>From the 1970s onward, sociology in India was challenged from multiple directions:</p>
+  <p>• Crisis in higher education as new and diverse students entered universities. • Social movements of marginalised groups demanding recognition. • The Indian state lost legitimacy as the sole driver of development. • Growth of communalism and globalisation challenged secular sociology. • Emergence of <strong>Subaltern Studies</strong> (studying the oppressed from their own perspective), <strong>Postcolonial Studies</strong>, and <strong>Feminist, Dalit, and Adivasi critiques</strong>. • Growth of interdisciplinary research in media and cultural studies.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s12">
+  <div class="section-number">Unit 3 India Reading</div>
+  <h2>12. Village Studies in India</h2>
+  <div class="subtitle">How sociologists studied the Indian village — and what they missed</div>
+
+  <p>From the 1950s–1970s, "village studies" dominated Indian sociology. Social anthropologists went and lived in Indian villages, using the method of <strong>participant observation</strong>, producing detailed accounts of village life. These were landmark studies — but also had serious limitations.</p>
+
+  <h3>Why the Village?</h3>
+  <p>After independence, India needed to understand its own society for development planning. The Ford Foundation and Planning Commission funded rural research. Sociologists saw the village as "India in microcosm" — a place where you could observe the "real" India: caste, kinship, religion, land relations. Robert Redfield's concept of the "Little Community" influenced this approach.</p>
+
+  <h3>Method: Participant Observation</h3>
+  <p>The anthropologist chose a single village, stayed for 1–2 years, observed daily life, talked to people, and tried to produce a "holistic" account. This "field-view" was seen as superior to the "book-view" of India produced by Indologists from ancient scriptures — it was based on what people actually <em>did</em>, not just what scriptures prescribed.</p>
+
+  <h3>What They Found: Caste, Class, Gender</h3>
+  <p><strong>Caste:</strong> Most studies found that caste was the primary organising principle of village life. The varna hierarchy (Brahmin–Kshatriya–Vaishya–Shudra–Untouchable) structured all social relations. But empirical research also showed that the middle of the hierarchy was fluid — caste statuses were not completely fixed.</p>
+  <p><strong>Land and Class:</strong> There was significant overlap between caste hierarchy and land ownership — rich landowners were usually from higher castes, landless labourers usually from lower castes/Dalits. But some argued land ownership mattered more than caste status itself.</p>
+  <p><strong>Gender:</strong> Though "gender" as a concept hadn't been developed yet, village studies documented patriarchy clearly. Women (especially upper-caste) were confined to the domestic sphere, their sexuality controlled by men, and treated as subordinate. However, most data came from male informants and male fieldworkers — giving a biased picture.</p>
+
+  <h3>The Jajmani System</h3>
+  <p>The social structure of the village was often interpreted through the <strong>Jajmani System</strong> — a framework of reciprocal service relationships between castes. The dominant caste (landowners) gave patronage; artisan and service castes provided specialised labour in return. Many scholars emphasised the "harmony" and "interdependence" of this system. Critics (like F.G. Bailey and Joan Mencher) challenged this: the system was actually held together by <em>coercion</em> and economic dependency, not mutual goodwill.</p>
+
+  <h3>Limitations of Village Studies</h3>
+  <p>• Anthropologists usually stayed with <em>upper-caste dominant families</em>, giving them a skewed perspective. They avoided asking questions that might offend the dominant interests. • The studies were <em>conservative</em> in orientation — they documented structures, not conflicts or change. • They were not "gender-sensitive" — women's perspectives were largely absent. • Srinivas himself admitted he "deliberately excluded the Harijan ward" initially. Harijans (Dalits) who were interviewed separately described the system in terms of <em>power and exploitation</em> — not harmony.</p>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s13">
+  <div class="section-number">Unit 4 Reading</div>
+  <h2>13. Social Construction of Reality</h2>
+  <div class="subtitle">Berger & Luckmann — how society creates "reality" and how we internalise it</div>
+
+  <p>One of the most influential ideas in sociology is that reality — what we take to be "true" and "normal" — is not natural or God-given. It is <em>socially constructed</em>: created, maintained, and transmitted by human beings living together.</p>
+
+  <div class="concept">
+    <strong>Social Construction of Reality (Berger & Luckmann)</strong>
+    Society exists as both objective and subjective reality. It is produced by human beings (externalisation), becomes an objective reality that constrains people (objectification), and is then internalised by individuals as their own understanding of the world (internalisation). This dialectical process — outward, objective, inward — is how society creates "reality."
+  </div>
+
+  <h3>How Reality Is Constructed and Maintained</h3>
+  <p>Reality is not given once and remains fixed. It is <em>fragile</em> — constantly renewed and maintained through rituals, routines, and social interaction. Society transmits reality to the next generation through <strong>socialisation</strong>:</p>
+  <p><strong>Primary Socialisation</strong> (childhood/family): The most powerful stage. We learn the basic rules of the world through the family. This is deeply emotional and hard to question later. <strong>Secondary Socialisation</strong> (school, work, other institutions): We learn role-specific knowledge for our place in the division of labour. Less emotionally deep, more "artificial," and more easily revised.</p>
+
+  <h3>The Role of Language</h3>
+  <p>Language is the most important tool for constructing and maintaining social reality. It is not just a communication device — it accumulates knowledge, transmits values, and gives names (and therefore reality) to things. When we change language, we change reality. Language is itself a social fact — external to individuals, coercive, and shared.</p>
+
+  <h3>Institutions and Legitimation</h3>
+  <p>Institutions (family, state, religion, education) become "real" through <strong>legitimation</strong> — the process of providing them with a rationale, justifying why they exist and why people should follow their rules. The tools of legitimation include mythology, theology, philosophy, and science.</p>
+
+  <p>The <strong>Symbolic Universe</strong> is the overarching framework that makes all of a society's institutions and beliefs feel coherent and meaningful. It arranges society in the mind of its members, filtering all experience through shared cognitive patterns. When the symbolic universe is threatened, society uses <em>therapy</em> (re-socialising deviants) and <em>nihilation</em> (dismissing and erasing alternative views).</p>
+
+  <div class="example">
+    <strong>Example — Caste as a Social Construction</strong>
+    The caste system was not biologically natural — it was socially constructed, legitimated by Hindu scripture (the Indological approach), maintained through daily rituals and social interactions, and internalised by people across generations as "the way things are." When lower castes began to question it (through education, social movements), they were challenging the symbolic universe that had maintained the system for centuries.
+  </div>
+
+  <div class="remember">
+    <strong>Key Formula: Externalisation → Objectification → Internalisation</strong>
+    Humans create society (externalise their collective practices) → society becomes a "given," objective reality that constrains individuals (objectification) → individuals internalise this reality as their own worldview. This cycle explains how social norms, inequalities, and "common sense" are reproduced across generations.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s14">
+  <div class="section-number">Berger Reading</div>
+  <h2>14. What Makes Someone a Sociologist?</h2>
+  <div class="subtitle">Peter Berger's "Invitation to Sociology" — the sociological passion</div>
+
+  <p>Peter Berger's reading begins by clearing away common misconceptions about what sociology is. He identifies several wrong images of the sociologist that persist in public imagination:</p>
+
+  <p><strong>Sociologist as social worker:</strong> Many students think sociology is about "helping people." But sociology is not a practice — it is an attempt to <em>understand</em>. Understanding may sometimes be used for social reform, but it can equally be used for other purposes. The sociologist's job is to report accurately on social terrain; others decide what to do with that information.</p>
+
+  <p><strong>Sociologist as statistician:</strong> Another image sees sociologists as just people who count things with surveys and IBM machines. Statistics are a useful <em>tool</em>, but they don't make sociology. Without theoretical interpretation, data is just numbers. Kinsey's sex surveys, for instance, contain almost no sociology — they are raw data, not analysis.</p>
+
+  <p><strong>Sociologist as social reformer:</strong> Comte himself saw sociology as a guide to progress. But sociological understanding can serve reform as easily as it serves oppression — the same knowledge about social solidarity can be used by a summer camp or a brainwasher.</p>
+
+  <div class="concept">
+    <strong>Weber's Value-Free Sociology</strong>
+    Weber argued that within sociology, there is only one fundamental value: scientific integrity. The sociologist tries to see what is there, regardless of personal preferences. This doesn't mean sociologists have no values as people — only that in their professional role, they try to observe clearly rather than judge. Like a good spy: your job is to report accurately, not to decide policy.
+  </div>
+
+  <h3>The Real Sociologist</h3>
+  <p>For Berger, the real sociologist is driven by an insatiable curiosity about human beings. Their "natural habitat" is wherever people gather. They are fascinated by the powerful and the marginalised, the sacred and the profane, the heroic and the completely ordinary. They want to open every closed door, understand every whispered conversation.</p>
+
+  <p>The great excitement of sociology is not exploring distant, unknown worlds — it is finding that the <em>familiar world you live in is not what it seems</em>. Sociology shows us new layers of meaning in the ordinary. This is what Berger calls <strong>"culture shock without geographical displacement."</strong></p>
+
+  <div class="example">
+    <strong>Example — The Southern Caste System</strong>
+    Berger imagines a sociology class in the American South where students are bored — they already know about racial segregation. But the lecturer introduces the concept of "caste," takes them to India, explains magical beliefs, economic interests, religious rationalisations. Suddenly India is not far away — and the familiar Southern system looks completely different. That moment of recognition — "things are not what they seem" — is the beginning of sociological thinking.
+  </div>
+
+  <div class="remember">
+    <strong>Berger's First Wisdom of Sociology</strong>
+    "Things are not what they seem." Social reality has many layers of meaning. Each new layer discovered changes the perception of the whole. Sociology is not a pastime — it is a passion, a demon that drives the thinker to keep asking its questions.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<div class="section" id="s15" style="border-top: 3px solid var(--gold);">
+  <h2 style="color: var(--gold);">Quick Revision: Key Terms at a Glance</h2>
+  <div class="subtitle">All the essential concepts in one place</div>
+
+  <table class="compare-table">
+    <tr><th>Term</th><th>Thinker</th><th>Simple Meaning</th></tr>
+    <tr><td>Sociological Imagination</td><td>C. Wright Mills</td><td>Connecting personal troubles to public social issues</td></tr>
+    <tr><td>Social Fact</td><td>Durkheim</td><td>External, coercive ways of acting that exist above the individual</td></tr>
+    <tr><td>Anomie</td><td>Durkheim</td><td>Normlessness; social rootlessness when old rules break down</td></tr>
+    <tr><td>Mechanical Solidarity</td><td>Durkheim</td><td>Pre-modern unity based on similarity and shared religion</td></tr>
+    <tr><td>Organic Solidarity</td><td>Durkheim</td><td>Modern unity based on interdependence from division of labour</td></tr>
+    <tr><td>Mode of Production</td><td>Marx</td><td>The way a society produces — productive forces + relations of production</td></tr>
+    <tr><td>Surplus Value</td><td>Marx</td><td>The value workers create beyond their wages — the basis of capitalist profit</td></tr>
+    <tr><td>Alienation</td><td>Marx</td><td>Worker's disconnection from labour, product, others, and self under capitalism</td></tr>
+    <tr><td>Verstehen</td><td>Weber</td><td>Interpretive understanding — grasping the subjective meaning actors give their actions</td></tr>
+    <tr><td>Iron Cage</td><td>Weber</td><td>The dehumanising effect of over-rationalisation and bureaucracy</td></tr>
+    <tr><td>Protestant Ethic</td><td>Weber</td><td>The religious work ethic (Calvinism) that helped create capitalism</td></tr>
+    <tr><td>AGIL</td><td>Parsons</td><td>Four functions all societies must fulfil: Adaptation, Goal Attainment, Integration, Latency</td></tr>
+    <tr><td>Manifest/Latent Functions</td><td>Merton</td><td>Intended vs. unintended consequences of social actions</td></tr>
+    <tr><td>Dysfunction</td><td>Merton</td><td>Consequences that harm the system's adaptation</td></tr>
+    <tr><td>Sanskritisation</td><td>Srinivas</td><td>Lower castes adopting upper-caste practices to claim higher social status</td></tr>
+    <tr><td>Dominant Caste</td><td>Srinivas</td><td>A caste combining numerical strength, land, and prestige to dominate village politics</td></tr>
+    <tr><td>Social Construction</td><td>Berger & Luckmann</td><td>Reality is human-made — produced, maintained, and internalised through social life</td></tr>
+    <tr><td>Legitimation</td><td>Berger & Luckmann</td><td>The process of justifying social institutions so people accept them as valid</td></tr>
+    <tr><td>Positivism</td><td>Comte</td><td>Society can and should be studied scientifically, using observable evidence</td></tr>
+    <tr><td>Law of Three Stages</td><td>Comte</td><td>All societies pass through Theological → Metaphysical → Scientific stages</td></tr>
+    <tr><td>Subaltern Studies</td><td>Post-1970s India</td><td>Studying oppressed/marginalised groups from their own perspective</td></tr>
+  </table>
+</div>
+
+</div><!-- end container -->
+
+</body>
+</html>
