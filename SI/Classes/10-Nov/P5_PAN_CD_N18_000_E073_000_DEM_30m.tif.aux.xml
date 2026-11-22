@@ -1,0 +1,13 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>Geocoded DEM channel</Description>
+    <Metadata>
+      <MDI key="STATISTICS_APPROXIMATE">YES</MDI>
+      <MDI key="STATISTICS_MINIMUM">-125.02409362793</MDI>
+      <MDI key="STATISTICS_MAXIMUM">1336.9017333984</MDI>
+      <MDI key="STATISTICS_MEAN">373.87488137633</MDI>
+      <MDI key="STATISTICS_STDDEV">318.42193474144</MDI>
+      <MDI key="STATISTICS_VALID_PERCENT">100</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>
