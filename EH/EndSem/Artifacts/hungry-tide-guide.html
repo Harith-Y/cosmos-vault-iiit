@@ -1,0 +1,640 @@
+<title>The Hungry Tide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a sticky section bar; geological strata band in the hero; cards only where content is a set */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --fg:#1d2420; --muted:#5a645e; --line:#d6dbd4;
+  --accent:#1e6a63; --accent-soft:#dcebe7; --rust:#a9502a; --rust-soft:#f3e2d8;
+  --s1:#c9c2a8; --s2:#b3a98a; --s3:#8f8770; --s4:#6c6655; --s5:#3c3a33; --s6:#a9502a; --sink:#f2f3ef;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.mono,.pg{font-family:var(--mono);font-size:.78rem}
+.pg{color:var(--rust);background:var(--rust-soft);padding:1px 6px;border-radius:4px;white-space:nowrap;font-weight:500}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero .wrap{padding-block:2.6rem 0;display:grid;gap:1rem}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--rust)}
+.hero .by{color:var(--muted);font-size:1rem}
+.oneliner{font-size:1.15rem;max-width:62ch}
+.strata{display:grid;grid-template-rows:repeat(6,auto);margin-top:1.2rem}
+.strata div{font-family:var(--mono);font-size:.72rem;padding:4px 12px;color:var(--fg);display:flex;justify-content:space-between;gap:1rem}
+.strata div:nth-child(1){background:var(--s6);color:var(--surface);font-weight:500}
+.strata div:nth-child(2){background:var(--s1)}
+.strata div:nth-child(3){background:var(--s2)}
+.strata div:nth-child(4){background:var(--s3);color:var(--sink)}
+.strata div:nth-child(5){background:var(--s4);color:var(--sink)}
+.strata div:nth-child(6){background:var(--s5);color:var(--sink)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.55rem;scrollbar-width:thin}
+nav.bar a{font-family:var(--display);font-size:.85rem;font-weight:500;text-decoration:none;color:var(--fg);padding:.3rem .7rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+nav.bar a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-block:2.6rem;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section > .wrap{display:grid;gap:1.2rem}
+.lead{color:var(--muted);max-width:65ch}
+
+.memorize{background:var(--accent-soft);border-left:4px solid var(--accent);padding:1.1rem 1.3rem;border-radius:0 8px 8px 0;max-width:72ch}
+.memorize p+p{margin-top:.7rem}
+
+/* argument steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem;padding:1rem 0;border-top:1px dashed var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--rust);line-height:1.2}
+ol.steps h3{margin-bottom:.3rem}
+ol.steps ul{margin:.4rem 0 0;padding-left:1.1rem}
+ol.steps ul li{display:list-item;padding:0;border:0;counter-increment:none}
+ol.steps ul li::before{content:none}
+
+/* glossary */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.35rem;align-content:start;min-width:0}
+.term h3{font-size:1.02rem}
+.term p{font-size:.95rem}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.q{font-style:italic;min-width:16rem}
+td .pg{display:inline-block}
+
+/* connections */
+.conn{display:grid;gap:1rem}
+details.text{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.text summary{cursor:pointer;padding:.9rem 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.text summary::-webkit-details-marker{display:none}
+details.text summary h3{font-size:1.08rem}
+details.text summary .tag{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+details.text .body{padding:0 1rem 1rem;display:grid;gap:.6rem}
+details.text .body ul{margin:0;padding-left:1.1rem}
+.use{background:var(--rust-soft);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+.use b{font-family:var(--display)}
+
+/* two column */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;min-width:0}
+.box h3{margin-bottom:.5rem}
+.box ul{margin:0;padding-left:1.1rem;display:grid;gap:.4rem}
+
+/* questions */
+.qa{display:grid;gap:1rem}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;padding:1rem 1.1rem;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.4;list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .n{font-family:var(--mono);font-size:.78rem;color:var(--surface);background:var(--accent);border-radius:4px;padding:2px 7px;height:fit-content;margin-top:2px}
+details.q .body{padding:0 1.1rem 1.1rem;display:grid;gap:.7rem;font-size:.97rem}
+details.q .body h4{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+details.q .body ul,details.q .body ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap}
+button{font-family:var(--display);font-size:.85rem;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul.tips{margin:0;padding-left:1.1rem;display:grid;gap:.5rem;max-width:70ch}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+@media (max-width:520px){body{font-size:16px} h2{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+/* river hero for this guide */
+.river{margin-top:1.2rem;background:var(--accent-soft);border-top:1px solid var(--line)}
+.river svg{display:block;width:100%;height:auto}
+.river .r-line{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;opacity:.55}
+.river .r-thin{fill:none;stroke:var(--accent);stroke-width:2}
+.river .wall{fill:var(--rust)}
+.river text{font-family:var(--mono);font-size:12px;fill:var(--fg)}
+.river text.h{font-family:var(--display);font-weight:700;font-size:15px}
+.river text.r{fill:var(--rust);font-weight:500}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:.7rem}
+.mem{font-family:var(--mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:0 5px;white-space:nowrap}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.map div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;font-size:.9rem}
+.map b{display:block;font-family:var(--display);color:var(--rust)}
+.part{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-top:1.2rem}
+.short{background:var(--rust-soft);border-left:4px solid var(--rust);padding:1rem 1.2rem;border-radius:0 8px 8px 0;max-width:72ch}
+.short ol{margin:.5rem 0 0;padding-left:1.2rem;display:grid;gap:.35rem}
+/* tide hero for this guide: Part One ebb / Part Two flood */
+.tide{margin-top:1.2rem;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.tide > div{padding:1rem 0 1.2rem;display:grid;gap:.45rem;align-content:start}
+.tide > div + div{border-left:1px dashed var(--line);padding-left:1.2rem}
+@media (max-width:560px){.tide > div + div{border-left:0;padding-left:0;border-top:1px dashed var(--line)}}
+.tide h3{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.tide .ebb h3{color:var(--accent)} .tide .flood h3{color:var(--rust)}
+.tide p{font-size:.93rem}
+.vs td:first-child{font-family:var(--display);font-weight:600;white-space:nowrap}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HS1.304 Environmental Humanities · Endsem study guide</div>
+    <h1>The Hungry Tide: <span>tigers, dolphins, refugees, and who gets to live in the tide country</span></h1>
+    <p class="by">Amitav Ghosh · novel, 2004 · prequel to <i>Gun Island</i> (2019). Your PDF is the 325-page Penguin Canada ebook. It has <b>no printed page numbers</b>, so every "p." below is the <b>PDF page number</b> (the number your PDF reader shows). The novel runs pp. 6–323; the Author's Note is p. 324.</p>
+    <p class="oneliner"><b>In one line:</b> Two outsiders, Piya (an American-Indian marine biologist hunting rare dolphins) and Kanai (a Delhi translator reading his dead uncle's notebook), enter the Sundarbans with Fokir, an illiterate local fisherman; the novel sets <b>conservation</b> (save the tiger and the dolphin) against <b>survival</b> (the poor who live and die there), through the 1979 <b>Morichjhãpi massacre</b>, a tiger burnt alive, and a cyclone that kills Fokir.</p>
+    <div class="tide" aria-label="The two parts of the novel">
+      <div class="ebb">
+        <h3>Part One · The Ebb: Bhata · pp. 6–142</h3>
+        <p>Arrivals. Piya hires Fokir and finds the dolphins' pool. Kanai reaches Lusibari and starts reading <b>Nirmal's 1979 notebook</b> about Morichjhãpi and Kusum. Stories of Hamilton, Bon Bibi and the refugees.</p>
+      </div>
+      <div class="flood">
+        <h3>Part Two · The Flood: Jowar · pp. 143–323</h3>
+        <p>Rising stakes. All four sail on the <i>Megha</i>. The notebook reaches the siege and massacre. The <b>tiger is killed</b> (236–241). Kanai is "judged" at Garjontola. The <b>cyclone</b> kills Fokir (309–315). Piya stays to build a project named after him.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#short">Short on time</a>
+    <a href="#summary">Summary</a>
+    <a href="#map">Chapter map</a>
+    <a href="#plot">Plot step by step</a>
+    <a href="#people">Characters</a>
+    <a href="#terms">Key terms</a>
+    <a href="#quotes">Quote bank</a>
+    <a href="#links">Links to other texts</a>
+    <a href="#eval">Strengths & limits</a>
+    <a href="#qs">Likely questions</a>
+    <a href="#tips">Exam tips</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="short">
+  <div class="wrap">
+    <h2>Short on time? Do this</h2>
+    <div class="short">
+      <p><b>If you have 30 minutes, learn these five things in this order:</b></p>
+      <ol>
+        <li><b>The 60-second summary</b> below. It opens almost any answer on this novel.</li>
+        <li><b>The central conflict: conservation vs. survival.</b> Two scenes carry it. <b>Kusum's speech</b> during the Morichjhãpi siege ("Who are these people… who love animals so much that they are willing to kill us for them?", p. 215) and the <b>Piya–Kanai argument</b> after the tiger is burnt ("people like you… without regard for the human costs" vs. "it'll be people next", pp. 245–246).</li>
+        <li><b>Four ways of living in the Sundarbans</b>, one per character: <b>Piya</b> = science/conservation; <b>Kanai</b> = language, the urban elite; <b>Fokir</b> = lived, bodily local knowledge; <b>Nirmal</b> = revolutionary idealism and poetry; <b>Nilima</b> = slow, practical reform. (Use any two for midsem-style Q1.)</li>
+        <li><b>Eight quotes</b>: "the boundaries between land and water are always mutating" (10); "hostility to their presence" (10); "the wild and the sown… held in careful balance" (84); "transformation is the rule of life" (183); "worth less than dirt or dust" (215); "too poor to matter" (245); "people like you… without regard for the human costs" (246); "home is where the Orcaella are" (323).</li>
+        <li><b>Slow violence + environmental injustice links</b>: Morichjhãpi = displacement in the name of conservation; weekly tiger deaths "never reported" (245) = Nixon's invisible, attritional violence; cyclones and salinity = the slow-and-sudden mix. Compare with <i>Pterodactyl</i> (tribals displaced by "development").</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="wrap">
+    <h2>The 60-second summary</h2>
+    <div class="memorize">
+      <p>In <i>The Hungry Tide</i> (2004), Amitav Ghosh sets a novel in the <b>Sundarbans</b>, the mangrove archipelago of the Ganga–Brahmaputra delta, called by locals <b>bhatir desh, "the tide country"</b> (p. 10). Two outsiders meet on the train to Canning (p. 7). <b>Piya Roy</b>, an American cetologist of Bengali descent who speaks no Bengali, has come to survey the rare <b>Irrawaddy dolphin</b> (<i>Orcaella brevirostris</i>). <b>Kanai Dutt</b>, a 42-year-old Delhi businessman who runs a translation bureau, is going to Lusibari because his aunt <b>Nilima</b> has found a notebook left for him by his uncle <b>Nirmal</b>, who died in 1979. After a corrupt forest guard's launch dumps her in the river (p. 37), Piya is rescued by <b>Fokir</b>, an illiterate crab-fisherman, who leads her to a dolphin pool at <b>Garjontola</b>. They share no language but work together almost perfectly.</p>
+      <p>Kanai reads the notebook. It tells of the 1978–79 settlement of <b>Morichjhãpi</b> by Dalit refugees from Bangladesh (who had escaped a government camp at Dandakaranya), and of <b>Kusum</b>, Fokir's mother, who was killed when the West Bengal government evicted them to protect a tiger reserve (pp. 94–99, 214–215). In Part Two all four sail on Horen's boat, the <i>Megha</i>. Villagers trap a man-eating tiger and burn it alive while Piya tries to stop them (pp. 236–241). Kanai and Piya argue about who pays the human cost of conservation (pp. 245–246). Fokir abandons Kanai on Garjontola, where he faces a tiger and is "judged" (pp. 265–269). A <b>cyclone</b> hits. Fokir shields Piya with his body, tied to a tree, and is killed (pp. 309–315); the notebook is lost. In the epilogue Piya returns to Lusibari to run a dolphin project with Nilima's trust, built on Fokir's knowledge, saved on her GPS and named after him (pp. 319–323). The novel's argument is that <b>nature and culture cannot be separated here</b>, that <b>conservation imposed from above can be a form of violence against the poor</b>, and that people with very different kinds of knowledge must learn to share the land.</p>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2>Chapter map</h2>
+    <p class="lead">Two parts named after the tides: <b>Bhata</b> (ebb) and <b>Jowar</b> (flood). Chapters alternate between Piya's story, Kanai's story, and Nirmal's notebook (written in first person, "I"). Page = PDF page where the chapter starts.</p>
+    <div class="part">Part One · The Ebb: Bhata (pp. 6–142)</div>
+    <div class="map">
+      <div><b>The Tide Country · 7</b>Kanai sees Piya at Dhakuria; the notebook's opening on the tide country.</div>
+      <div><b>An Invitation · 12</b>Piya and Kanai talk on the train; he invites her to Lusibari.</div>
+      <div><b>Canning · 18</b>Nilima, Kanai's past visit, Nirmal and Horen.</div>
+      <div><b>The Launch · 29</b>Piya's forest guard and boatman; the dolphin card.</div>
+      <div><b>Lusibari · 33</b>The Hamilton school and bungalow.</div>
+      <div><b>The Fall · 37</b>Piya falls overboard; Fokir rescues her.</div>
+      <div><b>S'Daniel · 43</b>Nirmal on Sir Daniel Hamilton's cooperative dream.</div>
+      <div><b>Snell's Window · 47</b>How dolphins see; Piya with Fokir.</div>
+      <div><b>The Trust · 51</b>Lusibari's people; Nilima's Badabon Trust; Moyna.</div>
+      <div><b>Fokir · 55</b>Piya and Fokir set off together.</div>
+      <div><b>The Letter · 57</b>The notebook: "a place called Morichjhãpi".</div>
+      <div><b>The Boat · 60</b>Fokir's boat; Tutul.</div>
+      <div><b>Nirmal and Nilima · 64</b>Their arrival in 1950; Nilima builds the Trust.</div>
+      <div><b>At Anchor · 69</b>The boats moored together for the night.</div>
+      <div><b>Kusum · 73</b>Kanai remembers Kusum from his childhood visit.</div>
+      <div><b>Words · 77</b>Piya's dislike of Bengali; words vs. no words.</div>
+      <div><b>The Glory of Bon Bibi · 82</b>The Bon Bibi play; the tiger kills Kusum's father.</div>
+      <div><b>Stirrings · 90</b>Piya watches the dolphins with Fokir.</div>
+      <div><b>Morichjhãpi · 94</b>Nilima tells Kanai about 1979 and Kusum's death.</div>
+      <div><b>An Epiphany · 100</b>Piya sees the dolphins follow the tides.</div>
+      <div><b>Moyna · 104</b>Moyna's ambition to be a nurse.</div>
+      <div><b>Crabs · 110</b>Fokir catches crabs; Tutul.</div>
+      <div><b>Travels · 116</b>Kanai at Lusibari.</div>
+      <div><b>Garjontola · 121</b>The ruined settlement; Fokir sings.</div>
+      <div><b>A Disturbance · 125</b>Kanai in Nirmal's study.</div>
+      <div><b>Listening · 127</b>Night sounds; a tiger nearby.</div>
+      <div><b>Blown Ashore · 129</b>Nirmal meets Kusum and little Fokir on Morichjhãpi.</div>
+      <div><b>A Hunt · 134</b>Fokir and Piya by the pool.</div>
+      <div><b>Dreams · 137</b>Kusum tells her story; the settlers' dream.</div>
+      <div><b>Pursued · 141</b>Piya and the dolphin calf.</div>
+    </div>
+    <div class="part">Part Two · The Flood: Jowar (pp. 143–323)</div>
+    <div class="map">
+      <div><b>Beginning Again · 144</b>Nirmal fired up by Morichjhãpi; deep time of the delta.</div>
+      <div><b>Landfall · 148</b>Piya and Fokir reach Lusibari.</div>
+      <div><b>A Feast · 153</b>The settlers' feast at Morichjhãpi.</div>
+      <div><b>Catching Up · 157</b>Piya and Kanai at the Guest House.</div>
+      <div><b>Storms · 163</b>Nirmal on the history of cyclones.</div>
+      <div><b>Negotiations · 168</b>Moyna and Kanai; Piya hires Fokir.</div>
+      <div><b>Habits · 173</b>Nilima refuses to help Morichjhãpi.</div>
+      <div><b>A Sunset · 177</b>Kanai tells Piya about Kusum.</div>
+      <div><b>Transformation · 181</b>Pilgrimage to Garjontola; "transformation is the rule of life".</div>
+      <div><b>A Pilgrimage · 184</b>Piya and Moyna.</div>
+      <div><b>Destiny · 190</b>The Bon Bibi story and her "messengers" (the dolphins).</div>
+      <div><b>The Megha · 193</b>Horen's boat; the expedition sets out.</div>
+      <div><b>Memory · 200</b>Nirmal ashore at Garjontola.</div>
+      <div><b>Intermediaries · 204</b>Piya, Kanai, Fokir.</div>
+      <div><b>Besieged · 207</b>The siege of Morichjhãpi begins.</div>
+      <div><b>Words · 211</b>Moyna visits Kanai; notebook continues.</div>
+      <div><b>Crimes · 214</b>Kusum's speech: "worth less than dirt or dust".</div>
+      <div><b>Leaving Lusibari · 216</b>The <i>Megha</i> departs; the stingray.</div>
+      <div><b>An Interruption · 222</b>Kanai asks Horen about the notebook.</div>
+      <div><b>Alive · 225</b>Nirmal ill after Morichjhãpi.</div>
+      <div><b>A Post Office on Sunday · 230</b>Night on deck; the notebook explained to Piya.</div>
+      <div><b>A Killing · 236</b>The tiger trapped and burnt alive.</div>
+      <div><b>Interrogations · 242</b>The Piya–Kanai argument about complicity.</div>
+      <div><b>Mr. Sloane · 248</b>Piya's childhood; the dolphins at Garjontola.</div>
+      <div><b>Kratie · 253</b>Piya's Mekong past.</div>
+      <div><b>Signs · 258</b>Fokir leaves Kanai on Garjontola; the tiger.</div>
+      <div><b>Lights · 270</b>Kanai recovering.</div>
+      <div><b>A Search · 274</b>Piya's plan to log the dolphins' routes.</div>
+      <div><b>Casualties · 280</b>Dead calf hit by an official motorboat.</div>
+      <div><b>A Gift · 285</b>Fokir's offering; night away from the <i>Megha</i>.</div>
+      <div><b>Dukhey's Redemption · 287</b>Fokir's song, the Bon Bibi legend.</div>
+      <div><b>Fresh Water and Salt · 293</b>Horen reveals his love for Kusum.</div>
+      <div><b>Horizons · 296</b>The storm is sighted.</div>
+      <div><b>Losses · 299</b>Fokir and Piya race the storm.</div>
+      <div><b>Going Ashore · 305</b>They tie themselves to a tree.</div>
+      <div><b>The Wave · 309</b>Tidal surge at Lusibari; Fokir dies shielding Piya.</div>
+      <div><b>The Day After · 316</b>Piya returns alone; Moyna's grief.</div>
+      <div><b>Home: An Epilogue · 319</b>Piya returns; the project named after Fokir.</div>
+    </div>
+  </div>
+</section>
+
+<section id="plot">
+  <div class="wrap">
+    <h2>Plot step by step</h2>
+    <p class="lead">Each step gives what happens, the page, and the theme it carries. The bold line is what to remember.</p>
+    <ol class="steps">
+      <li><div><h3>Two outsiders on the train to Canning (pp. 7–17)</h3>
+        <p>Kanai, a polyglot translator ("Language was both his livelihood and his addiction", p. 7), notices Piya, who knows no Bengali (p. 8). He pulls an old seat-mate aside by sheer class confidence (p. 9). The notebook's opening describes the tide country: Ganga's braid "comes undone", an archipelago where "the boundaries between land and water are always mutating" and where the terrain is hostile to humans (pp. 9–10). Piya tells Kanai the river dolphins have "kind of disappeared from view" because everyone only talks about "the tigers and the crocodiles" (p. 14).</p>
+        <ul><li><b>Remember:</b> both main viewpoints belong to outsiders. The novel will test how well outsiders can know this place.</li></ul></div></li>
+      <li><div><h3>Nilima, Nirmal and the notebook (pp. 18–28, 57–68)</h3>
+        <p>At Canning Kanai meets his aunt <b>Nilima</b>, who runs the <b>Badabon Trust</b> and hospital on Lusibari. Nirmal, her husband, a former Marxist and Rilke-loving schoolmaster, died in 1979 "around the time of the Morichjhãpi incident" (p. 25). The notebook begins: "I am writing these words in a place… called Morichjhãpi" (p. 58). Nirmal and Nilima came to Lusibari in 1950 and found "destitution" in Hamilton's supposed utopia (pp. 64–67).</p>
+        <ul><li><b>Remember:</b> the novel is built in layers. Kanai's present-day story frames Nirmal's 1979 story, so history is always read through a document.</li></ul></div></li>
+      <li><div><h3>Piya's fall and Fokir's rescue (pp. 29–42, 47–50, 55–63)</h3>
+        <p>The Forest Department forces Piya to take a guard and a launch (p. 30). The guard harasses fishermen and extorts them. When Piya falls into the river, <b>Fokir</b> dives in and saves her (p. 37 on). She shows him her dolphin card and he points straight at the <b>Irrawaddy dolphin</b> (p. 41). She hires him. His boat is "the nautical equivalent of a shanty" (p. 60). The guard's behaviour shows how the state's "conservation" looks to locals: bribes, bullying, and armed men.</p>
+        <ul><li><b>Remember:</b> local knowledge (Fokir) beats official authority (the guard) from the first meeting.</li></ul></div></li>
+      <li><div><h3>Hamilton's dream (pp. 33–36, 43–46)</h3>
+        <p>Sir Daniel Hamilton, a Scottish businessman, bought ten thousand acres of the tide country in 1903 (p. 44) to build a cooperative society without caste or exploitation. "Look how much this mud is worth… A single acre of Bengal's mud yields fifteen maunds of rice" (p. 43). Settlers cleared the forest and "hundreds" were killed by tigers, crocodiles and snakes (p. 45). Nirmal calls it a "mirage" (p. 43).</p>
+        <ul><li><b>Remember:</b> the first human settlement here was itself an <b>act of clearing the forest</b>. This complicates any idea that the Sundarbans is untouched "wilderness".</li></ul></div></li>
+      <li><div><h3>Kusum and the Bon Bibi story (pp. 73–89)</h3>
+        <p>Kanai remembers his punishment visit to Lusibari as a boy and the girl <b>Kusum</b>. At a performance of the Bon Bibi legend, she explains Bon Bibi's law: half the forest for the demon Dokkhin Rai, half for humans, "the wild and the sown… held in careful balance" (p. 84). Kusum saw a tiger kill her father (p. 88). She will not say the word <i>bagh</i>: "to say it is to call it" (p. 88). Horen hurries her away because Dilip, a trafficker, has come looking for her (p. 89).</p>
+        <ul><li><b>Remember:</b> local religion has its own <b>ethic of limits</b>: take only what you need from the forest. This is the islanders' version of "conservation".</li></ul></div></li>
+      <li><div><h3>What happened at Morichjhãpi (pp. 94–99)</h3>
+        <p>Nilima explains: in 1978 thousands of refugees, "most of them… Dalits" (p. 95), broke out of the Dandakaranya resettlement camp in central India ("more like a concentration camp", p. 96) and cleared Morichjhãpi, an island inside a tiger reserve. The new Left Front government declared it a protected forest and evicted them. The final clash came in May 1979 (p. 96). Kusum "died in the massacre" (p. 98).</p>
+        <ul><li><b>Remember:</b> this is a real event. It is the novel's clearest case of <b>conservation as displacement</b>.</li></ul></div></li>
+      <li><div><h3>Piya and Fokir at the dolphin pool (pp. 90–93, 100–103, 110–115, 121–124)</h3>
+        <p>Fokir leads Piya to a deep pool at Garjontola where Orcaella gather at low tide. Her "epiphany": these dolphins compress their yearly Mekong rhythm into the daily tide (p. 101). She realises the project could fill her life (p. 102). They share no language, yet she feels he understands her.</p>
+        <ul><li><b>Remember:</b> science and local knowledge cooperate here. Fokir already knew everything her instruments measure.</li></ul></div></li>
+      <li><div><h3>Nirmal on Morichjhãpi (pp. 129–140, 144–156, 163–167, 181–192, 200–203, 207–215)</h3>
+        <p>In the notebook, Nirmal and Horen are blown ashore on Morichjhãpi and find Kusum, now a widow, and young Fokir (p. 130). Kusum tells her story in a rhythmic, almost sung voice (pp. 131–133). Nirmal is excited by the settlers' self-organised society (a feast, p. 153). Nilima refuses to let the Trust help (p. 173). Kusum takes Nirmal to Garjontola for Bon Bibi's puja and the dolphins appear as Bon Bibi's "messengers" (pp. 190–191). Then the <b>siege</b>: police cut off food and water, destroy tube wells, and settlers eat grass (p. 214). Kusum's speech follows (p. 215).</p>
+        <ul><li><b>Remember:</b> Kusum gives the novel's strongest critique of "global" conservation. Her crime was being "just human beings, trying to live as human beings always have" (p. 215).</li></ul></div></li>
+      <li><div><h3>Moyna, Fokir and the <i>Megha</i> (pp. 104–109, 168–172, 193–199, 216–221)</h3>
+        <p><b>Moyna</b>, Fokir's wife, trains as a nurse and wants Tutul educated; she calls Fokir "illiterate" and says he cannot understand her plans (p. 108). Kanai is attracted to her. Piya hires Horen's boat, the <i>Megha</i>, for a longer survey, with Kanai as translator and Fokir as guide.</p>
+        <ul><li><b>Remember:</b> Moyna represents modernity and upward mobility from within the village. She is neither the "authentic" local nor the outsider.</li></ul></div></li>
+      <li><div><h3>The tiger is burnt alive (pp. 236–241)</h3>
+        <p>A tiger that "had killed two people" in the village (p. 238) is trapped in a cattle pen, blinded and speared. Villagers shout "Maar! Maar! Kill! Kill!" Piya pleads ("You can't take revenge on an animal", p. 239), snaps a spear, and is dragged away by <b>Fokir, who sides with the villagers</b> (p. 240). The pen is set on fire.</p>
+        <ul><li><b>Remember:</b> the novel's mirror image of Morichjhãpi. There the state killed humans for tigers; here humans kill a tiger. Neither side is simply right.</li></ul></div></li>
+      <li><div><h3>The argument (pp. 242–247)</h3>
+        <p>Piya calls the killing "the horror" and says it makes Fokir "a part of the horror". Kanai replies that tigers kill people "every week", and "if there were killings on that scale anywhere else on earth it would be called a genocide… these people are too poor to matter" (p. 245). He blames "people like you… who made a push to protect the wildlife here, without regard for the human costs" and Indians of his class who "hide these costs… to curry favor with their Western patrons" (p. 246). Piya answers that if we decide no other species matters, "it'll be people next — just the kind of people you're thinking of, people who're poor and unnoticed" (p. 246). Kanai apologises.</p>
+        <ul><li><b>Remember:</b> learn this exchange. It is the novel's debate on <b>environmentalism of the rich vs. the poor</b>, and both sides are given a real argument.</li></ul></div></li>
+      <li><div><h3>Kanai judged at Garjontola (pp. 258–269)</h3>
+        <p>Fokir takes Kanai onto Garjontola to see tiger marks and switches from respectful <i>apni</i> to familiar <i>tui</i>: "in stepping onto the island, the authority of their positions had been reversed" (p. 265). Kanai falls in the mud and curses Fokir, and out come "the master's suspicion of the menial; the pride of caste; the townsman's mistrust of the rustic" (p. 265). He suddenly sees himself through Fokir's eyes, as one of "the men who had destroyed Fokir's village… killed his mother": Fokir "wanted him to be judged" (p. 266). Abandoned, he meets a tiger and survives (pp. 267–269).</p>
+        <ul><li><b>Remember:</b> Kanai's words fail in the forest ("without words it could not be apprehended", p. 268). Language, his power, means nothing here.</li></ul></div></li>
+      <li><div><h3>Dead calf and Horen's secret (pp. 280–295)</h3>
+        <p>Piya and Fokir find a dolphin calf killed by the propeller of a fast official boat, probably police, coast guard or Forest Department (p. 281). Fokir has seen three such carcasses. Horen tells Kanai that he too loved Kusum, and that on her last night they joined "like that of fresh water and salt" (p. 295). Fokir sings the story of Dukhey's redemption (p. 287).</p>
+        <ul><li><b>Remember:</b> the dolphins are endangered by <b>the state's own boats</b>, not the fishermen. Another reversal of the "locals destroy nature" assumption.</li></ul></div></li>
+      <li><div><h3>The cyclone and Fokir's death (pp. 296–318)</h3>
+        <p>A cyclone arrives. Kanai loses Nirmal's notebook in the water (p. 312). At Lusibari, the tidal surge floods the island but people survive in the hospital's <b>cyclone shelter, built at Nirmal's urging</b> (p. 313). Nilima: "the dreamers have everyone to speak for them… those who try to build things — no one ever sees any poetry in that" (p. 313). On Garjontola, Piya and Fokir tie themselves to a tree with a sari. In the storm's eye they see a tiger swimming (p. 314). When the wind turns, Fokir's body becomes her shield: "the storm had given them what life could not; it had fused them together and made them one" (p. 315). He dies.</p>
+        <ul><li><b>Remember:</b> nature here is not a victim to be protected but an overwhelming force. And it is the poor local who dies.</li></ul></div></li>
+      <li><div><h3>Home: the epilogue (pp. 319–323)</h3>
+        <p>Piya returns from Kolkata with funding from the internet (p. 320). She refuses work "that places the burden of conservation on those who can least afford it" and wants the project under the Badabon Trust "so the local fishermen would be involved", with Moyna managing it (p. 321). She and wants it named after Fokir because his routes, saved on her GPS, are "decades of work and volumes of knowledge" (p. 322). She plans to help Moyna and Tutul. Kanai will move to Kolkata and rewrite Nirmal's notebook (p. 323). Piya: "for me, home is where the Orcaella are" (p. 323).</p>
+        <ul><li><b>Remember:</b> the ending proposes a <b>collaborative conservation</b> that includes local people and their knowledge. Critics still ask whether the local man had to die for the outsider to belong.</li></ul></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="people">
+  <div class="wrap">
+    <h2>Characters</h2>
+    <p class="lead">Exams ask you to "consider at least two characters" and their "ways of understanding and inhabiting the Sundarbans". Each card gives that angle.</p>
+    <div class="grid">
+      <div class="term"><h3>Piyali (Piya) Roy</h3><p>US-raised cetologist of Bengali parents, speaks no Bengali. Sees the delta as <b>a habitat to be studied and protected</b>. Her tools: GPS, depth sounder, data sheets. Learns that conservation has a human cost, and ends by staying and working <i>with</i> locals.</p><p class="mono">Way of knowing: science · Way of living: outsider who chooses to belong</p></div>
+      <div class="term"><h3>Kanai Dutt</h3><p>42, Delhi, runs a translation business; urbane, vain, a womaniser. Sees the place through <b>words and texts</b> (the notebook). Translates between Piya and Fokir, and controls what each hears. Humbled on Garjontola, where words fail. Voice of the "human costs" argument.</p><p class="mono">Way of knowing: language · Way of living: metropolitan visitor</p></div>
+      <div class="term"><h3>Fokir</h3><p>Kusum's son, illiterate fisherman, Moyna's husband, Tutul's father. Knows the rivers, tides and dolphins <b>with his body</b>; sings the Bon Bibi story. Helps kill the tiger, yet respects the forest. Dies shielding Piya. Mostly seen from outside: he rarely speaks.</p><p class="mono">Way of knowing: lived, oral, bodily · Way of living: part of the ecosystem</p></div>
+      <div class="term"><h3>Nirmal Bose</h3><p>Kanai's uncle, retired Lusibari headmaster, ex-Marxist, loves Rilke and geology. Sees in Morichjhãpi the revolution he never had. His notebook is a layer of the novel. Died in 1979. His practical legacy is the cyclone shelter ("just social service — not revolution", p. 313).</p><p class="mono">Way of knowing: history, poetry, ideology</p></div>
+      <div class="term"><h3>Nilima Bose</h3><p>Nirmal's wife, founder of the Badabon Trust and hospital. Pragmatic reformer who works with the state, so she would not help Morichjhãpi. "The challenge of making a few little things a little better in one small place is enough" (p. 312).</p><p class="mono">Way of living: patient, institutional reform</p></div>
+      <div class="term"><h3>Kusum</h3><p>Fokir's mother. Lost her father to a tiger (p. 88), trafficked, widowed, joined the Morichjhãpi settlers. Speaks for the displaced poor: "our crime was that we were just human beings" (p. 215). Killed in the 1979 massacre.</p><p class="mono">Voice of: the refugee, environmental injustice</p></div>
+      <div class="term"><h3>Moyna Mandol</h3><p>Fokir's wife, trainee nurse at the Trust hospital, ambitious for Tutul's schooling. Calls Fokir "illiterate" (p. 108). Shows that locals also want modern lives; the "authentic native" is a myth.</p><p class="mono">Voice of: aspiration, modernity from within</p></div>
+      <div class="term"><h3>Horen Naskor</h3><p>Fisherman and boatman, owner of the <i>Megha</i>. Took Nirmal to Morichjhãpi; secretly loved Kusum (p. 295); Fokir's protector. Reads tides and storms by experience.</p><p class="mono">Link between: the 1979 story and the present</p></div>
+      <div class="term"><h3>Tutul</h3><p>Fokir and Moyna's son. The future generation; Piya promises to support him.</p></div>
+      <div class="term"><h3>Sir Daniel Hamilton</h3><p>Real Scottish businessman who bought ten thousand acres in 1903 (p. 44) for a cooperative utopia (pp. 43–46). Colonial "improvement" of the land.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="wrap">
+    <h2>Key terms</h2>
+    <div class="grid">
+      <div class="term"><h3>Tide country (bhatir desh)</h3><p>Local name for the Sundarbans. "Bhati" is the ebb tide: "it is only in falling that the water gives birth to the forest" (p. 10). Land and water swap places twice a day.</p></div>
+      <div class="term"><h3>Sundarbans</h3><p>"The beautiful forest" (p. 10). World's largest mangrove forest, across India and Bangladesh. Tiger reserve, home to millions of very poor people.</p></div>
+      <div class="term"><h3>Morichjhãpi (1978–79)</h3><p>Island (name means "Pepper Island", p. 58) settled by Dalit refugees who fled Dandakaranya. Evicted by the West Bengal government in the name of forest and tiger protection; siege and massacre in May 1979 (pp. 95–98, 214–215). A real historical event.</p></div>
+      <div class="term"><h3>Bon Bibi</h3><p>Forest goddess worshipped by Hindus and Muslims alike. She defeated the demon Dokkhin Rai and divided the forest between wild and human halves (p. 84). Her "law of the forest": "the rich and greedy would be punished while the poor and righteous were rewarded" (p. 86).</p></div>
+      <div class="term"><h3>Dokkhin Rai</h3><p>Demon-king of the forest who takes the form of a tiger; craves human flesh (p. 84).</p></div>
+      <div class="term"><h3>Dukhey's story</h3><p>Greedy merchant Dhona offers the poor boy Dukhey to Dokkhin Rai in exchange for wealth; Bon Bibi saves him (pp. 84–85, 287). A myth about greed, limits and the poor.</p></div>
+      <div class="term"><h3>Conservation vs. survival</h3><p>The core conflict. Top-down protection of tigers/forests (state, foreign donors, "Project Tiger") vs. the right of poor people to fish, clear land and live. Clearest in Kusum's speech (p. 215) and the Piya–Kanai debate (pp. 245–246).</p></div>
+      <div class="term"><h3>Orcaella brevirostris</h3><p>Irrawaddy dolphin, Piya's research subject (p. 41). Bon Bibi's "messengers" in local belief (p. 190). Science and myth describe the same animal.</p></div>
+      <div class="term"><h3>Mohona</h3><p>A confluence of several rivers, "an oddly seductive word" (p. 10).</p></div>
+      <div class="term"><h3>Badabon Trust</h3><p>Nilima's NGO and hospital on Lusibari. Practical, local development.</p></div>
+      <div class="term"><h3>Dandakaranya</h3><p>Government resettlement camp in central India for East Bengali refugees (p. 95); harsh land, unfamiliar language, guarded.</p></div>
+      <div class="term"><h3>Garjontola</h3><p>Fictional island with the dolphin pool and Bon Bibi shrine (pp. 121, 190). Where Kanai is "judged" and Fokir dies.</p></div>
+      <div class="term"><h3>Snell's window</h3><p>The circle of light through which a dolphin sees the world above water (p. 47). Metaphor for partial, species-bound points of view.</p></div>
+      <div class="term"><h3>Translation</h3><p>Kanai's trade, and a key theme. Piya and Fokir communicate without a shared language; Kanai's translations are sometimes self-serving. Can anyone "translate" the tide country?</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2>Quote bank</h2>
+    <p class="lead">Every quote below was checked against your PDF. Page = PDF page. Use 2–3 per answer, short.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Quote</th><th>Who / where</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr><td class="q">"a terrain where the boundaries between land and water are always mutating, always unpredictable."</td><td>Notebook opening <span class="pg">p. 10</span></td><td>Nature/culture blurring; no fixed borders</td></tr>
+        <tr><td class="q">"At no moment can human beings have any doubt of the terrain's hostility to their presence, of its cunning and resourcefulness, of its determination to destroy or expel them."</td><td>Notebook <span class="pg">p. 10</span></td><td>Nature as agent, not backdrop; no "pastoral" ideal</td></tr>
+        <tr><td class="q">"it is only in falling that the water gives birth to the forest."</td><td>Notebook <span class="pg">p. 10</span></td><td>Meaning of "tide country"; the title</td></tr>
+        <tr><td class="q">"Look how much this mud is worth… A single acre of Bengal's mud yields fifteen maunds of rice."</td><td>Hamilton, via Nirmal <span class="pg">p. 43</span></td><td>Colonial development; land as value</td></tr>
+        <tr><td class="q">"one half of the tide country would remain a wilderness… the wild and the sown, being held in careful balance."</td><td>Bon Bibi legend <span class="pg">p. 84</span></td><td>Indigenous ethic of limits / sharing</td></tr>
+        <tr><td class="q">"the rich and greedy would be punished while the poor and righteous were rewarded."</td><td>Bon Bibi play <span class="pg">p. 86</span></td><td>Myth as moral ecology</td></tr>
+        <tr><td class="q">"to say it is to call it."</td><td>Kusum on the word for tiger <span class="pg">p. 88</span></td><td>Local relation to tigers; language and power</td></tr>
+        <tr><td class="q">"Most of them were Dalits, as we say now."</td><td>Nilima <span class="pg">p. 95</span></td><td>Caste + environmental injustice</td></tr>
+        <tr><td class="q">"They called it resettlement… but people say it was more like a concentration camp or a prison."</td><td>Nilima on Dandakaranya <span class="pg">p. 96</span></td><td>Displacement by the state</td></tr>
+        <tr><td class="q">"here in the tide country, transformation is the rule of life: rivers stray from week to week, and islands are made and unmade in days."</td><td>Nirmal <span class="pg">p. 183</span></td><td>Unstable land; deep time; climate</td></tr>
+        <tr><td class="q">"our lives, our existence, were worth less than dirt or dust."</td><td>Kusum <span class="pg">p. 215</span></td><td>Conservation as violence</td></tr>
+        <tr><td class="q">"Who are these people, I wondered, who love animals so much that they are willing to kill us for them?"</td><td>Kusum <span class="pg">p. 215</span></td><td>THE key quote: global conservation vs. local poor</td></tr>
+        <tr><td class="q">"our crime was that we were just human beings, trying to live as human beings always have, from the water and the soil."</td><td>Kusum <span class="pg">p. 215</span></td><td>Survival; right to the land</td></tr>
+        <tr><td class="q">"You can't take revenge on an animal."</td><td>Piya at the tiger killing <span class="pg">p. 239</span></td><td>Piya's ethic; human/non-human</td></tr>
+        <tr><td class="q">"If there were killings on that scale anywhere else on earth it would be called a genocide… these people are too poor to matter."</td><td>Kanai <span class="pg">p. 245</span></td><td>Slow violence; invisibility of the poor</td></tr>
+        <tr><td class="q">"it was people like you… who made a push to protect the wildlife here, without regard for the human costs."</td><td>Kanai to Piya <span class="pg">p. 246</span></td><td>Critique of Western conservation</td></tr>
+        <tr><td class="q">"Once we decide we can kill off other species, it'll be people next — just the kind of people you're thinking of, people who're poor and unnoticed."</td><td>Piya to Kanai <span class="pg">p. 246</span></td><td>Defence of conservation; links species and poor</td></tr>
+        <tr><td class="q">"the master's suspicion of the menial; the pride of caste; the townsman's mistrust of the rustic; the city's antagonism toward the village."</td><td>Kanai in the mud <span class="pg">p. 265</span></td><td>Class/caste; urban elite</td></tr>
+        <tr><td class="q">"a man such as Fokir counted for nothing, a man whose value was less than that of an animal… he wanted him to be judged."</td><td>Kanai's realisation <span class="pg">p. 266</span></td><td>Environmental injustice; reversal of power</td></tr>
+        <tr><td class="q">"the dreamers have everyone to speak for them… But those who're patient… who try to build things — no one ever sees any poetry in that."</td><td>Nilima <span class="pg">p. 313</span></td><td>Revolution vs. reform</td></tr>
+        <tr><td class="q">"it was as if the storm had given them what life could not; it had fused them together and made them one."</td><td>Fokir's death <span class="pg">p. 315</span></td><td>Bridging divides; cost borne by the local</td></tr>
+        <tr><td class="q">"I don't want to do the kind of work that places the burden of conservation on those who can least afford it."</td><td>Piya, epilogue <span class="pg">p. 321</span></td><td>Piya's change; just conservation</td></tr>
+        <tr><td class="q">"That one map represents decades of work and volumes of knowledge."</td><td>Piya on Fokir's GPS routes <span class="pg">p. 322</span></td><td>Valuing local knowledge</td></tr>
+        <tr><td class="q">"for me, home is where the Orcaella are."</td><td>Piya <span class="pg">p. 323</span></td><td>Belonging; ending</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <h2>Links to other course texts</h2>
+    <p class="lead">Examiners reward comparisons. Points marked <span class="mem">from memory</span> are not from your PDFs; check them against your notes.</p>
+    <div class="btnrow"><button id="openAll" type="button">Open all</button><button id="closeAll" type="button">Close all</button></div>
+    <div class="conn">
+      <details class="text"><summary><h3>Rob Nixon, <i>Slow Violence</i></h3><span class="tag">midsem text · key for Q6-type</span></summary><div class="body">
+        <p>Nixon <span class="mem">from memory</span>: slow violence is "violence that occurs gradually and out of sight… dispersed across time and space", attritional, not spectacular, and it falls mostly on the poor. It is a <b>representational challenge</b> because media prefer sudden events.</p>
+        <ul>
+          <li><b>Invisible deaths</b>: Kanai says tiger killings "are never reported, never written about in the papers… these people are too poor to matter" (p. 245). Pure slow violence.</li>
+          <li><b>Morichjhãpi</b>: spectacular at the end (massacre) but slow in the siege (hunger, cholera, eating grass, p. 214) and slower still in decades of camps and displacement since Partition. A historical event almost erased from public memory.</li>
+          <li><b>The land itself</b>: erosion, salinity, islands "made and unmade" (p. 183), and the hunger of settlers. Gradual harm.</li>
+          <li><b>Dead dolphins</b> from official motorboats (p. 281): unseen, cumulative species loss.</li>
+          <li><b>The cyclone</b> is the "fast" counterpart: spectacular, yet its toll falls on the same poor people (Fokir).</li>
+          <li>Nixon's "<b>environmentalism of the poor</b>" fits Kusum, whose fight for land is also an ecological claim. <span class="mem">from memory</span></li>
+        </ul>
+        <div class="use"><b>Strength of applying Nixon:</b> explains why Morichjhãpi and tiger deaths stay invisible. <b>Limit:</b> the novel also has very spectacular violence (burning tiger, massacre, cyclone), and it gives agency to nature, which Nixon's human-centred frame underplays.</div>
+      </div></details>
+      <details class="text"><summary><h3>Mahasweta Devi, <i>Pterodactyl, Puran Sahay and Pirtha</i></h3><span class="tag">midsem text · Q5-type</span></summary><div class="body">
+        <p><span class="mem">from memory</span> Journalist Puran visits Pirtha, a drought-hit, starving tribal (Nagesia) village, where a pterodactyl has appeared; the tribals see it as an ancestral soul. It dies; the tribal knowledge stays untranslatable to outsiders. A critique of "development" that ignores Adivasis.</p>
+        <ul>
+          <li><b>Both</b>: marginalised communities (Dalit refugees / Adivasis) whose knowledge is dismissed by "dominant institutions" (state, scientists, media).</li>
+          <li><b>Both</b>: an outsider (Puran / Kanai, Piya) enters, fails to fully understand, and is changed.</li>
+          <li><b>Both</b>: a non-human figure (pterodactyl / tiger, dolphin) carries indigenous memory and myth (Bon Bibi).</li>
+          <li><b>Development and displacement</b>: Pirtha's starvation and land loss ≈ Morichjhãpi's eviction and Dandakaranya camps.</li>
+          <li><b>Difference</b>: Pirtha's enemy is "development"; in Ghosh the enemy is <b>conservation</b>. Both show the state's projects serving outside interests.</li>
+          <li><b>Vulnerability + inequality</b>: in both, ecological disaster (drought / cyclones, tigers) hits hardest those already poorest.</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>Coleridge, <i>The Rime of the Ancient Mariner</i></h3><span class="tag">midsem text</span></summary><div class="body">
+        <p><span class="mem">from memory</span> The Mariner kills the albatross, suffers, and is redeemed when he blesses the water-snakes "unaware".</p>
+        <ul>
+          <li><b>Killing an animal</b>: the albatross vs. the burnt tiger (pp. 236–241). Coleridge treats it as sin; Ghosh shows a village that has lost people to that tiger. Compare the moral frames.</li>
+          <li><b>Storms and the sea</b> as a force beyond human control: the Mariner's ship vs. the cyclone (p. 309).</li>
+          <li><b>Transformation</b>: Kanai on Garjontola, like the Mariner, is humbled and sees the world differently.</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3><i>Gun Island</i> (Ghosh, 2019)</h3><span class="tag">sequel · endsem text</span></summary><div class="body">
+        <ul>
+          <li>Same world: Kanai, Nilima, Piya and Moyna return. Tipu, the boy bitten by the cobra, is <b>Tutul grown up</b>, Moyna and Fokir's son. Piya's dolphins (Rani) die in <i>Gun Island</i>.</li>
+          <li><i>Hungry Tide</i> is about <b>staying</b> (who can live here); <i>Gun Island</i> is about <b>leaving</b> (climate migration out of the delta).</li>
+          <li>Both use a Bengali legend (Bon Bibi / Manasa Devi) as a carrier of ecological knowledge.</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3><i>The Great Derangement</i> (Ghosh, 2016)</h3><span class="tag">endsem text</span></summary><div class="body">
+        <ul>
+          <li>In <i>GD</i> Ghosh says he first felt the Sundarbans' instability while writing <i>The Hungry Tide</i>: the landscape is "alive" and moves. See "transformation is the rule of life" (p. 183).</li>
+          <li><i>GD</i> argues realist novels exclude the improbable. <i>The Hungry Tide</i> already lets in a cyclone, a tiger in a storm's eye (p. 314), and Bon Bibi's "messengers" (p. 190), but it still explains them mostly in realist terms.</li>
+          <li>Nature as an <b>agent</b> ("determination to destroy or expel them", p. 10) is <i>GD</i>'s "non-human forces" idea in fiction.</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>Arundhati Roy, <i>The Cost of Living</i></h3><span class="tag">endsem text</span></summary><div class="body">
+        <ul>
+          <li>Roy writes about people displaced by big dams (Narmada) with no rehabilitation. Morichjhãpi is the same pattern: the state displaces the poor (mostly Dalits and Adivasis) for a "national" goal.</li>
+          <li>Roy's "who pays the cost of development?" = Kanai's "who pays the human cost of conservation?" (p. 246).</li>
+          <li>Both critique the urban Indian elite who hide the costs (Kanai: "Indians of my class… curry favor with their Western patrons").</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>Orijit Sen, <i>River of Stories</i></h3><span class="tag">endsem text</span></summary><div class="body">
+        <ul>
+          <li>Also about rivers, Adivasi myth and displacement (Narmada dam). Both mix myth with modern politics.</li>
+          <li>Both use an outsider (a journalist in Sen; Kanai/Piya in Ghosh) whose view is challenged by local knowledge.</li>
+          <li>Myth as resistance: Bon Bibi's balance of wild and sown vs. the Adivasi creation stories of the river.</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>Jamieson / Heise, <i>Anthropocene: Love It or Leave It</i></h3><span class="tag">endsem text</span></summary><div class="body">
+        <ul>
+          <li>"Anthropocene" says humans now shape nature. The Sundarbans shows that "humans" are not one group: the cost falls on the poor, not on those who caused it.</li>
+          <li>There is no "pristine nature" to protect: Hamilton's settlements were cleared forest, and Morichjhãpi was the same. This supports a critique of "wilderness" thinking.</li>
+          <li>The cyclone shows nature is not just shaped by humans; it overwhelms them.</li>
+        </ul>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="eval">
+  <div class="wrap">
+    <h2>Strengths and limits</h2>
+    <div class="two">
+      <div class="box"><h3>Strengths</h3><ul>
+        <li>Gives both sides of conservation vs. survival a real voice (Piya and Kanai, p. 246). No easy villain.</li>
+        <li>Recovers a forgotten real event (Morichjhãpi) and links caste to ecology.</li>
+        <li>Treats nature as an active force (tides, cyclone, tigers), not scenery.</li>
+        <li>Shows several kinds of knowledge (science, myth, lived skill) and how they can combine (Fokir's GPS map, p. 322).</li>
+        <li>Rich form: notebook, legend, songs, science, mixing genres the way the tide mixes fresh water and salt.</li>
+      </ul></div>
+      <div class="box"><h3>Limits / critiques</h3><ul>
+        <li><b>Fokir is silent</b>: the subaltern is seen only through outsiders; he barely speaks. (Spivak's "Can the subaltern speak?" question.)</li>
+        <li>The local man dies so the outsiders (Piya, Kanai) can be transformed and belong. Some call this a romantic sacrifice.</li>
+        <li>The ending (internet funding, NRI visa, a project in his name) may be too neat and still led by an outsider.</li>
+        <li>Morichjhãpi is told second-hand through Nirmal's romantic eyes.</li>
+        <li>Tigers have no "voice" like humans do; the non-human is still mainly a problem for humans.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="qs">
+  <div class="wrap">
+    <h2>Likely 10-mark questions</h2>
+    <p class="lead">Q1–Q3 follow your midsem's Q1, Q5 and Q6. Each outline is a full answer plan: intro, 3–4 body points with evidence, conclusion.</p>
+    <div class="btnrow"><button id="openQ" type="button">Open all</button><button id="closeQ" type="button">Close all</button></div>
+    <div class="qa">
+      <details class="q"><summary><span class="n">Q1</span>How does <i>The Hungry Tide</i> complicate the relationship between human communities and the environment? Use at least two characters to show competing ways of understanding and inhabiting the Sundarbans.</summary><div class="body">
+        <h4>Intro</h4><p>The Sundarbans blurs land/water, human/non-human, nature/culture (p. 10). Ghosh uses characters as different "ways of seeing" the same place. Thesis: no single way is enough; the novel argues for combining them, and shows who pays when one dominates.</p>
+        <h4>Body</h4><ol>
+          <li><b>Piya (science/conservation)</b>: sees a habitat; data, GPS, dolphins. Opposes the tiger killing: "You can't take revenge on an animal" (p. 239). Argues all species matter: "it'll be people next" (p. 246).</li>
+          <li><b>Fokir (lived knowledge)</b>: knows tides and dolphins by experience; the dolphins are Bon Bibi's "messengers" (p. 190). Yet he joins the tiger killing (p. 240): he lives with the danger. Inhabits rather than studies.</li>
+          <li><b>Kanai (language/urban elite)</b>: sees through words; argues "human costs" (p. 246); in the forest, his words fail and he is "judged" (pp. 265–266).</li>
+          <li><b>Kusum / Nirmal</b>: Morichjhãpi as the human right to live "from the water and the soil" (p. 215) vs. the state's tiger reserve.</li>
+          <li><b>Bon Bibi</b> offers a local model: wild and sown "held in careful balance" (p. 84).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Epilogue: Piya's project built on Fokir's knowledge (p. 322) suggests collaboration; but his death shows the unequal price.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q2</span>Compare <i>The Hungry Tide</i> and <i>Pterodactyl</i> as critiques of development, displacement and environmental injustice. How do they link ecological vulnerability and social inequality?</summary><div class="body">
+        <h4>Intro</h4><p>Both depict marginal communities (Dalit refugees; Adivasis) whose lives depend on ecology and whose knowledge is dismissed by the state.</p>
+        <h4>Body</h4><ol>
+          <li><b>Displacement</b>: Dandakaranya "concentration camp" (p. 96) and Morichjhãpi eviction ↔ Pirtha's land loss and starvation <span class="mem">from memory</span>.</li>
+          <li><b>Development vs. conservation</b>: Mahasweta targets development; Ghosh targets conservation. Both are state projects for outsiders ("paid for by people from all around the world", p. 215).</li>
+          <li><b>Caste/tribe</b>: "Most of them were Dalits" (p. 95); tribals in Pirtha. Inequality decides who is vulnerable.</li>
+          <li><b>Vulnerability</b>: tiger deaths "too poor to matter" (p. 245), cyclone kills Fokir ↔ drought and famine in Pirtha.</li>
+          <li><b>Outsider witness</b>: Kanai/Piya ↔ Puran. Both are changed, but can they speak for the community?</li>
+          <li><b>Myth and memory</b>: Bon Bibi ↔ the pterodactyl as ancestor.</li>
+        </ol>
+        <h4>Conclusion</h4><p>Both show ecological and social injustice are the same problem: the poor bear the costs of others' plans.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q3</span>Using Rob Nixon's "slow violence", analyse <i>The Hungry Tide</i>. Strengths and limits of applying the framework?</summary><div class="body">
+        <h4>Intro</h4><p>Define slow violence: gradual, dispersed, out of sight, hitting the poor; hard to represent. Literature can make it visible.</p>
+        <h4>Body</h4><ol>
+          <li><b>Unreported tiger deaths</b> (p. 245): "never reported… too poor to matter".</li>
+          <li><b>Morichjhãpi siege</b>: starvation, cholera, eating grass (p. 214), then erased from memory (Kanai "doesn't recall it", p. 25).</li>
+          <li><b>Long displacement</b>: Partition → Dandakaranya → Morichjhãpi: decades of attrition.</li>
+          <li><b>Ecological attrition</b>: dolphins killed by official boats (p. 281); unstable land (p. 183).</li>
+          <li><b>How the novel represents it</b>: Nirmal's notebook as testimony; Kusum's voice.</li>
+        </ol>
+        <h4>Strengths / limits</h4><p>Strength: explains invisibility and class. Limits: much violence here is spectacular (massacre, burning tiger, cyclone); Nixon centres humans while Ghosh gives nature agency; slow violence here is caused by conservation, not only by pollution/extraction.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q4</span>"Conservation vs. survival." Discuss with reference to Morichjhãpi and the tiger killing.</summary><div class="body"><ol>
+        <li>Morichjhãpi: humans evicted for tigers. Kusum: "Who are these people… who love animals so much…" (p. 215).</li>
+        <li>Tiger killing: humans kill a tiger that killed two villagers (pp. 238–240). Mirror image.</li>
+        <li>Debate: Kanai's "human costs" vs. Piya's "it'll be people next" (pp. 245–246).</li>
+        <li>Bon Bibi's balance (p. 84) as alternative. Epilogue: Piya rejects conservation that burdens "those who can least afford it" and involves local fishermen (p. 321).</li>
+        <li>Conclude: the novel refuses to choose; it asks <i>who decides</i> and <i>who pays</i>.</li>
+      </ol></div></details>
+      <details class="q"><summary><span class="n">Q5</span>Discuss the role of language and translation in the novel.</summary><div class="body"><ol>
+        <li>Kanai: "Language was both his livelihood and his addiction" (p. 7). He controls Piya–Fokir communication.</li>
+        <li>Piya and Fokir connect without words; Fokir's map is "volumes of knowledge" (p. 322).</li>
+        <li>Kusum: "to say it is to call it" (p. 88). Words have power in the forest.</li>
+        <li>Kanai in the mud: "without words it could not be apprehended" (p. 268). Language fails.</li>
+        <li>Nirmal's notebook: history survives in writing and is then lost; Kanai must rewrite it (p. 323).</li>
+      </ol></div></details>
+      <details class="q"><summary><span class="n">Q6</span>How do myth and legend (Bon Bibi) function as environmental knowledge?</summary><div class="body"><ol>
+        <li>Bon Bibi divides wild and sown (p. 84): a rule of limits.</li>
+        <li>"Law of the forest": greed punished (p. 86); Dukhey's story vs. greedy Dhona.</li>
+        <li>Worshipped by Hindus and Muslims: shared, syncretic culture of the tide country.</li>
+        <li>Dolphins as "messengers" (p. 190) = the same pool Piya studies. Myth and science meet.</li>
+        <li>Link to <i>Gun Island</i> (Manasa Devi legend) and <i>River of Stories</i>; <i>GD</i>'s call to take stories seriously.</li>
+      </ol></div></details>
+      <details class="q"><summary><span class="n">Q7</span>Compare Nirmal and Nilima as two models of social change in the Sundarbans.</summary><div class="body"><ol>
+        <li>Nirmal: Marxist dreamer, poetry and revolution; drawn to Morichjhãpi (p. 96).</li>
+        <li>Nilima: practical reformer; the Trust and hospital; "a few little things a little better" (p. 312).</li>
+        <li>Nilima refuses to help Morichjhãpi (p. 173): pragmatism has a moral cost.</li>
+        <li>Irony: Nirmal's lasting gift is the cyclone shelter, "social service — not revolution" (p. 313).</li>
+        <li>"The dreamers have everyone to speak for them" (p. 313). The novel values both.</li>
+      </ol></div></details>
+      <details class="q"><summary><span class="n">Q8</span>How is the non-human (tide, tiger, dolphin, cyclone) represented as an agent in the novel?</summary><div class="body"><ol>
+        <li>Land "determined to destroy or expel" humans (p. 10); "transformation is the rule of life" (p. 183).</li>
+        <li>Tiger: feared, worshipped, killed; never named (p. 88); seen in the storm's eye (p. 314).</li>
+        <li>Dolphins: follow the tides (p. 101); studied, sacred, killed by boats (p. 281).</li>
+        <li>Cyclone: kills Fokir, floods Lusibari (pp. 313–315).</li>
+        <li>Link to <i>GD</i> (non-human agency) and the Anthropocene debate.</li>
+      </ol></div></details>
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Exam tips and traps</h2>
+    <ul class="tips">
+      <li>Write <b>"Morichjhãpi (1978–79)"</b> with the date and the word <b>Dalit refugees</b>. It shows you know it is history.</li>
+      <li>Don't say Fokir "protected the tiger". He helped kill it (p. 240). That is the point: locals are not romantic eco-saints.</li>
+      <li>Don't make Piya the villain. Her argument ("it'll be people next", p. 246) is strong. Give both sides, then judge.</li>
+      <li>Bon Bibi is worshipped by <b>Hindus and Muslims</b>. Mention it for "culture" questions.</li>
+      <li>The title: the tide is "hungry" because it eats land and people. The forest itself is hostile (p. 10).</li>
+      <li>Name the two parts: <b>The Ebb (Bhata)</b> and <b>The Flood (Jowar)</b>.</li>
+      <li>Say "PDF p." only if asked; otherwise quote the words and the scene.</li>
+      <li>Always link to at least one other course text. Nixon and <i>Pterodactyl</i> are the safest; <i>Gun Island</i> and <i>GD</i> show you know Ghosh's career.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">Study guide for HS1.304 · Built from your PDF of <i>The Hungry Tide</i> (Penguin Canada ebook, 325 PDF pages). Points tagged "from memory" come from general knowledge, not your files.</div></footer>
+
+<script>
+(function(){
+  function setAll(sel,open){document.querySelectorAll(sel).forEach(function(d){d.open=open;});}
+  document.getElementById('openAll').addEventListener('click',function(){setAll('details.text',true);});
+  document.getElementById('closeAll').addEventListener('click',function(){setAll('details.text',false);});
+  document.getElementById('openQ').addEventListener('click',function(){setAll('details.q',true);});
+  document.getElementById('closeQ').addEventListener('click',function(){setAll('details.q',false);});
+})();
+</script>

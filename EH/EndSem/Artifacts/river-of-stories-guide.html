@@ -1,0 +1,629 @@
+<title>River of Stories</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a sticky section bar; geological strata band in the hero; cards only where content is a set */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --fg:#1d2420; --muted:#5a645e; --line:#d6dbd4;
+  --accent:#1e6a63; --accent-soft:#dcebe7; --rust:#a9502a; --rust-soft:#f3e2d8;
+  --s1:#c9c2a8; --s2:#b3a98a; --s3:#8f8770; --s4:#6c6655; --s5:#3c3a33; --s6:#a9502a; --sink:#f2f3ef;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.mono,.pg{font-family:var(--mono);font-size:.78rem}
+.pg{color:var(--rust);background:var(--rust-soft);padding:1px 6px;border-radius:4px;white-space:nowrap;font-weight:500}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero .wrap{padding-block:2.6rem 0;display:grid;gap:1rem}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--rust)}
+.hero .by{color:var(--muted);font-size:1rem}
+.oneliner{font-size:1.15rem;max-width:62ch}
+.strata{display:grid;grid-template-rows:repeat(6,auto);margin-top:1.2rem}
+.strata div{font-family:var(--mono);font-size:.72rem;padding:4px 12px;color:var(--fg);display:flex;justify-content:space-between;gap:1rem}
+.strata div:nth-child(1){background:var(--s6);color:var(--surface);font-weight:500}
+.strata div:nth-child(2){background:var(--s1)}
+.strata div:nth-child(3){background:var(--s2)}
+.strata div:nth-child(4){background:var(--s3);color:var(--sink)}
+.strata div:nth-child(5){background:var(--s4);color:var(--sink)}
+.strata div:nth-child(6){background:var(--s5);color:var(--sink)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.55rem;scrollbar-width:thin}
+nav.bar a{font-family:var(--display);font-size:.85rem;font-weight:500;text-decoration:none;color:var(--fg);padding:.3rem .7rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+nav.bar a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-block:2.6rem;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section > .wrap{display:grid;gap:1.2rem}
+.lead{color:var(--muted);max-width:65ch}
+
+.memorize{background:var(--accent-soft);border-left:4px solid var(--accent);padding:1.1rem 1.3rem;border-radius:0 8px 8px 0;max-width:72ch}
+.memorize p+p{margin-top:.7rem}
+
+/* argument steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem;padding:1rem 0;border-top:1px dashed var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--rust);line-height:1.2}
+ol.steps h3{margin-bottom:.3rem}
+ol.steps ul{margin:.4rem 0 0;padding-left:1.1rem}
+ol.steps ul li{display:list-item;padding:0;border:0;counter-increment:none}
+ol.steps ul li::before{content:none}
+
+/* glossary */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.35rem;align-content:start;min-width:0}
+.term h3{font-size:1.02rem}
+.term p{font-size:.95rem}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.q{font-style:italic;min-width:16rem}
+td .pg{display:inline-block}
+
+/* connections */
+.conn{display:grid;gap:1rem}
+details.text{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.text summary{cursor:pointer;padding:.9rem 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.text summary::-webkit-details-marker{display:none}
+details.text summary h3{font-size:1.08rem}
+details.text summary .tag{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+details.text .body{padding:0 1rem 1rem;display:grid;gap:.6rem}
+details.text .body ul{margin:0;padding-left:1.1rem}
+.use{background:var(--rust-soft);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+.use b{font-family:var(--display)}
+
+/* two column */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;min-width:0}
+.box h3{margin-bottom:.5rem}
+.box ul{margin:0;padding-left:1.1rem;display:grid;gap:.4rem}
+
+/* questions */
+.qa{display:grid;gap:1rem}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;padding:1rem 1.1rem;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.4;list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .n{font-family:var(--mono);font-size:.78rem;color:var(--surface);background:var(--accent);border-radius:4px;padding:2px 7px;height:fit-content;margin-top:2px}
+details.q .body{padding:0 1.1rem 1.1rem;display:grid;gap:.7rem;font-size:.97rem}
+details.q .body h4{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+details.q .body ul,details.q .body ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap}
+button{font-family:var(--display);font-size:.85rem;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul.tips{margin:0;padding-left:1.1rem;display:grid;gap:.5rem;max-width:70ch}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+@media (max-width:520px){body{font-size:16px} h2{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+/* river hero for this guide */
+.river{margin-top:1.2rem;background:var(--accent-soft);border-top:1px solid var(--line)}
+.river svg{display:block;width:100%;height:auto}
+.river .r-line{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;opacity:.55}
+.river .r-thin{fill:none;stroke:var(--accent);stroke-width:2}
+.river .wall{fill:var(--rust)}
+.river text{font-family:var(--mono);font-size:12px;fill:var(--fg)}
+.river text.h{font-family:var(--display);font-weight:700;font-size:15px}
+.river text.r{fill:var(--rust);font-weight:500}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:.7rem}
+.mem{font-family:var(--mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:0 5px;white-space:nowrap}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.map div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;font-size:.9rem}
+.map b{display:block;font-family:var(--display);color:var(--rust)}
+.part{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-top:1.2rem}
+.short{background:var(--rust-soft);border-left:4px solid var(--rust);padding:1rem 1.2rem;border-radius:0 8px 8px 0;max-width:72ch}
+.short ol{margin:.5rem 0 0;padding-left:1.2rem;display:grid;gap:.35rem}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HS1.304 Environmental Humanities · Endsem study guide</div>
+    <h1>River of Stories: <span>a dam, a valley, and who gets to speak</span></h1>
+    <p class="by">Orijit Sen · graphic novel, first published 1994 by Kalpavriksh <span class="mem">from memory</span>. Your PDF runs from <b>Part I "The Spring" (p. 8)</b> to the <b>Epilogue "Under the Mahua Tree" (pp. 57–58)</b>. Page numbers below are the <b>printed</b> page numbers in the corners of the comic.</p>
+    <p class="oneliner"><b>In one line:</b> A fictional dam on the <b>Rewa</b> river (Rewasagar) threatens to drown adivasi villages. The book tells this through <b>three braided strands</b>: the adivasi <b>creation myth and river song</b> of the singer Malgu gayan, the <b>life story of Relku</b>, an adivasi woman pushed off her land long before the dam, and the journey of <b>Vishnu, a city journalist</b> who goes to report on the anti-dam movement. Its claim: the dam is not an isolated project but part of <b>a long history of "development" that transfers land and resources from the poor to the rich</b>.</p>
+  </div>
+  <div class="river" aria-label="The book's three parts follow the river from spring to sea, with the dam wall in the middle">
+    <svg viewBox="0 0 880 190" preserveAspectRatio="xMidYMid meet" role="img">
+      <path class="r-line" d="M30,95 C110,40 170,150 260,95 S400,40 470,95 S620,150 700,95 S820,70 860,95"/>
+      <path class="r-thin" d="M30,95 C110,40 170,150 260,95 S400,40 470,95 S620,150 700,95 S820,70 860,95"/>
+      <rect class="wall" x="512" y="78" width="10" height="56" rx="2"/>
+      <text class="r" x="517" y="152" text-anchor="middle">Rewasagar dam</text>
+      <text class="h" x="30" y="28">I · THE SPRING</text>
+      <text x="30" y="46">pp. 8–28</text>
+      <text x="30" y="174">Kujum Chantu myth · Relku's story</text>
+      <text class="h" x="330" y="28">II · THE RIVER</text>
+      <text x="330" y="46">pp. 29–49</text>
+      <text x="300" y="174">Vishnu's journey · Malgu's song · the march</text>
+      <text class="h" x="700" y="28">III · THE SEA</text>
+      <text x="700" y="46">pp. 50–58</text>
+      <text x="640" y="174">the city reacts · epilogue</text>
+    </svg>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#short">Short on time</a>
+    <a href="#summary">Summary</a>
+    <a href="#map">Section map</a>
+    <a href="#plot">Plot step by step</a>
+    <a href="#terms">Characters & terms</a>
+    <a href="#quotes">Quote bank</a>
+    <a href="#links">Other texts</a>
+    <a href="#eval">Strengths & limits</a>
+    <a href="#qs">Exam questions</a>
+    <a href="#tips">Tips & traps</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="short">
+  <div class="wrap">
+    <h2>Short on time? Do this</h2>
+    <div class="short">
+      <ol>
+        <li>Learn the <b>60-second summary</b> below. It opens almost any answer.</li>
+        <li>Learn <b>Relku's chain of loss</b> (step 3 of the plot): reserve forest → road → bazarias and thekedars → liquor debt → beating → police → fire → land taken for debt → migrant labour in the city. This is your best evidence.</li>
+        <li>Memorise <b>six quotes</b>: the "primitive way" official (15), "This land is our Mata" (16), the inspector's "jungli" line (25), "Can the sarkar give us another like her?" (36), Maya Phule on "the entire idea of development" (53), and the Epilogue punchline (58).</li>
+        <li>Know the <b>three-part form</b> (Spring, River, Sea) and why myth sits next to realism.</li>
+        <li>Pick <b>two links</b>: Roy's <i>Cost of Living</i> (same subject: big dams, displacement) and Nixon's slow violence. Add <i>The Hungry Tide</i> (Morichjhapi) if the question asks for comparison.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="wrap">
+    <h2>The 60-second version</h2>
+    <p class="lead">Learn this paragraph. It works as the opening of almost any answer on this text.</p>
+    <div class="memorize">
+      <p>Orijit Sen's graphic novel <i>River of Stories</i> follows the river Rewa from <b>"The Spring"</b> to <b>"The River"</b> to <b>"The Sea"</b>, and braids three kinds of storytelling. The adivasi singer <b>Malgu gayan</b> sings the creation of the world by <b>Kujum Chantu</b>, who made it "with enough food in it for all" (12), and later the birth of the river Rewa. The adivasi woman <b>Relku</b>, now a domestic worker in the city, tells the journalist <b>Vishnu</b> how her family lost their land in <b>Jamli</b>: the forest was declared "reserve forest", a road brought traders, a liquor merchant, <b>Rathore</b>, trapped her uncle in debt, the police beat her father, their house was burnt, and the land was taken "in payment for uncle's debts" (28). Vishnu then travels to the Rewa valley, where the <b>Rewasagar dam</b> will submerge villages, and joins the <b>Rewa Andolan</b>'s pledge, march and debate about an "alternative development model" (46).</p>
+      <p>The book argues that the dam is <b>one more stage in a long history of dispossession</b> of adivasis (Mughals, Rajputs, Marathas, the British "reserved forests", and now "our government, aided by these international banks", 42). It joins <b>social justice and ecology</b>: the activist Maya Phule says "our battle is not only against this dam. It is against the entire idea of development as we experience it today" (53). Part III shows the city, comfortable and dismissive, while the <b>Epilogue</b> mocks the official promise of "the fruits of progress" (57). By giving the myth and the people's voices as much space as the engineers' figures, the book asks <b>whose stories count</b> when "development" is decided.</p>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2>Section map</h2>
+    <p class="lead">The book has three parts and an epilogue, named after the course of a river. Each part mixes myth pages (Malgu's song, drawn in a softer, more decorative style) with realist pages (Relku, Vishnu, the city).</p>
+    <div class="map">
+      <div><b>pp. 9–12</b>Kujum Chantu: Malgu sings the creation of the world.</div>
+      <div><b>pp. 13–28</b>Relku's Story: from Jamli village to the city.</div>
+      <div><b>p. 30–31</b>"The mountains were changing": myth meets the dam site. Malgu's letter to Relukabadi.</div>
+      <div><b>pp. 32–35</b>Vishnu on the train: the engineer's case for the dam.</div>
+      <div><b>pp. 36–37</b>Ballanpur: the old weaver and Anand.</div>
+      <div><b>pp. 38–40</b>"The Children of Rewa": birth of the rivers Rewa and Vijali.</div>
+      <div><b>pp. 41–47</b>Manigam: history of displacement, the pledge, the meeting, the campfire.</div>
+      <div><b>pp. 48–50</b>Fold-out map: "Rewa: a map of stories told and as yet untold".</div>
+      <div><b>pp. 51–55</b>Part III "The Sea": the resort, the <i>Voice</i> article, the city's reactions.</div>
+      <div><b>pp. 57–58</b>Epilogue "Under the Mahua Tree": the neta and Malgu.</div>
+    </div>
+    <p class="note">The PDF has no printed page 56 (it jumps from 55 to 57). The fold-out map is split across three scanned pages without page numbers; cite it as "the map, pp. 48–50".</p>
+  </div>
+</section>
+
+<section id="plot">
+  <div class="wrap">
+    <h2>The plot, step by step</h2>
+    <p class="lead">Use the page numbers in brackets in your answer. The "Point" line under each step tells you what the step proves.</p>
+    <ol class="steps">
+
+      <div class="part">Part I · The Spring</div>
+
+      <li><div><h3>Malgu sings the creation <span class="pg">pp. 9–12</span></h3>
+        <p>The singer Malgu gayan opens: "God give me wisdom... On my lap, I have a rangai... I will sing to you the song of all existence" (9). <b>Kujum Chantu</b>, "the universe", lay on her back, and on her belly lived the first humans (10). Afraid they would fall off if she got up, she rubbed dirt off her chest and shaped a world, then trees, grasses, lizards, tigers, bears, snakes, birds (11). She planted gardens to put blood into every creature, one for humans, one for livestock, plants for lizards and snakes: "the entire world, with all its creatures, with enough food in it for all, she created" (12).</p>
+        <ul><li><b>Point:</b> the book begins inside an adivasi worldview. The earth is a <b>mother's body</b>, made for <b>all creatures</b>, with <b>enough for all</b>. Hold this against the scarcity and greed that follow.</li></ul></div></li>
+
+      <li><div><h3>Relku's childhood in Jamli <span class="pg">pp. 13–14</span></h3>
+        <p>In the city, the journalist <b>Vishnu</b> ("Vishnubhai") interviews <b>Relku</b>, the adivasi woman who works in his family's home, for an article on migrant workers (13). She was born in <b>Jamli</b>, three hours by bus from <b>Ballanpur</b>, by the Rewa (14). Childhood memories: swinging from banyan trees, collecting mahua flowers with her brother <b>Somariyo</b>.</p>
+        <ul><li><b>Point:</b> the "migrant worker" in the city has a history. Displacement is the hidden back-story of urban poverty.</li></ul></div></li>
+
+      <li><div><h3>The state arrives: reserve forest and the road <span class="pg">pp. 15–19</span></h3>
+        <p>Forest Department officials arrive by jeep: "These damned tribals always choose the most inaccessible places for their settlements"; "The very existence of people living in such a primitive way is an obstacle for modernizing the country" (15). They announce the area is a <b>reserve forest</b> that "belongs to the sarkar" (16). The villagers answer: "Sahib, these hills and forests are our home!... This land is our Mata. She gives us food and shelter... We worship the trees, the river, the hills" (16). The officer: "You can't go on living the way your ancestors used to"; the pucca road from Ballanpur to Mathwa will open up the jungle; maybe "your son will get an education... instead of spending his life wandering around the jungles like a monkey!" (17). He also makes a sexual threat about the women (18).</p>
+        <p>Afterwards forest guards stop villagers even collecting firewood (18), while <b>thekedars</b> (contractors) with permits cut "as many trees as they wished" and guards take gifts and chickens as bribes (19). The road is "like a big snake, from whose belly emerged the caravans and motors of traders from the bazar"; the <b>bazarias</b> set up shops and "slowly, they began to take over our land, sometimes even by force" (19).</p>
+        <ul><li><b>Point:</b> "conservation" and "development" both <b>exclude the adivasi and include the contractor</b>. The law punishes subsistence use and licenses commercial extraction.</li></ul></div></li>
+
+      <li><div><h3>The plot against Jamli <span class="pg">pp. 20–21</span></h3>
+        <p>At the Ballanpur Forest Range office, a forest contractor (Aggarwal) complains that adivasis are "uncooperative and resentful of outsiders"; the ranger agrees "the basic problem... is the attitude of the adivasis" and wants "some strong action now, before such ideas start to spread... Show them who's the boss" (20). Names mentioned: <b>Antriyo Singh</b> (Relku's father) and Bhuriyo Vasava. "A crackdown on the more vocal ones will serve as an effective example for the rest!" The ranger calls helping "these backward people" his "personal mission" (21).</p>
+        <p>Relku guesses why her family was targeted: her father "refused to be cowed by the thekedar", their land was "very good land, near the river", and <b>Rathore</b>, the liquor merchant, wanted it. He got her uncle <b>Maaru</b> addicted to "Inglish" (liquor) by giving it on credit (21).</p>
+        <ul><li><b>Point:</b> officials, contractors and merchants act as one network. The violence is <b>planned and structural</b>, not accidental.</li></ul></div></li>
+
+      <li><div><h3>Debt, beating, police, fire <span class="pg">pp. 22–28</span></h3>
+        <p>Antriyo begs Rathore to stop selling Maaru liquor; Rathore laughs him off (22). Rathore's men beat Maaru: "This drunkard owes Rathoreji eight thousand rupees" (23). At the police station the officer is reluctant to record a complaint against "a respected and influential" man (23–24). Antriyo is beaten by the inspector under a portrait of Gandhi: "Now where did a jungli like you get the gall to come making complaints against civilized people?" (25). A neighbour says it is safer to stay in "their good books": "If we try to meddle with them.... we're DEAD!" (26). That night their house burns (27).</p>
+        <p>Relku ends: "No one knew how the fire started. The police made a report saying it was an accident. The whole village knew it was done by Rathore, but there was no proof. Then uncle Maaru died in hospital... And we were forced to give away all our land in payment for uncle's debts" (28). "It was Rathore's word against ours. And he showed his accounts to the adhikaris." The family walks to Ballanpur "to work as landless labourers... with no money or possessions" (28). The part closes on a verse: "My life is like a river, mother / And on it I float away to the big city" (28).</p>
+        <ul><li><b>Point:</b> the law (accounts, reports, police) <b>launders</b> theft. The later fold-out map labels "Rathore's house, built on the land where Relku's house once stood" (map, pp. 48–50).</li></ul></div></li>
+
+      <div class="part">Part II · The River</div>
+
+      <li><div><h3>"The mountains were changing" <span class="pg">pp. 30–31</span></h3>
+        <p>Myth and present collide on one page: a crane and concrete stand over the mountain while Ranikajal cries "Our mountain is changing" and Ratukamai rides to wake Malgu gayan, who "sleeps for twelve years and snores for thirteen" (30). At the <b>Reva Sagar</b> project office, an official presses the engineer Trivedi to hurry because "the international aid agency team" visits next month and "the next instalment of the loan depends on their report" (31). Malgu makes a letter from the dirt off his chest (echoing Kujum Chantu) and sends it to <b>Relukabadi</b> the woodcutter: "the time has come again to pick up the rangai so that the river of stories which rises from the soul can flow out... to the far corners of the world" (31).</p>
+        <ul><li><b>Point:</b> the dam is driven by <b>foreign loans and deadlines</b>; the myth answers with a call to <b>tell the story again</b>. The title comes from here.</li></ul></div></li>
+
+      <li><div><h3>The train: the official case for the dam <span class="pg">pp. 32–35</span></h3>
+        <p>Vishnu leaves for Ballanpur; Relku asks him to visit Somariyo, who may be in "the anti-dam agitation", and his mother warns him not to get "mixed up in all this anti-government political stuff" (32). On the train a technical supervisor for <b>J.S. Associates</b>, the main contractor, says "You media people are always adding fuel to the fire" (33). Vishnu reads the activists' booklet: the tribals "are fighting to preserve their ecosystem from destruction by our flawed development policies" (34). The supervisor gives the figures: about a hundred thousand people lose land; 375 sq km of forest and farmland flooded; another lakh displaced by canals; "it's still nothing compared to the benefits"; 1450 megawatts, irrigation and drinking water "to drought-prone areas"; "the nation can't do without such a project"; $600 million of international aid (34). A card player jokes that 300 million "must be going into the pockets of politicians" (35). Vishnu: people displaced by past projects "have never been resettled or adequately compensated"; millions now live "as landless labourers or as urban migrants in slums" (35). The supervisor's last word: "that's the government's headache, not mine" (35).</p>
+        <ul><li><b>Point:</b> the language of <b>numbers and national interest</b> makes people into "acceptable losses". Relku is exactly the "urban migrant" Vishnu reads about.</li></ul></div></li>
+
+      <li><div><h3>Ballanpur: the weaver and Anand <span class="pg">pp. 36–37</span></h3>
+        <p>An old weaver guides Vishnu: the sarkar promises good land and jobs, "but I can't bear to leave Mother Rewa. She is the holy one, the provider and protector of life... Can the sarkar give us another like her?" (36). <b>Anand</b>, a former electronics engineer, joined the <b>Rewa Andolan</b> because he felt like "a 'thinking machine' who is utterly unaware of the larger implications of what he's doing"; the movement asked "What is this thing called 'modern' technology?... Who benefits from it? And at whose cost?" (37).</p>
+        <ul><li><b>Point:</b> the river cannot be <b>compensated</b> because it is not a commodity. And expert knowledge is questioned from inside by an engineer.</li></ul></div></li>
+
+      <li><div><h3>The Children of Rewa (myth) <span class="pg">pp. 38–40</span></h3>
+        <p>Relukabadi searches every mountain for wood, weeps, prays, and finds a tall teak tree. His axe draws blood, then water, then milk; the tree turns black and falls on his <i>matla</i> (water pot), behind which his daughters Revli and Devli are hiding (38–39). They flow away with the water to <b>Ambarkhant</b>, who is barren and adopts them, naming them "Ganga, Rewa" and "Jamna, Vijali" (40). From the tree Relukabadi makes instruments, including the <b>rangai</b>, for Malgu (40).</p>
+        <ul><li><b>Point:</b> the rivers are <b>daughters</b> and the source of music. Cutting the tree is sacred, costly and creative, the opposite of the thekedars' felling. The myth parallels Relku (a daughter carried away by water, 28).</li></ul></div></li>
+
+      <li><div><h3>Manigam: a long history of displacement <span class="pg">pp. 41–43</span></h3>
+        <p>On the bus to the rally at <b>Manigam</b>, "the first village that is scheduled for submergence" (41), Anand explains that outsiders have long regarded the adivasi "with a mixture of fear and contempt": Mughals, Rajputs, Marathas drove them into the hills, "similar to what white settlers did in the Americas and Australia"; the British introduced "reserved forests" to take over the forests; "And now our government, aided by these international banks, is planning to flood some of their last remaining villages out of existence" (42). Vishnu asks if the dam is "part of a historical process of displacement of tribal communities"; Anand: "Definitely!", but legends of resistance "abound" and "as the dam wall grows higher, so does people's determination to not allow it to be built" (42). It is "as though... Malgu gayan had picked up his rangai, and was telling his people to rise, to unite!" (43).</p>
+        <ul><li><b>Point:</b> the dam is <b>internal colonialism</b>. And resistance is also a tradition, carried by stories.</li></ul></div></li>
+
+      <li><div><h3>The pledge and the march <span class="pg">pp. 44–45</span></h3>
+        <p>Standing in the river with water cupped in their hands, the people pledge: "we, who consider ourselves the children and the guardians of Mother Rewa, shall never allow the forces of greed and self-interest to wrongfully exploit her wealth... We pledge to protect these for our future generations... we oppose all those who, in the name of development, commit crimes against humanity by tearing apart this earth for their own short-term gains... We are prepared to face them with the courage of peace and non-violence" (44). The crowd chants (in Hindi) "No one will move! The dam will not be built!" (45). Asked about the energy shortage and alternatives, Anand admits: "There are no easy answers for that, it's an ongoing dialogue among us" (45).</p>
+        <ul><li><b>Point:</b> <b>guardianship</b> and <b>future generations</b> (intergenerational justice), <b>non-violence</b> (Gandhian). The book is honest that alternatives are unsettled.</li></ul></div></li>
+
+      <li><div><h3>An alternative development model <span class="pg">pp. 46–47</span></h3>
+        <p>At the public meeting, a woman speaker says they have gathered "not just to stop the building of a dam, but to assert the need in our country and the world for an alternative development model". Development runs "on an economic system which regards all forms of human and natural resources as goods which can be bought and sold by anyone who can pay the price", which "disregards life and nature" and seeks "to continually transfer natural resources from the poor to the rich". She quotes Gandhi: "This earth has enough for everyone's needs, but not enough for anyone's greed", and calls for "an equal and fair share of resources" and confidence "in our ability to live wisely with nature's gifts" (46).</p>
+        <p>At the campfire, villagers describe what development could have been: "An alternative way is one that does not benefit one person at the cost of another. In which people are consulted and their ideas respected... Our knowledge is based on real life experience"; old systems of tanks and waterways, checkdams, lift irrigation, windmills; money for schools and medicines; tree planting and water harvesting. "That would truly have been development, because it would have meant a flow of resources and knowledge back to the people from whom it has always been taken away." Why it won't happen: "no contractor would stand to make huge profits, no corrupt politician would manage to line his pockets!" (47).</p>
+        <ul><li><b>Point:</b> the movement is <b>for</b> something, not only against. Its alternative is <b>decentralised, participatory, local-knowledge-based</b>. Compare Gandhi's line to Kujum Chantu's world "with enough food in it for all" (12).</li></ul></div></li>
+
+      <li><div><h3>The map: Malgu sings the river <span class="pg">pp. 48–50</span></h3>
+        <p>A huge illustrated map of the valley carries Malgu's song of the Rewa's journey to "Duda Hamad, the sea", naming Rajghat, Kalghat, Omkar, Kakrana, Jamli; labels show the shrine of the sacred turtles, the monument to <b>Khajya Bhil</b>, "the rebel tribal chief... murdered in his sleep by Rajput rulers", forests that "provide food, wood for houses... and most other necessities", medicinal plants, birds, "an as yet undocumented variety of insect species", "some of the migratory fish species will disappear because of the dam", the ruins of Mand, "built to commemorate Mughal might", and Rathore's house on Relku's land. Inset panels show the march: "If the sarkar won't stop this dam, they'll have to do it on our dead bodies!"; marchers to a policeman: "You are a child of Rewa, just like us. Yet you are prepared to hurt your brothers and sisters for the sake of your naukri!"; a Japanese supporter says the dam "represents what our entire human society has become, oppressive, foisted on us without our consent". The map is titled "<b>Rewa: a map of stories told and as yet untold</b>" and ends: "What started as a trickle, has become a stream... And I dreamt what is today a river will tomorrow join the vast sea!"</p>
+        <ul><li><b>Point:</b> a <b>counter-map</b>. Official maps show a reservoir; this one shows <b>myth, history, species, and people</b> on the same surface. It is the book's clearest statement of what would be lost.</li></ul></div></li>
+
+      <div class="part">Part III · The Sea</div>
+
+      <li><div><h3>The city: the resort and the article <span class="pg">pp. 51–53</span></h3>
+        <p>At a beach resort, the <b>chairman of the National Water Commission</b> complains about cable TV and cold tea ("I'm paying for a bit of peace!"); his wife snaps, "If you want to be simple, go live with the tribals!" A waiter brings the <i>Voice</i>: "WHAT!" (51). Vishnu's article, "<b>Rewasagar Dam: Monument of Progress or Wall of Despair?</b>" (52–53), reports nearly 100,000 adivasis and activists against the project. <b>Khursheo</b>: "The government says they will resettle us. But our community will be broken up... Will there be any point in living after that?" <b>Danu Naik</b> of the fishing community tells how the bilsa fish come up from the sea to spawn, "But the dam will block their route". <b>Buribai</b>: "Now the sarkar expects us to leave our villages to go and live amongst these same people? I prefer to drown!" (52). Anand: planners' "so-called cost-benefit analyses" leave out siltation, waterlogging and salinity. Ecologists: "Do we have a right to destroy something whose importance we don't even understand?" Rahul Ram reports malaria rising near another dam. <b>Maya Phule</b>: 70% of the population consumes only 30% of resources; "our battle is not only against this dam. It is against the entire idea of development as we experience it today". Vishnu concludes the Andolan's strength is "its clear perception of the inseparability of social justice and ecological sustainability" (53).</p>
+        <ul><li><b>Point:</b> the decision-makers live far from the consequences. The article puts <b>human, cultural, non-human (fish, forest) and economic</b> costs together.</li></ul></div></li>
+
+      <li><div><h3>The city reacts <span class="pg">pp. 54–55</span></h3>
+        <p>A chorus of readers: "Obviously, a few people have to suffer for the good of the majority... surely these environmentalists don't expect us to go back to the middle ages"; "Do you think these environmentalists really care about tribals? They're in it to make a name for themselves" (54). A contractor's executive orders "a press release to counter the 'Voice' article" because it could hurt "our other dam-construction contracts". A man says "these so-called poor people want everything without working for it!" But a woman reflects: "All these centuries, we've been trying to teach all these 'backward' people what civilization is all about. Now we have to admit that it is THEY who might have the answers!"; students plan a campus support group; a reader writes a letter to the editor asking for more public participation in decisions that affect future generations, not only ours (54). Relku sees a photo: "Look, that's Dhediya from my village" (54). Others: "If our own government is ready to violate our human rights, then who do we turn to? Our Constitution guarantees the right of every citizen to live his life with dignity in the place and in the manner of his choice!"; a politician: "Today 'activist' has come to mean the same thing as 'terrorist'!... We should denounce them as anti-nationals!"; "India is one of the wettest countries in the world... Yet we are made to believe that this is a drought-prone country" (55). Last word: "until and unless younger generation take a more active interest in the way things are going, nothing can change... nobody wants to ask questions" (55).</p>
+        <ul><li><b>Point:</b> a <b>panorama of middle-class opinion</b>: indifference, utilitarian reasoning, nationalism, corporate spin, and a few awakenings. The ending puts responsibility on the reader.</li></ul></div></li>
+
+      <li><div><h3>Epilogue: Under the Mahua Tree <span class="pg">pp. 57–58</span></h3>
+        <p>A neta lands by helicopter beside Malgu, who sits playing under a mahua tree. "Don't you know that the nation is on the move? Gearing up to move into the 21st century?... join the national mainstream! You and your people should be made to enjoy the fruits of progress!" Malgu: "Are they sweet?" (57). The neta tells him to earn money, buy land, grow more food, sell for profit, go into business and employ others, "While YOU sat back and just enjoyed life!" Malgu: "But THAT, my friend... is just what I was doing anyway, till you came along on that noisy bird of yours!" "TWONG" (58).</p>
+        <ul><li><b>Point:</b> a comic <b>reversal</b>. The endless growth story promises, at the end, exactly what Malgu already has. "Progress" is shown to be <b>circular and self-defeating</b>; the noise (helicopter) disturbs the peace it promises. (This is a version of a well-known fisherman parable <span class="mem">from memory</span>.)</li></ul></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="wrap">
+    <h2>Characters and key terms</h2>
+    <div class="grid">
+      <div class="term"><h3>Malgu gayan</h3><p>The legendary singer and narrator of the myth strand. Sleeps for years, wakes when the mountains change. His <b>rangai</b> (stringed instrument) carries "the river of stories" (31). Last seen in the Epilogue.</p></div>
+      <div class="term"><h3>Kujum Chantu</h3><p>"The universe" as a female body who makes the world from dirt on her chest, "with enough food in it for all" (10–12).</p></div>
+      <div class="term"><h3>Relukabadi</h3><p>Mythic woodcutter who cuts the teak tree, loses his daughters to the water (they become rivers), and makes the instruments (38–40).</p></div>
+      <div class="term"><h3>Relku</h3><p>Adivasi woman from Jamli, now a domestic worker in Vishnu's city home. Her family lost their land through debt, violence and fraud (13–28). The human face of "developmental refugees".</p></div>
+      <div class="term"><h3>Antriyo, Maaru, Somariyo</h3><p>Relku's father (beaten for complaining), her uncle (made indebted by liquor, beaten, died), her brother (still near Ballanpur, likely in the movement, 32).</p></div>
+      <div class="term"><h3>Rathore</h3><p>Liquor merchant who wanted the family's riverside land; uses credit, goons and police connections. Later builds his house on it (map).</p></div>
+      <div class="term"><h3>Vishnu (Vishnubhai)</h3><p>City journalist for the <i>Voice</i>; outsider and mediator who goes from "just going there as a reporter" (32) to writing the article (52–53). "Indu's son" (55).</p></div>
+      <div class="term"><h3>Anand</h3><p>Ex-electronics engineer turned activist in the Rewa Andolan (37); gives the historical and technical critique (42, 53).</p></div>
+      <div class="term"><h3>Maya Phule</h3><p>Anti-dam activist quoted in the article on "the entire idea of development" (53). <span class="mem">from memory:</span> modelled on Medha Patkar.</p></div>
+      <div class="term"><h3>Rewa / Rewasagar / Rewa Andolan</h3><p>Fictional river, dam and movement. <span class="mem">from memory:</span> Rewa is a local name for the Narmada; the story fictionalises the Sardar Sarovar dam and the Narmada Bachao Andolan.</p></div>
+      <div class="term"><h3>Adivasi</h3><p>Indigenous/tribal communities. Officials call them "tribals", "jungli", "backward"; they call themselves children of Mother Rewa.</p></div>
+      <div class="term"><h3>Sarkar, adhikaris</h3><p>The government and its officials. "Belongs to the sarkar" (16) is the language that turns home into state property.</p></div>
+      <div class="term"><h3>Thekedar, bazaria</h3><p>Contractor (with permits to fell trees, 19) and trader/outsider from the bazar who took over land (19, 41).</p></div>
+      <div class="term"><h3>Reserve forest</h3><p>Forest declared state property, criminalising local use (16). Anand traces it to the British (42).</p></div>
+      <div class="term"><h3>Submergence, oustees, resettlement</h3><p>Flooding by the reservoir; displaced people; "land for land" promises the book doubts: "is there enough spare cultivable land...?" (35).</p></div>
+      <div class="term"><h3>Alternative development model</h3><p>Development that does "not benefit one person at the cost of another", with consultation, local knowledge, small-scale water systems (46–47).</p></div>
+      <div class="term"><h3>Mahua</h3><p>Tree whose flowers Relku gathered as a child (14) and under which Malgu sits in the Epilogue (57): a frame of forest abundance.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2>Quote bank</h2>
+    <p class="lead">All quotations were read off the scanned pages of your PDF. Speech-bubble text is in capitals in the comic; it is given here in normal case. Ellipses (...) are in the original bubbles unless marked.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Quote</th><th>Page</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr><td class="q">"And so, the entire world, with all its creatures, with enough food in it for all, she created."</td><td><span class="pg">12</span></td><td>Abundance and sharing in the adivasi cosmology; contrast with greed.</td></tr>
+        <tr><td class="q">"The very existence of people living in such a primitive way is an obstacle for modernizing the country."</td><td><span class="pg">15</span></td><td>Official contempt; adivasis seen as obstacles to "development".</td></tr>
+        <tr><td class="q">"Sahib, this land is our Mata. She gives us food and shelter. She takes care of our needs. We worship the trees, the river, the hills..."</td><td><span class="pg">16</span></td><td>Land as mother vs land as property.</td></tr>
+        <tr><td class="q">"You people have to give up thinking of the forests as your private property to use as you please."</td><td><span class="pg">16</span></td><td>Irony: the state calls their commons "private property" and then hands it to contractors.</td></tr>
+        <tr><td class="q">"It was like a big snake, from whose belly emerged the caravans and motors of traders from the bazar."</td><td><span class="pg">19</span></td><td>The road as an image of development; outsiders take over land.</td></tr>
+        <tr><td class="q">"A crackdown on the more vocal ones will serve as an effective example for the rest!"</td><td><span class="pg">21</span></td><td>Planned, structural violence by officials and contractors.</td></tr>
+        <tr><td class="q">"Now where did a jungli like you get the gall to come making complaints against civilized people?"</td><td><span class="pg">25</span></td><td>The law against the adivasi; "civilized" vs "jungli".</td></tr>
+        <tr><td class="q">"The police made a report saying it was an accident. The whole village knew it was done by Rathore, but there was no proof."</td><td><span class="pg">28</span></td><td>Paperwork launders violence; invisibility of the crime.</td></tr>
+        <tr><td class="q">"And we were forced to give away all our land in payment for uncle's debts."</td><td><span class="pg">28</span></td><td>Dispossession through debt; displacement before the dam.</td></tr>
+        <tr><td class="q">"My life is like a river, mother / And on it I float away to the big city"</td><td><span class="pg">28</span></td><td>Migration; river as the book's central metaphor.</td></tr>
+        <tr><td class="q">"Relu, the time has come again to pick up the rangai so that the river of stories which rises from the soul can flow out..."</td><td><span class="pg">31</span></td><td>The title; storytelling as resistance.</td></tr>
+        <tr><td class="q">"...it's still nothing compared to the benefits the project will bring."</td><td><span class="pg">34</span></td><td>Utilitarian cost-benefit logic; people as numbers.</td></tr>
+        <tr><td class="q">"Anyway that's the government's headache, not mine."</td><td><span class="pg">35</span></td><td>Experts' moral indifference.</td></tr>
+        <tr><td class="q">"I can't bear to leave Mother Rewa. She is the holy one, the provider and protector of life... Can the sarkar give us another like her?"</td><td><span class="pg">36</span></td><td>Why compensation fails; the river is not replaceable.</td></tr>
+        <tr><td class="q">"What is this thing called 'modern' technology? What does it do for us? Is it always relevant? Who benefits from it? And at whose cost?"</td><td><span class="pg">37</span></td><td>Questioning technology and expertise.</td></tr>
+        <tr><td class="q">"And now our government, aided by these international banks, is planning to flood some of their last remaining villages out of existence."</td><td><span class="pg">42</span></td><td>Historical continuity of displacement; internal colonialism; global capital.</td></tr>
+        <tr><td class="q">"Everyday, as the dam wall grows higher, so does people's determination to not allow it to be built."</td><td><span class="pg">42</span></td><td>Resistance and adivasi agency.</td></tr>
+        <tr><td class="q">"...we oppose all those who, in the name of development, commit crimes against humanity by tearing apart this earth for their own short-term gains..."</td><td><span class="pg">44</span></td><td>The pledge; development as crime; future generations.</td></tr>
+        <tr><td class="q">"There are no easy answers for that, it's an ongoing dialogue among us..."</td><td><span class="pg">45</span></td><td>Honesty about alternatives (useful for "limits").</td></tr>
+        <tr><td class="q">"...an economic system which regards all forms of human and natural resources as goods which can be bought and sold by anyone who can pay the price."</td><td><span class="pg">46</span></td><td>Critique of commodification.</td></tr>
+        <tr><td class="q">"This earth has enough for everyone's needs, but not enough for anyone's greed." (quoting Gandhi)</td><td><span class="pg">46</span></td><td>Sufficiency vs greed; links back to p. 12.</td></tr>
+        <tr><td class="q">"That would truly have been development, because it would have meant a flow of resources and knowledge back to the people from whom it has always been taken away."</td><td><span class="pg">47</span></td><td>The alternative model; redistribution.</td></tr>
+        <tr><td class="q">"Rewa: a map of stories told and as yet untold"</td><td><span class="pg">48–50</span></td><td>Counter-mapping; whose stories count.</td></tr>
+        <tr><td class="q">"The government says they will resettle us. But our community will be broken up... Will there be any point in living after that?" (Khursheo)</td><td><span class="pg">52</span></td><td>Cultural loss beyond economic compensation.</td></tr>
+        <tr><td class="q">"But the dam will block their route and the fish won't be able to swim up." (Danu Naik)</td><td><span class="pg">52</span></td><td>Non-human loss; local ecological knowledge.</td></tr>
+        <tr><td class="q">"Do we have a right to destroy something whose importance we don't even understand?"</td><td><span class="pg">53</span></td><td>Biodiversity, humility, precaution.</td></tr>
+        <tr><td class="q">"So our battle is not only against this dam. It is against the entire idea of development as we experience it today." (Maya Phule)</td><td><span class="pg">53</span></td><td>The book's thesis.</td></tr>
+        <tr><td class="q">"...the inseparability of social justice and ecological sustainability."</td><td><span class="pg">53</span></td><td>Environmental justice; strongest single phrase for essays.</td></tr>
+        <tr><td class="q">"Obviously, a few people have to suffer for the good of the majority..."</td><td><span class="pg">54</span></td><td>The utilitarian city view the book critiques.</td></tr>
+        <tr><td class="q">"Now we have to admit that it is THEY who might have the answers!"</td><td><span class="pg">54</span></td><td>Reversal of "civilising" hierarchy; indigenous knowledge.</td></tr>
+        <tr><td class="q">"Today 'activist' has come to mean the same thing as 'terrorist'!"</td><td><span class="pg">55</span></td><td>Delegitimising dissent; "anti-national".</td></tr>
+        <tr><td class="q">"You and your people should be made to enjoy the fruits of progress!" / "Are they sweet?"</td><td><span class="pg">57</span></td><td>Satire of "national mainstream".</td></tr>
+        <tr><td class="q">"But THAT, my friend... is just what I was doing anyway, till you came along on that noisy bird of yours!"</td><td><span class="pg">58</span></td><td>Final reversal; growth for its own sake.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <h2>Connecting <i>River of Stories</i> to other course texts</h2>
+    <p class="lead">The Roy and Heise points are checked against your PDFs. Points marked <span class="mem">from memory</span> come from general knowledge of the text, not from a PDF in your folder; check against your own notes.</p>
+    <div class="btnrow"><button id="openAll" type="button">Open all</button><button id="closeAll" type="button">Close all</button></div>
+    <div class="conn">
+
+      <details class="text" open><summary><h3>Arundhati Roy, "The Cost of Living"</h3><span class="tag">closest match · checked in your PDF</span></summary><div class="body">
+        <ul>
+          <li>Same subject: the Narmada valley and the Sardar Sarovar dam. Roy: "the story of the Narmada Valley is nothing less than the story of Modern India".</li>
+          <li>Nehru's "Temples of Modern India": big dams are "an article of faith inextricably linked with nationalism. To question their utility amounts almost to sedition." Compare the "anti-nationals" and "activist = terrorist" lines (55) and "the nation can't do without such a project" (34).</li>
+          <li>Roy: displaced people "don't count as people. Therefore the costs of Big Dams don't count as costs." Compare the supervisor's "nothing compared to the benefits" (34) and Anand on "so-called cost-benefit analyses" (53).</li>
+          <li>Roy: "About 60% of those displaced are either Dalit or Adivasi"; "When history is written, they won't be in it, not even as statistics." Relku is one of those uncounted people.</li>
+          <li>Both are by writers who use the <b>craft of fiction</b> to make the issue cohere (Roy calls herself "a fiction writer" who uses "the craft and rigour of writing fiction to make the separate parts cohere").</li>
+        </ul>
+        <p class="use"><b>Difference:</b> Roy argues with statistics and essayistic anger; Sen uses myth, image and multiple voices. Roy is about national numbers; Sen is about one family and one valley.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Rob Nixon, <i>Slow Violence</i></h3><span class="tag">concept · from memory</span></summary><div class="body">
+        <ul>
+          <li><b>Slow violence</b> <span class="mem">from memory</span>: violence "that occurs gradually and out of sight... dispersed across time and space", attritional and usually not seen as violence. Relku's loss is slow (forest rules, road, debt over years) with flashes of fast violence (beating, fire). The police report calling the fire "an accident" (28) shows how violence is made invisible.</li>
+          <li>Nixon's <b>"displacement without moving"</b> <span class="mem">from memory</span>: losing access to a place while still living there. The reserve-forest rules (16–18) displace the villagers before they physically leave.</li>
+          <li>Nixon writes on <b>megadams and "developmental refugees"</b> and the "unimagined communities" that national development erases, discussing Roy and the Narmada <span class="mem">from memory</span>. Fits the "urban migrants in slums" (35) and Relku.</li>
+          <li>Nixon's <b>writer-activist</b> who makes slow violence visible = Vishnu and the book itself.</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Amitav Ghosh, <i>The Hungry Tide</i></h3><span class="tag">from memory</span></summary><div class="body">
+        <ul>
+          <li><b>Morichjhapi</b> (1979): refugees evicted from a Sundarbans island in the name of conservation <span class="mem">from memory</span>. Parallel: the reserve forest in Jamli (16) protects "the forest" from adivasis while contractors fell it (19). Both show conservation and development used <b>against the poor</b>.</li>
+          <li><b>Myth inside a realist novel</b>: the Bon Bibi legend structures the islanders' relation to the forest, as Malgu's song does in Sen <span class="mem">from memory</span>.</li>
+          <li><b>Outsiders and translators</b>: Kanai and Piya come from the city/abroad, like Vishnu, and must learn to listen <span class="mem">from memory</span>.</li>
+        </ul>
+        <p class="use"><b>Difference:</b> in <i>The Hungry Tide</i> the non-human (tigers, dolphins, tide) is a danger as well as kin; in Sen, the river is mainly a mother and nature is benign.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Amitav Ghosh, <i>The Great Derangement</i></h3><span class="tag">see your Ghosh guide</span></summary><div class="body">
+        <ul>
+          <li>Ghosh says the crisis is "also a crisis of culture, and thus of the imagination" and that the realist novel struggles to show collective, non-human forces (from your Ghosh guide).</li>
+          <li><i>River of Stories</i> can be read as one <b>answer</b>: the graphic form, myth beside realism, a collective cast, and a <b>map</b> that gives forests, fish and insects a place in the story (48–50). The river is almost a character.</li>
+          <li>Ghosh stresses colonial history and inequality; Sen traces the same line (Mughals, British "reserved forests", international banks, 42).</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Jamieson and Heise, the Anthropocene</h3><span class="tag">see your Anthropocene guide</span></summary><div class="body">
+        <ul>
+          <li>Heise names Anthropocene stories of "disempowerment, expropriation, and displacement" (Heise, p. 3, in your PDF). Relku's story is exactly this.</li>
+          <li>Jamieson's ethics of <b>respect for nature</b> (opposite of domination) and his point that "politics is required, not just virtue" (19). The Andolan combines both: a worldview of the river as mother <i>and</i> political organisation (pledge, march, article).</li>
+          <li>Critique of the universal "we": the Anthropocene's "human power" is not shared equally. The ones who build dams (the chairman at the resort, 51) are not the ones who drown.</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Ghosh, <i>Gun Island</i></h3><span class="tag">from memory</span></summary><div class="body">
+        <ul>
+          <li>Built around a Bengali legend (the Gun Merchant and Manasa Devi) that turns out to explain present-day climate disaster and migration <span class="mem">from memory</span>. Same move as Sen: <b>old stories hold ecological knowledge</b>.</li>
+          <li>Migration: Tipu and Rafi move from the Sundarbans towards Europe; Relku moves from Jamli to the city <span class="mem">from memory</span>. Climate migrants vs development refugees: both pushed by forces they did not create.</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Mahasweta Devi, "Pterodactyl, Puran Sahay and Pirtha"</h3><span class="tag">midsem text · from memory</span></summary><div class="body">
+        <ul>
+          <li>A journalist, Puran, visits a starving adivasi area (Pirtha) and cannot fully understand or report what he sees <span class="mem">from memory</span>. Compare Vishnu: an outsider who mediates adivasi experience for city readers.</li>
+          <li>Both show state neglect and "development" failing adivasis, and both treat adivasi myth (the pterodactyl as ancestral soul; Malgu's song) as a form of knowledge <span class="mem">from memory</span>.</li>
+        </ul>
+        <p class="use"><b>Difference:</b> Mahasweta's tone is bleak and doubtful about communication; Sen is hopeful ("What started as a trickle, has become a stream", map).</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Coleridge, <i>The Rime of the Ancient Mariner</i></h3><span class="tag">midsem text · from memory</span></summary><div class="body">
+        <ul>
+          <li>Both are about a <b>teller compelled to tell</b>: the Mariner must tell his tale; Malgu must sing when the mountains change (30–31).</li>
+          <li>The crime against nature (killing the albatross) brings curse; the dam is a crime "against humanity by tearing apart this earth" (44). Coleridge's moral, "He prayeth best, who loveth best / All things both great and small" <span class="mem">from memory</span>, matches Kujum Chantu making a world for "all its creatures" (12).</li>
+        </ul>
+      </div></details>
+
+    </div>
+  </div>
+</section>
+
+<section id="eval">
+  <div class="wrap">
+    <h2>Evaluating the text: strengths and limits</h2>
+    <div class="two">
+      <div class="box"><h3>Strengths</h3><ul>
+        <li><b>Gives voice</b> to people missing from official accounts: Relku, Khursheo, Danu Naik, Buribai.</li>
+        <li><b>Joins justice and ecology</b>: "the inseparability of social justice and ecological sustainability" (53).</li>
+        <li><b>Historical depth</b>: the dam is placed in a long chain of dispossession (42), so it is not a one-off "mistake".</li>
+        <li><b>Form fits argument</b>: myth, realism, journalism, a map and satire sit side by side, so no single (official) voice dominates. The graphic form makes abstract numbers concrete.</li>
+        <li><b>Shows the mechanics</b> of dispossession (permits, bribes, debt, police reports), not just its result.</li>
+        <li><b>Proposes alternatives</b> (47), and is honest that they are unfinished (45).</li>
+      </ul></div>
+      <div class="box"><h3>Limits (use for "critically evaluate")</h3><ul>
+        <li><b>Romanticising risk</b>: adivasis appear close to nature and content; the map says tribal settlements "continue unchanged" (map), which can freeze them outside history.</li>
+        <li><b>Mediated voice</b>: adivasi experience reaches the reader through Vishnu, an upper-class urban journalist. Relku tells her story as an interview subject in his home (13).</li>
+        <li><b>Flat villains</b>: officials, Rathore and the inspector are caricatures; the pro-dam case is voiced by an indifferent supervisor (34–35) rather than its strongest version.</li>
+        <li><b>Energy question</b> is left open: "There are no easy answers" (45). Drought-prone areas' need for water (34) is not answered in depth.</li>
+        <li><b>Didactic</b>: speeches and articles explain the message directly.</li>
+        <li><b>Gender</b>: Relku narrates, Buribai and Maya Phule speak, but the myth's heroes (Malgu, Relukabadi) are male, and Relku's own voice fades in Parts II–III.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="qs">
+  <div class="wrap">
+    <h2>Likely exam questions with answer outlines</h2>
+    <p class="lead">Format from your midsem: answer 3 of 6, 10 marks each, analytical essays "substantiated with relevant evidences from the texts". Aim for a two-line thesis, 4–5 paragraphs each with one quote and page number, a counterpoint, and a conclusion that answers the exact question.</p>
+    <div class="btnrow"><button id="openQ" type="button">Open all</button><button id="closeQ" type="button">Close all</button></div>
+    <div class="qa">
+
+      <details class="q"><summary><span class="n">Q1</span>"Displacement begins long before the dam." Discuss with reference to Relku's story in <i>River of Stories</i>.</summary><div class="body">
+        <h4>Thesis</h4><p>Relku's family loses its land years before any dam, through a chain of legal, economic and physical violence. The dam is the latest and largest stage of a process already under way.</p>
+        <h4>Points</h4><ol>
+          <li>Reserve forest: home becomes "sarkar" property (16); villagers barred from firewood (18). "Displacement without moving" (Nixon, from memory).</li>
+          <li>The road "like a big snake" brings bazarias who take land "sometimes even by force" (19).</li>
+          <li>Network of power: ranger and contractor plan "a crackdown on the more vocal ones" (21).</li>
+          <li>Debt and violence: Rathore's liquor on credit, Maaru's "eight thousand rupees" (23), the inspector's "jungli" (25), the fire (27).</li>
+          <li>Paper legality: police report "an accident"; "he showed his accounts to the adhikaris"; land taken "in payment for uncle's debts" (28). Ends as migrant labour (28), the "urban migrants in slums" Vishnu reads about (35).</li>
+        </ol>
+        <h4>Counterpoint / conclusion</h4><p>One might say this is "just" local corruption, not development. But the book links it explicitly: Anand's history (42) and Rathore's house on Relku's land (map). Conclude with Roy: the displaced "won't be in [history], not even as statistics".</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q2</span>How does <i>River of Stories</i> use myth and oral storytelling? Why does it place Malgu's song beside a realist narrative?</summary><div class="body">
+        <h4>Thesis</h4><p>Myth is not decoration. It gives an alternative way of knowing the land (as mother, as shared abundance), and the act of singing becomes resistance.</p>
+        <h4>Points</h4><ol>
+          <li>Opening: Kujum Chantu makes a world "with enough food in it for all" (12): a moral economy that the rest of the book measures "development" against.</li>
+          <li>"The mountains were changing" (30): myth and crane on one page; Malgu's letter, "the river of stories which rises from the soul" (31), gives the title.</li>
+          <li>Children of Rewa: rivers as daughters; the tree bleeds (38–40). Sacred and costly use vs the thekedars' felling (19).</li>
+          <li>Myth feeds politics: Anand sees Malgu "telling his people to rise" (43); Danu Naik cites "the Gayana sung by Malgu gayan" (52).</li>
+          <li>The map: "a map of stories told and as yet untold" (48–50): a counter-map against the engineers' figures (34).</li>
+          <li>Link: Ghosh's call for new forms (<i>Great Derangement</i>); Bon Bibi in <i>The Hungry Tide</i> (from memory).</li>
+        </ol>
+        <h4>Counterpoint</h4><p>Risk of exoticising: the myth may make adivasis seem timeless. Answer: the book shows myth as living and adapting (Malgu wakes up because the mountains change).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q3</span>"Our battle is not only against this dam. It is against the entire idea of development." Examine the critique of development in <i>River of Stories</i>.</summary><div class="body">
+        <h4>Thesis</h4><p>The book critiques a model of development that measures benefit in aggregate numbers, treats resources as commodities, and "transfer[s] natural resources from the poor to the rich" (46), and proposes participatory, local alternatives.</p>
+        <h4>Points</h4><ol>
+          <li>Official view: "primitive way... obstacle" (15); "nothing compared to the benefits" (34); $600 million aid and loan deadlines (31, 34).</li>
+          <li>Hidden costs: cost-benefit analyses leave out siltation and salinity (53); fish routes blocked (52); malaria (53); culture broken (52).</li>
+          <li>Who benefits: 70% consume 30% (Maya Phule, 53); "no contractor would stand to make huge profits" from the alternative (47).</li>
+          <li>Alternative: consultation, local knowledge, tanks, checkdams, water harvesting (47); Gandhi's "enough for everyone's needs" (46).</li>
+          <li>Satire: the Epilogue's "fruits of progress... Are they sweet?" (57–58).</li>
+        </ol>
+        <h4>Link and evaluation</h4><p>Roy: big dams as "Temples of Modern India" and "article of faith" (Cost of Living). Limit: energy needs left open (45).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q4</span>Apply Rob Nixon's idea of slow violence to <i>River of Stories</i>.</summary><div class="body">
+        <h4>Thesis</h4><p>The book shows a mix of slow and spectacular violence; its achievement is to make the slow kind visible by telling it as one life story and by mapping what will be lost.</p>
+        <h4>Points</h4><ol>
+          <li>Define slow violence (from memory): gradual, out of sight, attritional, not counted as violence.</li>
+          <li>Slow: forest rules, road, debt, loss of land over years (16–21, 28); fast flashes: beating (25), fire (27).</li>
+          <li>Invisibility: the "accident" report (28); "that's the government's headache, not mine" (35).</li>
+          <li>Future and non-human harm: siltation, salinity, malaria (53); "migratory fish species will disappear" (map).</li>
+          <li>Developmental refugees and "unimagined communities" (Nixon on megadams, from memory) = Relku and the urban migrants (35).</li>
+          <li>Writer-activist: Vishnu's article (52–53), and the book itself.</li>
+        </ol>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q5</span>Compare the representation of state power and marginalised communities in <i>River of Stories</i> and <i>The Hungry Tide</i>.</summary><div class="body">
+        <h4>Thesis</h4><p>Both texts show the state using the language of conservation or development to remove the poorest people from land, and both set official narratives against local stories.</p>
+        <h4>Points</h4><ol>
+          <li>Sen: reserve forest (16), police and inspector (25), dam and international banks (42).</li>
+          <li><i>Hungry Tide</i>: Morichjhapi massacre; refugees evicted for tiger conservation (from memory).</li>
+          <li>Both: who counts as "human"? "jungli" (25) vs the question in Morichjhapi of who the forest is protected for (from memory).</li>
+          <li>Stories as counter-history: Malgu's song and the map; Bon Bibi and Nirmal's notebook (from memory).</li>
+          <li>Outsiders: Vishnu vs Kanai/Piya.</li>
+        </ol>
+        <h4>Difference</h4><p>Ghosh lets the non-human be dangerous (tiger, storm); Sen keeps nature benign and the danger human. Ghosh's ending is ambiguous; Sen's is hopeful ("a stream", map).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q6</span>"The decision-makers never live where the consequences fall." Discuss Part III of <i>River of Stories</i> and the role of the city and the media.</summary><div class="body">
+        <h4>Thesis</h4><p>Part III moves the story to where power sits, the resort and the city, and shows how distance produces indifference, while the media can either expose or counter-spin.</p>
+        <h4>Points</h4><ol>
+          <li>The Water Commission chairman at the beach resort, "paying for a bit of peace" (51).</li>
+          <li>The article as testimony: Khursheo, Danu Naik, Buribai (52); expert critique (53).</li>
+          <li>City opinions: "a few people have to suffer for the good of the majority" (54); "activist = terrorist" (55); a press release "to counter" the article (54).</li>
+          <li>Awakening: "it is THEY who might have the answers" (54); students' support group; the constitutional right to "live... with dignity in the place and in the manner of his choice" (55).</li>
+          <li>Responsibility: "nobody wants to ask questions" (55); Vishnu's turn from "just going there as a reporter" (32).</li>
+          <li>Link: Jamieson on distance and "action at a distance" (your Anthropocene guide); Mahasweta's Puran as journalist.</li>
+        </ol>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q7</span>"This land is our Mata." Discuss the relationship between the adivasis and nature in <i>River of Stories</i>. Is it romanticised?</summary><div class="body">
+        <h4>Thesis</h4><p>The book presents nature as mother, kin and commons, against nature as property and resource; it largely persuades, but at times risks a romantic, static image of adivasi life.</p>
+        <h4>Points</h4><ol>
+          <li>Cosmology: Kujum Chantu's body (10–12); rivers as daughters (40); "Mother Rewa" (36, 44).</li>
+          <li>Practical knowledge: mahua gathering (14), bilsa fish spawning (52), old irrigation systems (47).</li>
+          <li>Against commodification: "goods which can be bought and sold" (46); "Can the sarkar give us another like her?" (36).</li>
+          <li>Guardianship and future generations (44); Jamieson's respect for nature.</li>
+          <li>Critical view: "continue unchanged" (map); Epilogue's idyll; adivasis shown through a sympathetic outsider. But the book also shows them organising, debating, and admitting "no easy answers" (45), which complicates the romance.</li>
+        </ol>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q8</span>Can <i>River of Stories</i> be read as a response to Ghosh's claim that the environmental crisis is a "crisis of the imagination"?</summary><div class="body">
+        <h4>Thesis</h4><p>Yes, partly. Sen's graphic, multi-voiced form makes room for the collective, the non-human and the improbable that Ghosh says the realist novel excludes, though its subject is development, not climate change.</p>
+        <h4>Points</h4><ol>
+          <li>Ghosh's argument in brief (your Ghosh guide).</li>
+          <li>Form: myth + realism + journalism + map + satire; a collective cast; the river as a quasi-character.</li>
+          <li>Non-human presence: forests, fish, insects, turtles on the map (48–50); the bleeding tree (39).</li>
+          <li>Collective action: pledge and march (44–45) vs the lone individual hero of realist fiction.</li>
+          <li>History and colonialism: Mughals to the British to international banks (42), as Ghosh insists.</li>
+          <li>Limit: Sen's crisis is local and visible, not planetary and slow like climate change; still, the method transfers.</li>
+        </ol>
+      </div></details>
+
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Exam tips and traps</h2>
+    <ul class="tips">
+      <li><b>Cite correctly:</b> Orijit Sen, <i>River of Stories</i> (Kalpavriksh, 1994) <span class="mem">from memory</span>. It is a <b>graphic novel</b>; mention form at least once in every answer.</li>
+      <li><b>The river and dam are fictional</b> (Rewa, Rewasagar, Rewa Andolan). You may add that they are based on the Narmada, Sardar Sarovar and the Narmada Bachao Andolan, but say "based on", not "is".</li>
+      <li><b>Don't mix up</b> Relku (the woman in the city) with Relukabadi (the mythic woodcutter). The echo of names is deliberate; you can point it out.</li>
+      <li><b>Don't say</b> Relku was displaced by the dam. Her family lost its land through the reserve forest, debt and Rathore's violence (16–28). That is the point.</li>
+      <li><b>Don't say</b> the book rejects all development. It rejects a model and proposes an alternative (46–47).</li>
+      <li><b>Name the three parts</b> correctly: The Spring, The River, The Sea, plus Epilogue: Under the Mahua Tree.</li>
+      <li><b>Always add one justice point and one non-human point</b>: Relku or Khursheo for justice; fish, forest or the river for the non-human.</li>
+      <li><b>Structure:</b> thesis in two lines, one quote with page number per paragraph, a counterpoint, and a conclusion that answers the exact question.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">Study guide built from your scanned PDF of <i>River of Stories</i> (51 pages: Part I p. 8 to Epilogue p. 58; printed page 56 is not in the scan). All quotations from the book were read off the scanned pages and page numbers are the printed ones. Roy quotations are from your "Cost of Living" PDF and the Heise reference from your Anthropocene PDF. Items marked "from memory" come from general knowledge, not from a PDF in your folder; check them against your own notes.</div></footer>
+
+<script>
+(function(){
+  function setAll(sel,open){document.querySelectorAll(sel).forEach(function(d){d.open=open;});}
+  document.getElementById('openAll').addEventListener('click',function(){setAll('details.text',true);});
+  document.getElementById('closeAll').addEventListener('click',function(){setAll('details.text',false);});
+  document.getElementById('openQ').addEventListener('click',function(){setAll('details.q',true);});
+  document.getElementById('closeQ').addEventListener('click',function(){setAll('details.q',false);});
+})();
+</script>

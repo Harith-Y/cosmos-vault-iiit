@@ -1,0 +1,629 @@
+<title>The Great Derangement</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a sticky section bar; geological strata band in the hero; cards only where content is a set */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --fg:#1d2420; --muted:#5a645e; --line:#d6dbd4;
+  --accent:#1e6a63; --accent-soft:#dcebe7; --rust:#a9502a; --rust-soft:#f3e2d8;
+  --s1:#c9c2a8; --s2:#b3a98a; --s3:#8f8770; --s4:#6c6655; --s5:#3c3a33; --s6:#a9502a; --sink:#f2f3ef;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.mono,.pg{font-family:var(--mono);font-size:.78rem}
+.pg{color:var(--rust);background:var(--rust-soft);padding:1px 6px;border-radius:4px;white-space:nowrap;font-weight:500}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero .wrap{padding-block:2.6rem 0;display:grid;gap:1rem}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--rust)}
+.hero .by{color:var(--muted);font-size:1rem}
+.oneliner{font-size:1.15rem;max-width:62ch}
+.strata{display:grid;grid-template-rows:repeat(6,auto);margin-top:1.2rem}
+.strata div{font-family:var(--mono);font-size:.72rem;padding:4px 12px;color:var(--fg);display:flex;justify-content:space-between;gap:1rem}
+.strata div:nth-child(1){background:var(--s6);color:var(--surface);font-weight:500}
+.strata div:nth-child(2){background:var(--s1)}
+.strata div:nth-child(3){background:var(--s2)}
+.strata div:nth-child(4){background:var(--s3);color:var(--sink)}
+.strata div:nth-child(5){background:var(--s4);color:var(--sink)}
+.strata div:nth-child(6){background:var(--s5);color:var(--sink)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.55rem;scrollbar-width:thin}
+nav.bar a{font-family:var(--display);font-size:.85rem;font-weight:500;text-decoration:none;color:var(--fg);padding:.3rem .7rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+nav.bar a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-block:2.6rem;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section > .wrap{display:grid;gap:1.2rem}
+.lead{color:var(--muted);max-width:65ch}
+
+.memorize{background:var(--accent-soft);border-left:4px solid var(--accent);padding:1.1rem 1.3rem;border-radius:0 8px 8px 0;max-width:72ch}
+.memorize p+p{margin-top:.7rem}
+
+/* argument steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem;padding:1rem 0;border-top:1px dashed var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--rust);line-height:1.2}
+ol.steps h3{margin-bottom:.3rem}
+ol.steps ul{margin:.4rem 0 0;padding-left:1.1rem}
+ol.steps ul li{display:list-item;padding:0;border:0;counter-increment:none}
+ol.steps ul li::before{content:none}
+
+/* glossary */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.35rem;align-content:start;min-width:0}
+.term h3{font-size:1.02rem}
+.term p{font-size:.95rem}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.q{font-style:italic;min-width:16rem}
+td .pg{display:inline-block}
+
+/* connections */
+.conn{display:grid;gap:1rem}
+details.text{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.text summary{cursor:pointer;padding:.9rem 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.text summary::-webkit-details-marker{display:none}
+details.text summary h3{font-size:1.08rem}
+details.text summary .tag{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+details.text .body{padding:0 1rem 1rem;display:grid;gap:.6rem}
+details.text .body ul{margin:0;padding-left:1.1rem}
+.use{background:var(--rust-soft);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+.use b{font-family:var(--display)}
+
+/* two column */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;min-width:0}
+.box h3{margin-bottom:.5rem}
+.box ul{margin:0;padding-left:1.1rem;display:grid;gap:.4rem}
+
+/* questions */
+.qa{display:grid;gap:1rem}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;padding:1rem 1.1rem;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.4;list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .n{font-family:var(--mono);font-size:.78rem;color:var(--surface);background:var(--accent);border-radius:4px;padding:2px 7px;height:fit-content;margin-top:2px}
+details.q .body{padding:0 1.1rem 1.1rem;display:grid;gap:.7rem;font-size:.97rem}
+details.q .body h4{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+details.q .body ul,details.q .body ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap}
+button{font-family:var(--display);font-size:.85rem;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul.tips{margin:0;padding-left:1.1rem;display:grid;gap:.5rem;max-width:70ch}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+@media (max-width:520px){body{font-size:16px} h2{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+/* curve hero for this guide */
+.curve{margin-top:1.2rem;background:var(--accent-soft);border-top:1px solid var(--line)}
+.curve svg{display:block;width:100%;height:auto}
+.curve .c-line{fill:none;stroke:var(--accent);stroke-width:2.5}
+.curve .c-fill{fill:var(--surface);opacity:.7}
+.curve .c-tail{fill:var(--rust);opacity:.25}
+.curve text{font-family:var(--mono);font-size:12px;fill:var(--fg)}
+.curve text.r{fill:var(--rust);font-weight:500}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:.7rem}
+.mem{font-family:var(--mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:0 5px;white-space:nowrap}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.map div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;font-size:.9rem}
+.map b{display:block;font-family:var(--display);color:var(--rust)}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HS1.304 Environmental Humanities · Endsem study guide</div>
+    <h1>The Great Derangement: <span>climate change and the unthinkable</span></h1>
+    <p class="by">Amitav Ghosh (Indian novelist, author of <i>The Hungry Tide</i> and <i>Gun Island</i>) · University of Chicago Press, 2016 (the Berlin Family Lectures). Your PDF is <b>Part I, "Stories," sections 1–9, pp. 3–37</b> (it stops at the first lines of section 10).</p>
+    <p class="oneliner"><b>In one line:</b> Climate change brings <b>improbable, uncanny</b> events, but the modern "serious" novel was built on <b>probability and the everyday</b>, so it pushes such events out to genre fiction. That makes the climate crisis <b>"also a crisis of culture, and thus of the imagination"</b> (9), and future readers may call our age <b>"the time of the Great Derangement"</b> (11).</p>
+  </div>
+  <div class="curve" aria-label="A probability curve: the realist novel lives in the probable middle; climate events sit in the improbable tail">
+    <svg viewBox="0 0 880 200" preserveAspectRatio="xMidYMid meet" role="img">
+      <path class="c-fill" d="M20,150 C200,150 300,25 440,25 C580,25 680,150 860,150 Z"/>
+      <path class="c-line" d="M20,150 C200,150 300,25 440,25 C580,25 680,150 860,150"/>
+      <line x1="20" y1="150" x2="860" y2="150" stroke="currentColor" stroke-opacity=".3"/>
+      <text x="440" y="118" text-anchor="middle">the "probable" middle: everyday life, "fillers"</text>
+      <text x="440" y="136" text-anchor="middle">= where the serious realist novel lives</text>
+      <text class="r" x="855" y="172" text-anchor="end">the improbable tail →</text>
+      <text class="r" x="855" y="190" text-anchor="end">Delhi tornado · Sandy · 2004 tsunami</text>
+      <text x="25" y="172">PROBABILITY & THE NOVEL ARE "TWINS" (16)</text>
+    </svg>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#summary">Summary</a>
+    <a href="#map">Section map</a>
+    <a href="#argument">Argument</a>
+    <a href="#concepts">Key terms</a>
+    <a href="#quotes">Quotes</a>
+    <a href="#links">Other texts</a>
+    <a href="#critique">Critique</a>
+    <a href="#exam">Exam Qs</a>
+    <a href="#tips">Tips</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="summary">
+  <div class="wrap">
+    <h2>The 60-second version</h2>
+    <p class="lead">Learn this. It works as the opening paragraph of almost any answer on this reading.</p>
+    <div class="memorize">
+      <p>In <i>The Great Derangement</i> (2016), Amitav Ghosh argues that climate change "casts a much smaller shadow within the landscape of literary fiction than it does even in the public arena" (7). The problem is not lack of information (8). It comes from "the grid of literary forms and conventions" that took shape exactly when carbon "was rewriting the destiny of the earth" (7). So "the climate crisis is also a crisis of culture, and thus of the imagination" (9).</p>
+      <p>His key example is his own brush with Delhi's first recorded <b>tornado</b> in 1978 (11–15), which he could never put into a novel because it would look like "a contrivance of last resort" (16). The reason: "Probability and the modern novel are in fact twins" (16). The realist novel was "midwifed into existence ... through the banishing of the improbable and the insertion of the everyday" (17), mirroring <b>gradualist</b> geology's belief that "Nature does not make leaps" (20). Yet climate events are highly improbable and <b>uncanny</b>: they reveal "the presence and proximity of nonhuman interlocutors" (30) and are "the mysterious work of our own hands returning to haunt us" (32). Treating them as magic would deny that "they are actually happening on this earth, at this time" (27).</p>
+      <p>The same belief in the "regularity of bourgeois life" shapes how we <b>build</b>: after the 2004 tsunami, a Nicobar air base whose officers lived closest to the sea showed the bourgeois belief in a regular world "carried to the point of derangement" (36), a <b>colonial</b> pattern of seafront cities now "most directly threatened by climate change" (37). Future generations may call our time "the Great Derangement" (11).</p>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2>Section map (what each numbered section does)</h2>
+    <p class="lead">Ghosh writes in short numbered sections. If you remember one word per section, you can rebuild the whole argument in the exam hall.</p>
+    <div class="map">
+      <div><b>§1 · p. 3</b>Inert things come alive (carpet, log/crocodile, Han Solo's asteroid)</div>
+      <div><b>§2 · pp. 3–7</b>Recognition: ancestors as ecological refugees; Sundarbans "a protagonist"</div>
+      <div><b>§3 · pp. 7–9</b>Fiction avoids climate; it gets "relegated" to sci-fi</div>
+      <div><b>§4 · pp. 9–11</b>Crisis of culture and imagination; desire; "Great Derangement"</div>
+      <div><b>§5 · pp. 11–15</b>Delhi tornado, 17 March 1978</div>
+      <div><b>§6 · pp. 15–24</b>Probability and the novel; fillers; gradualism vs catastrophism</div>
+      <div><b>§7 · pp. 24–27</b>Improbable weather now normal: Sandy, L'Aquila; magical realism is not the answer</div>
+      <div><b>§8 · pp. 28–33</b>The uncanny: tigers, Bon Bibi, nonhuman agency</div>
+      <div><b>§9 · pp. 33–37</b>2004 tsunami, Nicobar base; colonial seafront cities</div>
+    </div>
+  </div>
+</section>
+
+<section id="argument">
+  <div class="wrap">
+    <h2>The argument, step by step</h2>
+    <ol class="steps">
+      <li><div>
+        <h3>Things we think are inert turn out to be alive <span class="pg">p. 3</span></h3>
+        <p>He opens with small shocks: a carpet pattern that is a dog's tail, a "harmlessly drifting log" that is a crocodile, Han Solo landing on an "asteroid" that is a space monster. Future humans will know that "only in one, very brief era, lasting less than three centuries, did a significant number of their kind believe that planets and asteroids are inert" (3).</p>
+        <ul><li><b>Point:</b> modernity's belief in a passive, dead nature is historically unusual and short-lived.</li></ul>
+      </div></li>
+      <li><div>
+        <h3>Recognition: the river asks "Do you recognize me?" <span class="pg">pp. 3–7</span></h3>
+        <p>"My ancestors were ecological refugees long before the term was invented" (3): in the mid-1850s the Padma changed course and drowned their village in what is now Bangladesh; they moved west to the Ganges in Bihar (4). Ghosh defines <b>recognition</b> as a passage from ignorance to knowledge that depends on a "prior awareness" (4); it is "a renewed reckoning with a potentiality that lies within oneself" (5).</p>
+        <ul>
+          <li>Examples: Lake Nyos, Cameroon 1988 (a CO₂ cloud killed 1,700; Ghosh writes "Congo"), and polluted air in Delhi and Beijing, which shows "no difference between the without and the within; between using and being used" (5).</li>
+          <li>Writing <i>The Hungry Tide</i>, he felt the "urgent proximity of nonhuman presences" (5). His 2002 note: the Sundarbans land is "demonstrably alive ... [itself] a protagonist" (6).</li>
+          <li>The problem he found in writing that novel is general: it comes from literary forms that took shape "in precisely that period when the accumulation of carbon in the atmosphere was rewriting the destiny of the earth" (7).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Serious fiction avoids climate change <span class="pg">pp. 7–9</span></h3>
+        <p>Literary journals (<i>LRB</i>, <i>NYRB</i>, etc.) discuss climate change almost only in nonfiction. "The mere mention of the subject is often enough to relegate a novel or a short story to the genre of science fiction" (7), as if climate change were "akin to extraterrestrials or interplanetary travel."</p>
+        <ul>
+          <li>"We have entered a time when the wild has become the norm": if literary forms can't handle it, "their failures will have to be counted as an aspect of the broader imaginative and cultural failure that lies at the heart of the climate crisis" (8).</li>
+          <li>Not a lack of information (8). Proof: <b>Arundhati Roy</b> writes about it only in nonfiction; <b>Paul Kingsnorth</b> (Dark Mountain Project) hasn't written a climate novel (8). Ghosh admits his own fiction treats climate "only obliquely" (9).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>A crisis of culture, desire and concealment <span class="pg">pp. 9–11</span></h3>
+        <p>Building on <b>Dipesh Chakrabarty</b> ("humans have become geological agents"), Ghosh says the Anthropocene challenges the arts, humanities and "commonsense understandings" (9). "The climate crisis is also a crisis of culture, and thus of the imagination" (9).</p>
+        <ul>
+          <li>Culture generates <b>desires</b> that drive the carbon economy: the convertible (freedom, James Dean, Kerouac), the "paradise" island (Defoe, Rousseau), green lawns in deserts (Jane Austen) (10). Such objects are "at once expressions and concealments of the cultural matrix" (10).</li>
+          <li>Linked to "imperialism and capitalism" (10). Writers are <b>complicit</b>: brand names in novels, glass towers in architecture (11).</li>
+          <li>Future readers, in a world where the Sundarbans are swallowed and Kolkata, New York and Bangkok uninhabitable, will find art "drawn into the modes of concealment" and call this "the time of the Great Derangement" (11).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The Delhi tornado, 17 March 1978 <span class="pg">pp. 11–15</span></h3>
+        <p>As an MA student at Delhi University, Ghosh took an unusual route home and was caught near Maurice Nagar by a tornado. He sheltered on a balcony; objects flew past; "gravity itself seemed to have been transformed into a wheel spinning upon the fingertip of some unknown power" (13). The glass doorway he first chose was shattered (13).</p>
+        <ul>
+          <li>The <i>Times of India</i>: "30 Dead, 700 Hurt As Cyclone Hits North Delhi" (13). Papers "literally did not know what to call it" (14) until "A Very, Very Rare Phenomenon, Says Met Office" (14): the first tornado in the region's recorded history.</li>
+          <li>The eye passed over him: "beholding and being beheld" (14). Something "irreducibly mysterious" was planted in him, "not a property of the thing itself but of the manner in which it had intersected with my life" (14–15).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Why he couldn't write it: probability and the novel <span class="pg">pp. 15–17</span></h3>
+        <p>Storms recur in his books, but "no tornado has ever figured in my novels" despite repeated attempts (15–16). In someone else's novel, he would think the scene "a contrivance of last resort" (16). Key word: <b>improbability</b>, which is "not the opposite of probable" but a point on a continuum (16).</p>
+        <ul>
+          <li>Ian Hacking: probability is a "manner of conceiving the world constituted without our being aware of it" (16).</li>
+          <li>"Probability and the modern novel are in fact twins, born at about the same time, among the same people" (16).</li>
+          <li>Older stories (<i>Arabian Nights</i>, <i>Journey to the West</i>, <i>Decameron</i>) leap "from one exceptional event to another" (16). The modern novel hides its exceptional moments using Franco Moretti's <b>fillers</b>: everyday details that keep "the 'narrativity' of life under control" (17), moving "the unheard-of toward the background ... while the everyday moves into the foreground" (17).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The global spread: Bankim Chandra Chatterjee and Flaubert <span class="pg">pp. 17–19, 21–22</span></h3>
+        <p>The novel was "midwifed into existence around the world, through the banishing of the improbable and the insertion of the everyday" (17). <b>Bankim Chandra Chatterjee</b> (1871 essay) attacked the "Sanskrit school" of "mere narrative," preferring "sketches of character and pictures of Bengali life" (18). He was replacing epics, Jatakas and Urdu <i>dastaans</i> (18).</p>
+        <ul>
+          <li><i>Rajmohan's Wife</i> and Flaubert's <i>Madame Bovary</i> both lead the reader into a scene "through the eye" ("descry," "view," "see") (19): the "mimetic ambition."</li>
+          <li>Moretti: fillers "offer the kind of narrative pleasure compatible with the new regularity of bourgeois life" ... "a world of few surprises, fewer adventures, and no miracles at all" (19), part of Weber's "rationalization."</li>
+          <li>Chatterjee mocks Madana's flower-arrows (21) and Michael Madhusudan Datta's raging winds (22); Flaubert mocks Emma, who says she detests "moderate sentiments, such as there are in Nature" (21). Ghosh: "How did Nature ever come to be associated with words like these?" (21).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Gradualism in geology mirrors realism in fiction <span class="pg">pp. 19–23</span></h3>
+        <p>Stephen Jay Gould's <i>Time's Arrow, Time's Cycle</i>: <b>catastrophism</b> (Burnet, 1690, events of "unrepeatable uniqueness") vs <b>gradualism/uniformitarianism</b> (Hutton, Lyell): "nothing could change otherwise than the way things were seen to change in the present", or "Nature does not make leaps" (20).</p>
+        <ul>
+          <li>But "Nature does certainly jump" (20): the Chicxulub asteroid. Gould's answer to which dominates is "both and neither" (20).</li>
+          <li>Lyell won by calling catastrophists <b>primitive</b> (20–21), the same rhetoric Chatterjee used against the Sanskrit school (21). Wegener's continental drift was "derided" (22); as late as 1985 the <i>New York Times</i> told astronomers to "leave to astrologers" the asteroid theory (22).</li>
+          <li>Gradualism became "a set of blinders" (23). The 19th century's "complacency" now looks like "the planet ... toying with humanity" (22), based on the Holocene's stability (21).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The irony of realism: it conceals the real <span class="pg">pp. 23–24</span></h3>
+        <p>Novels still depend on chance (Bovary's meeting at the opera, 23), or writers would face "the Borgesian task of reproducing the world in its entirety" (23). But the novel must hide this scaffolding. "Here, then, is the irony of the 'realist' novel: the very gestures with which it conjures up reality are actually a concealment of the real" (23).</p>
+        <ul><li>Hence "If this were in a novel, no one would believe it" (24). Improbable events get evicted "from the mansion in which serious fiction has long been in residence" to the "outhouses": Gothic, romance, melodrama, now "fantasy," "horror," and "science fiction" (24).</li></ul>
+      </div></li>
+      <li><div>
+        <h3>The improbable is now the normal <span class="pg">pp. 24–27</span></h3>
+        <p>The 1978 tornado wasn't climate-related, but we are now in an era "defined precisely by events that appear, by our current standards of normalcy, highly improbable" (24): flash floods, hundred-year storms, droughts, heat, glacial-lake floods.</p>
+        <ul>
+          <li><b>Hurricane Sandy</b> (2012): "unprecedented," a "mammoth hybrid" (24–25). Statistical models failed, physics-based models worked, but risk decisions rely on probability, so officials "underestimate[d] the threat" (25).</li>
+          <li>Ghosh suspects "human beings were generally catastrophists at heart" until uniformitarianism, statistics and government replaced that instinct (25). <b>L'Aquila</b> 2009: the government sent people back indoors (25–26). New Yorkers thought hurricane deaths happen "in far-away places"; Brazilians denied hurricanes were possible (Catarina 2004) (26).</li>
+          <li>"In the era of global warming, nothing is really far away" (26). "It is as though our earth had become a literary critic and were laughing at Flaubert, Chatterjee, and their like" (26).</li>
+          <li>Names for the era: "catastrophozoic," "the long emergency," "the Penumbral Period" (26). <b>Poetry</b> has handled climate better (Milton's <i>Paradise Lost</i>, 26–27).</li>
+          <li>Surrealism and magical realism welcome the improbable, but these events "are neither surreal nor magical ... overwhelmingly, urgently, astoundingly real" (27). Treating them as magical robs them of the fact "that they are actually happening on this earth, at this time" (27).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The uncanny and nonhuman agency <span class="pg">pp. 28–33</span></h3>
+        <p>In the Sundarbans, "tigers are everywhere and nowhere" (28); red rags mark where people were killed. In the folk epic <i>Bon Bibir Johuranama</i>, the tiger-demon Dokkhin Rai locks eyes with the boy Dukhey (29). This "mute exchange of gazes" is real communication with a nonhuman presence (29).</p>
+        <ul>
+          <li>The right word is <b>uncanny</b> (Freud, Heidegger) (30). Timothy Morton and George Marshall ("Climate change is inherently uncanny") use it too (30).</li>
+          <li>We "recognize something we had turned away from ... the presence and proximity of nonhuman interlocutors" (30); "humans were never alone" (30). Hence the turn to panpsychism, Whitehead, object-oriented ontology, actor-network theory, new animism (31), against "Cartesian dualism that arrogates all intelligence and agency to the human" (31).</li>
+          <li>Like discovering "one's telephone has been tapped for years" (31): perhaps "we were ourselves being 'thought' by other entities" (31), like Lem's <i>Solaris</i> (31–32).</li>
+          <li><b>Environmental uncanny ≠ supernatural:</b> ghosts are projections of humans; the tiger and the tornado "have no human referents at all" (32). And climate events are "animated by cumulative human actions": "the mysterious work of our own hands returning to haunt us in unthinkable shapes and forms" (32).</li>
+          <li>So they are "too powerful, too grotesque, too dangerous, and too accusatory" for lyrical, elegiac or romantic writing (32–33), and they confound "Nature writing" (33). McKibben: "We live in a post-natural world" (33). The new task: "finding other ways in which to imagine the unthinkable beings and events of this era" (33).</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The tsunami, the Nicobar base and colonial coastlines <span class="pg">pp. 33–37</span></h3>
+        <p>The final part of <i>The Hungry Tide</i> has a storm surge in which a principal character dies protecting another (33). Months later came the 26 December 2004 tsunami (33–34). Ghosh reported from the Nicobars: the shore town of Malacca was razed while coconut palms stood untouched (34); damage was limited to a half-mile along the shore (34).</p>
+        <ul>
+          <li>Indigenous islanders lived in the <b>interior</b> and were largely unaffected; educated middle-class mainland settlers lived on the <b>shore</b>, "silently express[ing] their belief that highly improbable events belong not in the real world but in fantasy" (35).</li>
+          <li>At the air force base, the higher the rank, the closer to the water, so "the commander's house was thus the first to be hit" (35). This showed "a complacency that was itself a kind of madness" (35): "the bourgeois belief in the regularity of the world had been carried to the point of derangement" (36).</li>
+          <li>Far Rockaway and Long Beach (flooded in Sandy) had "the sanction of the state" (36). This follows <b>colonial</b> city-building (Bombay, Madras, New York, Singapore, Hong Kong) (36). "A colonial vision of the world, in which proximity to the water represents power and security, mastery and conquest" is now built into "middle-class patterns of living across the globe" (36–37).</li>
+          <li>Pre-modern ports (London, Amsterdam, Cochin, Surat, Dhaka, Malacca) were sheltered from the open ocean (37). Colonial seafront cities "are now among those that are most directly threatened by climate change" (37).</li>
+        </ul>
+      </div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="wrap">
+    <h2>Key terms to use in answers</h2>
+    <div class="grid">
+      <div class="term"><h3>The Great Derangement</h3><p>Ghosh's name for our era: a culture that "congratulates itself on its self-awareness" yet hides climate reality from itself (11). Also the madness of building as if the world were regular (36).</p><span class="pg">pp. 11, 35–36</span></div>
+      <div class="term"><h3>Crisis of culture / imagination</h3><p>The climate crisis is not only technical or political. It is a failure to imagine and represent what is happening (9).</p><span class="pg">p. 9</span></div>
+      <div class="term"><h3>Recognition</h3><p>A passage from ignorance to knowledge triggered by a "prior awareness" (4). Climate events force us to recognize nonhuman presences we already knew about but turned away from.</p><span class="pg">pp. 4–5, 30</span></div>
+      <div class="term"><h3>Probability / improbability</h3><p>A modern way of seeing the world (Hacking). The improbable is a gradient of the probable, not its opposite. The modern novel and probability are "twins" (16).</p><span class="pg">p. 16</span></div>
+      <div class="term"><h3>Fillers (Moretti)</h3><p>Everyday descriptive details that push the exceptional into the background and make the novel a "calm passion" fit for "the regularity of bourgeois life" (17, 19).</p><span class="pg">pp. 17, 19</span></div>
+      <div class="term"><h3>Gradualism / uniformitarianism</h3><p>Hutton and Lyell: Earth changes slowly at even rates; "Nature does not make leaps" (20). The geological twin of the realist novel.</p><span class="pg">pp. 19–22</span></div>
+      <div class="term"><h3>Catastrophism</h3><p>The view that Earth's history is marked by sudden unique events (Burnet; asteroid extinction). Mocked as "primitive," now partly vindicated (20–23).</p><span class="pg">pp. 19–23</span></div>
+      <div class="term"><h3>Regularity of bourgeois life</h3><p>Moretti's phrase, Ghosh's refrain: the middle-class expectation of an orderly, predictable world, shaping novels, science, government and housing (19, 25, 35).</p><span class="pg">pp. 19, 25, 35</span></div>
+      <div class="term"><h3>Irony of realism</h3><p>"The very gestures with which it conjures up reality are actually a concealment of the real" (23).</p><span class="pg">p. 23</span></div>
+      <div class="term"><h3>The "mansion" and "outhouses"</h3><p>Serious literary fiction is the manor house; improbable events are banished to genre outhouses: Gothic, romance, fantasy, horror, sci-fi (24).</p><span class="pg">p. 24</span></div>
+      <div class="term"><h3>The (environmental) uncanny</h3><p>The strange-yet-familiar. Unlike ghost stories, it involves nonhuman forces with "no human referents," yet produced by "our own hands" (32).</p><span class="pg">pp. 30–33</span></div>
+      <div class="term"><h3>Nonhuman interlocutors / agency</h3><p>Tigers, rivers, storms that "communicate" and even shape human thought; against "Cartesian dualism" (30–31).</p><span class="pg">pp. 30–31</span></div>
+      <div class="term"><h3>Anthropocene / geological agents</h3><p>Chakrabarty: "humans have become geological agents" (9). Ghosh: this challenges common sense and culture as a whole.</p><span class="pg">p. 9</span></div>
+      <div class="term"><h3>Ecological refugees</h3><p>His ancestors, displaced by the Padma's change of course in the 1850s (3–4). Climate displacement is old, not new.</p><span class="pg">pp. 3–4</span></div>
+      <div class="term"><h3>Colonial vision of the coast</h3><p>Living by the sea = "power and security, mastery and conquest," now a global middle-class status symbol (36–37).</p><span class="pg">pp. 36–37</span></div>
+      <div class="term"><h3>Catastrophozoic</h3><p>One proposed name for the era, beside "the long emergency" and "the Penumbral Period" (26).</p><span class="pg">p. 26</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2>Quote bank</h2>
+    <p class="lead">All quotations below were checked against your PDF. Page numbers are the printed book pages. Pick 4–5 to memorise; the ★ ones are the most versatile.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Quote</th><th>Page</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr><td class="q">★ "the climate crisis is also a crisis of culture, and thus of the imagination."</td><td><span class="pg">9</span></td><td>Thesis line for any question</td></tr>
+        <tr><td class="q">★ "Quite possibly, then, this era, which so congratulates itself on its self-awareness, will come to be known as the time of the Great Derangement."</td><td><span class="pg">11</span></td><td>Explaining the title</td></tr>
+        <tr><td class="q">★ "Probability and the modern novel are in fact twins, born at about the same time, among the same people, under a shared star that destined them to work as vessels for the containment of the same kind of experience."</td><td><span class="pg">16</span></td><td>Realism and probability</td></tr>
+        <tr><td class="q">★ "Here, then, is the irony of the 'realist' novel: the very gestures with which it conjures up reality are actually a concealment of the real."</td><td><span class="pg">23</span></td><td>Critique of realism</td></tr>
+        <tr><td class="q">★ "They are the mysterious work of our own hands returning to haunt us in unthinkable shapes and forms."</td><td><span class="pg">32</span></td><td>Uncanny; human responsibility</td></tr>
+        <tr><td class="q">"My ancestors were ecological refugees long before the term was invented."</td><td><span class="pg">3</span></td><td>Displacement; Gun Island; Hungry Tide</td></tr>
+        <tr><td class="q">"the land here is demonstrably alive; that it does not exist solely, or even incidentally, as a stage for the enactment of human history; that it is [itself] a protagonist."</td><td><span class="pg">6</span></td><td>Hungry Tide; nonhuman agency</td></tr>
+        <tr><td class="q">"the mere mention of the subject is often enough to relegate a novel or a short story to the genre of science fiction."</td><td><span class="pg">7</span></td><td>Genre hierarchy</td></tr>
+        <tr><td class="q">"if certain literary forms are unable to negotiate these torrents, then they will have failed—and their failures will have to be counted as an aspect of the broader imaginative and cultural failure that lies at the heart of the climate crisis."</td><td><span class="pg">8</span></td><td>Literature's responsibility</td></tr>
+        <tr><td class="q">"The artifacts and commodities that are conjured up by these desires are, in a sense, at once expressions and concealments of the cultural matrix that brought them into being."</td><td><span class="pg">10</span></td><td>Consumer culture; complicity</td></tr>
+        <tr><td class="q">"Thus was the novel midwifed into existence around the world, through the banishing of the improbable and the insertion of the everyday."</td><td><span class="pg">17</span></td><td>History of the novel; Chatterjee</td></tr>
+        <tr><td class="q">Moretti: fillers "offer the kind of narrative pleasure compatible with the new regularity of bourgeois life ... a world of few surprises, fewer adventures, and no miracles at all."</td><td><span class="pg">19</span></td><td>Fillers; bourgeois order</td></tr>
+        <tr><td class="q">"Nature does not make leaps." / "The trouble, however, is that Nature does certainly jump, if not leap."</td><td><span class="pg">20</span></td><td>Gradualism vs catastrophism</td></tr>
+        <tr><td class="q">To introduce such happenings into a novel is "to court eviction from the mansion in which serious fiction has long been in residence."</td><td><span class="pg">24</span></td><td>Genre hierarchy</td></tr>
+        <tr><td class="q">"But in the era of global warming, nothing is really far away."</td><td><span class="pg">26</span></td><td>Sandy; global vulnerability</td></tr>
+        <tr><td class="q">"It is as though our earth had become a literary critic and were laughing at Flaubert, Chatterjee, and their like, mocking their mockery of the 'prodigious happenings'..."</td><td><span class="pg">26</span></td><td>A memorable line for conclusions</td></tr>
+        <tr><td class="q">"these highly improbable occurrences are overwhelmingly, urgently, astoundingly real."</td><td><span class="pg">27</span></td><td>Against magical realism</td></tr>
+        <tr><td class="q">"This mute exchange of gazes is the only communication that is possible between you and this presence—yet communication it undoubtedly is."</td><td><span class="pg">29</span></td><td>Tiger; Rime; Hungry Tide</td></tr>
+        <tr><td class="q">"we recognize something we had turned away from: that is to say, the presence and proximity of nonhuman interlocutors."</td><td><span class="pg">30</span></td><td>Uncanny; recognition</td></tr>
+        <tr><td class="q">"the Cartesian dualism that arrogates all intelligence and agency to the human while denying them to every other kind of being"</td><td><span class="pg">31</span></td><td>Human/nonhuman binary</td></tr>
+        <tr><td class="q">Climate events are "too powerful, too grotesque, too dangerous, and too accusatory to be written about in a lyrical, or elegiac, or romantic vein."</td><td><span class="pg">32–33</span></td><td>Limits of nature writing; Rime</td></tr>
+        <tr><td class="q">"It was as if, in being adopted by the state, the bourgeois belief in the regularity of the world had been carried to the point of derangement."</td><td><span class="pg">36</span></td><td>Nicobar base; title</td></tr>
+        <tr><td class="q">"A colonial vision of the world, in which proximity to the water represents power and security, mastery and conquest, has now been incorporated into the very foundations of middle-class patterns of living across the globe."</td><td><span class="pg">36–37</span></td><td>Colonialism; class; injustice</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Ghosh's sources inside the text, useful for name-dropping: Dipesh Chakrabarty (9), Ian Hacking (16), Franco Moretti (17, 19), Bankim Chandra Chatterjee (17–22), Flaubert (18–23), Stephen Jay Gould (19–20), Lyell and Hutton (19–20), Adam Sobel (24–25), Geoffrey Parker on Milton (26), Timothy Morton and George Marshall (30), Bill McKibben (33).</p>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <h2>Connecting Ghosh to other course texts</h2>
+    <p class="lead">Links are my interpretation for revision. Details of the other texts marked <span class="mem">from memory</span> are not from your Ghosh PDF, so check them against your own notes.</p>
+    <div class="btnrow"><button type="button" id="openAll">Open all</button><button type="button" id="closeAll">Close all</button></div>
+    <div class="conn">
+
+      <details class="text" open><summary><h3>Ghosh, <i>The Hungry Tide</i> (2004)</h3><span class="tag">strongest link · he cites it himself</span></summary><div class="body">
+        <ul>
+          <li>Ghosh says the challenges of climate fiction first appeared while writing it (6), and that the Sundarbans land is "a protagonist" (6). Use this to read the tide country as an active agent, not a backdrop.</li>
+          <li>He describes the final storm surge in which a principal character dies protecting another (33). <span class="mem">from memory</span> This is Fokir sheltering Piya. Show that the novel <i>does</i> include a catastrophic, "improbable" event, yet it is made believable through long preparation and research (33).</li>
+          <li>Bon Bibi and Dokkhin Rai (29) appear in both texts: folk narrative treats the tiger as a presence that sees you, unlike the scientific gaze.</li>
+          <li>Competing ways of knowing (midsem Q1): Ghosh's p. 35 contrast between indigenous islanders in the interior and middle-class settlers on the shore matches the novel's contrast of local knowledge (Fokir) with outsiders (Kanai, Piya) <span class="mem">from memory</span>.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> In <i>The Great Derangement</i> Ghosh calls the Sundarbans "demonstrably alive ... a protagonist" (6); <i>The Hungry Tide</i> dramatises this by letting the tide and the storm, not only human characters, drive the plot.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Ghosh, <i>Gun Island</i> (2019)</h3><span class="tag">Ghosh's answer to his own challenge</span></summary><div class="body">
+        <ul>
+          <li><span class="mem">from memory</span> Written after <i>The Great Derangement</i>, it deliberately uses improbable coincidences, a Bengali legend (the Gun Merchant / Bonduki Sadagar and Manasa Devi), snakes, spiders, wildfires in LA, and climate migrants in Venice. It tests whether a serious novel can include the "improbable" without becoming fantasy.</li>
+          <li>"My ancestors were ecological refugees" (3) and the Padma's change of course (4) link to the novel's migrants displaced by floods and cyclones from the Sundarbans.</li>
+          <li>Nonhuman agency (30–31): animals in <i>Gun Island</i> act and seem to communicate, which is Ghosh's "uncanny" in fiction.</li>
+          <li>Critical angle: does piling up coincidences make the novel feel contrived, as Ghosh feared (16)? That's a good "evaluate" point.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> If <i>The Great Derangement</i> diagnoses the realist novel's "banishing of the improbable" (17), <i>Gun Island</i> can be read as Ghosh's experiment in letting the improbable back in while insisting it is "actually happening on this earth, at this time" (27).</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Rob Nixon, <i>Slow Violence</i></h3><span class="tag">best "compare" question</span></summary><div class="body">
+        <ul>
+          <li><b>Shared idea:</b> both say environmental harm poses a <b>representational challenge</b>. Literature and media fail to show it.</li>
+          <li><b>Key contrast:</b> Nixon's problem is harm that is <i>too slow and invisible</i> (attritional, dispersed, not spectacular). Ghosh's problem in Part I is events that are <i>too sudden and improbable</i> (tornado, Sandy, tsunami) for realist fiction. One is below the threshold of the story, the other is beyond the limits of plausibility.</li>
+          <li><b>Bridge:</b> Ghosh's sudden events are the visible ends of a slow process, "cumulative human actions" (32). So slow violence (carbon accumulation, salt intrusion and receding shores in the Sundarbans, 6) produces Ghosh's sudden catastrophes.</li>
+          <li>Both stress the poor and marginal, though Ghosh's Nicobar example interestingly shows the middle class on the shore hit first (35).</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> Where Nixon argues that slow violence is invisible because it lacks spectacle, Ghosh shows that even spectacular climate events are made unbelievable by the realist novel's commitment to the probable; between them, environmental harm is either too slow or too sudden for our dominant forms of storytelling.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Coleridge, <i>The Rime of the Ancient Mariner</i></h3><span class="tag">poetry vs novel; recognition</span></summary><div class="body">
+        <ul>
+          <li>Ghosh says <b>poetry</b> "has long had an intimate relationship with climatic events" (26), citing Milton. The <i>Rime</i> is a perfect example: storms, ice, deathly calm and supernatural punishment fit easily in a poem.</li>
+          <li><b>Recognition</b> (4–5, 30): the Mariner's turning point, blessing the water-snakes "unaware" <span class="mem">from memory</span>, is a moment of recognising nonhuman life he had ignored, like Ghosh's "nonhuman interlocutors."</li>
+          <li>The albatross as a nonhuman presence with agency; nature "answers" human violence. Compare "the mysterious work of our own hands returning to haunt us" (32).</li>
+          <li>Difference: the Rime uses the <b>supernatural</b> (spirits, Death and Life-in-Death); Ghosh insists the environmental uncanny is not supernatural (32) and that climate events are real, not magical (27).</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Mahasweta Devi, <i>Pterodactyl, Puran Sahay and Pirtha</i></h3><span class="tag">improbable creature; indigenous knowledge</span></summary><div class="body">
+        <ul>
+          <li><span class="mem">from memory</span> The pterodactyl is a highly improbable, uncanny creature that appears in a drought-hit Adivasi village. Realist journalism (Puran) cannot report it. This matches Ghosh's point that the improbable is evicted from serious realist narrative (24).</li>
+          <li>Like Ghosh's tiger (29), the creature communicates through silence and gaze, not words: mute recognition across a gap.</li>
+          <li>Indigenous memory vs bourgeois regularity: Ghosh's Nicobar islanders who lived inland and survived (35) parallel the Adivasi knowledge in Pirtha that the state and "development" ignore.</li>
+          <li>Difference: Mahasweta's creature is symbolic (ancestral soul, ecological loss) while Ghosh warns against turning real climate events into allegory (27). Good tension for an essay.</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Arundhati Roy, "The Cost of Living" (1998)</h3><span class="tag">Ghosh names Roy directly</span></summary><div class="body">
+        <ul>
+          <li>Ghosh: Roy is "passionate and deeply informed about climate change. Yet all her writings on these subjects are in various forms of nonfiction" (8).</li>
+          <li>Your Roy PDF supports and complicates this: she says the Narmada Valley "needed a writer. Not just a writer, a fiction writer", one who saw that what was happening "was perhaps too vulgar for fiction, but who could use the craft and rigour of writing fiction" (Roy, PDF p. 2). That is Ghosh's problem exactly: the subject feels unfit for the novel, so it goes into nonfiction.</li>
+          <li>Roy shows big dams as "Temples of Modern India" (Nehru), an article of faith. Compare Ghosh's critique of a state that builds on a belief in regularity (36): faith in planning and development over local knowledge.</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3><i>River of Stories</i> (Orijit Sen, graphic novel on the Narmada)</h3><span class="tag">form as an answer</span></summary><div class="body">
+        <ul>
+          <li><span class="mem">from memory</span> A graphic novel mixing Adivasi myth about the river with a journalist's account of the dam and displacement.</li>
+          <li>It shows a non-realist <b>form</b> handling environmental crisis: myth, image and documentary together, the kind of storytelling Ghosh says the modern novel pushed aside (Arabian Nights, Jatakas, dastaans, 16–18).</li>
+          <li>The river as a living storyteller echoes Ghosh's river that asks "Do you recognize me?" (4).</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Jamieson, "The Anthropocene: Love It or Leave It" &amp; Heise</h3><span class="tag">Anthropocene framing</span></summary><div class="body">
+        <ul>
+          <li>Both rely on the Anthropocene idea; Ghosh via Chakrabarty's "geological agents" (9).</li>
+          <li>Jamieson: "everything seems possible but nothing seems to matter," harms not "proximate." Ghosh: climate events are made to seem "far away" (26) and improbable. Both describe a failure of perception.</li>
+          <li>Difference: Jamieson's remedy is green virtues (plus politics); Ghosh's diagnosis in Part I is about culture, form and colonial history, not individual virtue.</li>
+          <li><span class="mem">from memory, not in your excerpt</span> Later parts of the book (Part II "History," Part III "Politics") discuss Asia's role in carbon history and criticise politics reduced to individual "moral adventure." Only use these if your class covered them.</li>
+        </ul>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="critique">
+  <div class="wrap">
+    <h2>Evaluating Ghosh: strengths and limits</h2>
+    <p class="lead">For "critically discuss" or "evaluate" questions. One point from each column lifts an answer.</p>
+    <div class="two">
+      <div class="box"><h3>Strengths</h3><ul>
+        <li>Moves the climate debate from science and policy to <b>culture and form</b>, making literature part of the problem and solution.</li>
+        <li>Original link between <b>probability, realism and geology</b> (Hacking, Moretti, Gould), a single "regime of thought" across art, science and governance.</li>
+        <li><b>Self-critical:</b> he includes his own failures (no tornado in his novels, 15–16) and complicity (brand names, 11).</li>
+        <li>Global, <b>postcolonial</b> perspective: Bengal, Bankim, the Sundarbans, Nicobars, colonial cities, not just Western examples.</li>
+        <li>Concrete evidence (tornado, Sandy, L'Aquila, tsunami) shows the improbable is already real.</li>
+        <li>Takes nonhuman agency seriously without romanticising it ("too accusatory" for lyric, 32–33).</li>
+      </ul></div>
+      <div class="box"><h3>Limits</h3><ul>
+        <li><b>Broad brush</b>, which he admits himself (27): many novels do include disasters, and "cli-fi" exists (Atwood, Kim Stanley Robinson, Barbara Kingsolver) <span class="mem">from memory</span>.</li>
+        <li>His sample is mainly <b>elite Anglophone literary journals</b> (7). Regional-language literature, oral and Adivasi storytelling (e.g. <i>River of Stories</i>, Mahasweta Devi) may already handle these themes.</li>
+        <li>Treats genre fiction (sci-fi) as lesser even while criticising the hierarchy. Is the problem the "mansion" or critics' snobbery?</li>
+        <li>Focus on <b>sudden</b> events can miss <b>slow violence</b> (Nixon), which is the main way climate change hurts the poor.</li>
+        <li>The Nicobar example blames middle-class complacency, but indigenous people elsewhere are often the worst hit; class analysis needs nuance.</li>
+        <li>Diagnosis more than cure: Part I says what fails but offers few concrete new forms beyond "other ways" to imagine (33).</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="exam">
+  <div class="wrap">
+    <h2>Likely exam questions with answer outlines</h2>
+    <p class="lead">Modelled on your midsem: 10 marks each, analytical essays, "substantiate your arguments by providing relevant evidences from the texts." Aim for an intro with thesis, 3–4 body paragraphs each with one quote and page number, a counterpoint, and a conclusion.</p>
+    <div class="btnrow"><button type="button" id="openQ">Open all answers</button><button type="button" id="closeQ">Close all answers</button></div>
+    <div class="qa">
+
+      <details class="q"><summary><span class="n">Q1</span>Why does Ghosh argue that the climate crisis is "also a crisis of culture, and thus of the imagination"? What does he mean by "the Great Derangement"?</summary><div class="body">
+        <h4>Thesis</h4><p>Ghosh argues that the failure to face climate change is not caused by a lack of information but by cultural forms, above all the realist novel, built on probability and bourgeois regularity, which conceal the reality of our situation. Future generations may therefore see our self-aware age as deranged.</p>
+        <h4>Points</h4><ol>
+          <li>Climate's "smaller shadow" in fiction; relegated to sci-fi (7). Not information: Roy and Kingsnorth (8).</li>
+          <li>Origin in "the grid of literary forms and conventions" formed as carbon accumulated (7); crisis of culture (9).</li>
+          <li>Culture makes desires that drive carbon (convertible, paradise, lawns); "expressions and concealments" (10); complicity (11).</li>
+          <li>Future readers find art "drawn into the modes of concealment" → "Great Derangement" (11).</li>
+          <li>Second meaning: bourgeois belief in regularity "carried to the point of derangement" at the Nicobar base (36).</li>
+        </ol>
+        <h4>Counterpoint / evaluation</h4><p>Broad generalisation (27); cli-fi exists; but his point is about what counts as "serious" fiction.</p>
+        <h4>Connect</h4><p>Jamieson's "nothing seems to matter"; Roy's turn to nonfiction.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q2</span>"Probability and the modern novel are in fact twins." Explain Ghosh's argument about the realist novel and the banishing of the improbable.</summary><div class="body">
+        <h4>Thesis</h4><p>Ghosh shows that the modern novel developed alongside the statistical idea of probability; through "fillers" and everyday detail it hid exceptional events, making it unable to represent the improbable events of climate change.</p>
+        <h4>Points</h4><ol>
+          <li>Starting problem: the Delhi tornado (11–15) and his failure to fictionalise it; it would seem "a contrivance of last resort" (16).</li>
+          <li>Improbable as a gradient of probable; Hacking (16); twins (16). Older narratives leap between exceptions (16).</li>
+          <li>Moretti's fillers: unheard-of to background, everyday to foreground (17); "regularity of bourgeois life," "no miracles at all" (19).</li>
+          <li>Global spread: Bankim Chandra Chatterjee vs "Sanskrit school" (18); <i>Rajmohan's Wife</i> and <i>Madame Bovary</i> (18–19).</li>
+          <li>Irony: realism conceals the real (23); "If this were in a novel, no one would believe it"; eviction to genre "outhouses" (24).</li>
+          <li>Now improbable events are normal: Sandy (24–25); earth "laughing at Flaubert, Chatterjee" (26).</li>
+        </ol>
+        <h4>Counterpoint</h4><p>Magical realism and surrealism celebrate the improbable, but Ghosh rejects them because climate events are "astoundingly real" (27).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q3</span>How does Ghosh connect the history of geology (gradualism vs catastrophism) with the history of literary form?</summary><div class="body">
+        <h4>Thesis</h4><p>For Ghosh, Lyell's uniformitarian geology and the realist novel are products of the same 19th-century "regime of thought" that assumed Nature to be moderate and orderly, a belief climate change now exposes as a blinder.</p>
+        <h4>Points</h4><ol>
+          <li>Gould's study is "a study of narrative" (19); Burnet's catastrophism vs Hutton and Lyell's gradualism (19–20); "Nature does not make leaps" (20).</li>
+          <li>But "Nature does certainly jump" (Chicxulub) (20); Gould "both and neither" (20).</li>
+          <li>Same weapon in both fields: calling opponents primitive (Lyell 20–21; Chatterjee vs Sanskrit school 21; Datta's raging winds 22).</li>
+          <li>Persistence: Wegener derided, NYT 1985, Alvarez (22); gradualism "a set of blinders" (23).</li>
+          <li>Consequences: risk models, L'Aquila, Sandy (25–26); humans were "catastrophists at heart" until uniformitarianism (25).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Geology corrected itself, but "the modern novel, unlike geology, has never been forced to confront the centrality of the improbable" (23).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q4</span>Discuss Ghosh's use of the "uncanny" and nonhuman agency. How is the environmental uncanny different from the supernatural?</summary><div class="body">
+        <h4>Thesis</h4><p>Ghosh argues that climate events are uncanny because they force us to recognise nonhuman presences we had turned away from; unlike ghost stories, these presences have no human referent, yet they are produced by human action.</p>
+        <h4>Points</h4><ol>
+          <li>Recognition (4–5): river, Lake Nyos, polluted air, "between using and being used" (5).</li>
+          <li>Tiger "everywhere and nowhere" (28); Dokkhin Rai and Dukhey; "mute exchange of gazes" (29).</li>
+          <li>Uncanny (Freud, Heidegger; Morton, Marshall) (30); "nonhuman interlocutors" (30); against Cartesian dualism (31); being "thought" by other entities (31).</li>
+          <li>Different from supernatural: ghosts = human projections; tiger and tornado have "no human referents" (32). Yet "the mysterious work of our own hands" (32).</li>
+          <li>Implication: too "accusatory" for lyric or Nature writing (32–33); need "other ways" to imagine (33).</li>
+        </ol>
+        <h4>Connect</h4><p><i>Rime</i> (water-snakes; supernatural vs real), <i>Pterodactyl</i> (silent creature), <i>Hungry Tide</i> (Bon Bibi).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q5</span>Compare Ghosh's "improbable" events with Rob Nixon's "slow violence" as challenges to representation.</summary><div class="body">
+        <h4>Thesis</h4><p>Both writers argue that dominant narrative forms fail environmental harm, but from opposite directions: Nixon's harm is too slow and invisible, Ghosh's too sudden and improbable. Together they show climate change escapes both ends of our storytelling.</p>
+        <h4>Points</h4><ol>
+          <li>Nixon: attritional, dispersed, delayed violence that lacks spectacle; hits the poor; media and writers miss it.</li>
+          <li>Ghosh: tornado, Sandy, tsunami are spectacular but "improbable," so realist fiction pushes them to genre (24); officials underestimate them (25).</li>
+          <li>Link: sudden events are produced by "cumulative human actions" (32); slow change in the Sundarbans ("receding shorelines," salt intrusion, 6) builds up to catastrophe.</li>
+          <li>Justice: Nixon on marginalized communities; Ghosh on colonial seafront cities and class (35–37).</li>
+          <li>Apply to a text: <i>The Hungry Tide</i> has both slow violence (erosion, Morichjhapi) and a sudden storm (33).</li>
+        </ol>
+        <h4>Evaluation</h4><p>Ghosh's focus on spectacle risks overlooking slow harm; Nixon's framework helps fill that gap.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q6</span>How does Ghosh link colonialism, class and patterns of settlement to climate vulnerability? Use the tsunami episode.</summary><div class="body">
+        <h4>Thesis</h4><p>Through the 2004 tsunami, Ghosh shows that the bourgeois faith in a regular world is built into the physical layout of colonial and middle-class settlements, making them dangerously exposed: a literal "derangement."</p>
+        <h4>Points</h4><ol>
+          <li>Nicobars: Malacca razed, palms untouched; damage limited to the shore (34).</li>
+          <li>Indigenous islanders inland unaffected; educated mainland settlers on the shore believed improbable events "belong ... in fantasy" (35).</li>
+          <li>Air base: higher rank, closer to the water, commander's house hit first (35); "complacency that was itself a kind of madness" (35); state-sanctioned derangement (36).</li>
+          <li>Global pattern: Far Rockaway, Long Beach and Sandy (36); colonial cities on the ocean (36); sea view as status symbol (36); "colonial vision ... power and security, mastery and conquest" (36–37).</li>
+          <li>Old ports sheltered (37); colonial cities now "most directly threatened" (37).</li>
+        </ol>
+        <h4>Connect / evaluate</h4><p>Roy and <i>River of Stories</i>: state planning (dams) ignoring local knowledge. Limit: elsewhere the poor and indigenous are often most exposed, so class effects vary.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q7</span>Read <i>The Hungry Tide</i> (or <i>Gun Island</i>) in the light of <i>The Great Derangement</i>. Does the novel overcome the problems Ghosh describes?</summary><div class="body">
+        <h4>Thesis</h4><p>Ghosh's novels partly answer his own critique by treating landscape and animals as actors and by including catastrophe, but they also show how hard it is to make the improbable believable inside the realist form.</p>
+        <h4>Points</h4><ol>
+          <li>Ghosh links the challenges of climate fiction to writing <i>The Hungry Tide</i> (6); land as "protagonist" (6).</li>
+          <li>Nonhuman agency: tide, tiger, dolphins; Bon Bibi legend (29) inside the novel.</li>
+          <li>Catastrophe: final storm surge, a character dies protecting another (33), prepared through research (33).</li>
+          <li><i>Gun Island</i> <span class="mem">from memory</span>: openly uses coincidence, legend and climate migration, testing whether "serious" fiction can include the improbable.</li>
+          <li>Limit: the novels still rely on human-centred plots (love, guilt); the storm comes at the end like a climax, which fits the novel's "scaffolding of exceptional moments" (23).</li>
+        </ol>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q8</span>Why does Ghosh reject magical realism and Nature writing as solutions? What kind of storytelling does he seem to want?</summary><div class="body">
+        <h4>Thesis</h4><p>Ghosh rejects these modes because they either make climate events unreal or treat Nature as separate and serene; he calls for forms that present the improbable as real and nonhumans as agents entangled with us.</p>
+        <h4>Points</h4><ol>
+          <li>20th-century fiction disdained plot; "show, don't tell" (27).</li>
+          <li>Surrealism and magical realism welcome the improbable (27), but climate events are "astoundingly real"; treating them as magic robs them of the fact that they are "actually happening on this earth, at this time" (27). Ethical problem of allegory (27).</li>
+          <li>Too "accusatory" for lyrical, elegiac or romantic writing; they confound "Nature writing" (32–33); McKibben's "post-natural world" (33).</li>
+          <li>Better models: poetry (Milton, 26–27); pre-modern narrative (<i>Arabian Nights</i>, Jatakas, dastaans, 16–18); folk epic <i>Bon Bibir Johuranama</i> (29).</li>
+          <li>The task: "other ways in which to imagine the unthinkable beings and events of this era" (33).</li>
+        </ol>
+        <h4>Connect</h4><p><i>River of Stories</i> (myth plus documentary), <i>Rime</i> (poetry), Mahasweta Devi (symbolic creature): are these the "other ways"?</p>
+      </div></details>
+
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Exam tips and traps</h2>
+    <ul class="tips">
+      <li><b>Cite correctly:</b> Amitav Ghosh, <i>The Great Derangement: Climate Change and the Unthinkable</i> (University of Chicago Press, 2016), Part I "Stories," pp. 3–37.</li>
+      <li><b>It's nonfiction</b> (lectures/essay), not a novel. Ghosh is writing as a novelist reflecting on his own craft.</li>
+      <li><b>Don't say</b> Ghosh blames writers for lacking information. He says the opposite (8): the problem is form and culture.</li>
+      <li><b>Don't say</b> he wants magical realism. He explicitly rejects treating climate events as magical (27).</li>
+      <li><b>Don't say</b> the 1978 tornado was caused by climate change. He says "So far as I know, climate change was not a factor" (24). What they share is improbability.</li>
+      <li><b>Don't confuse</b> the uncanny with the supernatural (32).</li>
+      <li><b>Name-drop accurately:</b> Moretti = fillers; Hacking = probability; Gould = gradualism vs catastrophism; Chakrabarty = geological agents; Chatterjee = Bengali realism.</li>
+      <li><b>Always add one justice point</b>: colonial cities, class on the shoreline, indigenous islanders (35–37). Your course leans postcolonial.</li>
+      <li><b>Structure:</b> thesis in two lines, one quote with page number per paragraph, a counterpoint, a conclusion that answers the exact question.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">Study guide built from your scanned PDF of <i>The Great Derangement</i>, Part I, sections 1–9 (pp. 3–37). All Ghosh quotations and page numbers were checked against the scan. Items marked "from memory" come from general knowledge of the other texts, not from this PDF; check them against your own copies. The Roy quotation is from your "Cost of Living" PDF.</div></footer>
+
+<script>
+(function(){
+  function setAll(sel,open){document.querySelectorAll(sel).forEach(function(d){d.open=open;});}
+  document.getElementById('openAll').addEventListener('click',function(){setAll('details.text',true);});
+  document.getElementById('closeAll').addEventListener('click',function(){setAll('details.text',false);});
+  document.getElementById('openQ').addEventListener('click',function(){setAll('details.q',true);});
+  document.getElementById('closeQ').addEventListener('click',function(){setAll('details.q',false);});
+})();
+</script>

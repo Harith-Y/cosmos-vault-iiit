@@ -1,0 +1,602 @@
+<title>Anthropocene: Love It or Leave It</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a sticky section bar; geological strata band in the hero; cards only where content is a set */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --fg:#1d2420; --muted:#5a645e; --line:#d6dbd4;
+  --accent:#1e6a63; --accent-soft:#dcebe7; --rust:#a9502a; --rust-soft:#f3e2d8;
+  --s1:#c9c2a8; --s2:#b3a98a; --s3:#8f8770; --s4:#6c6655; --s5:#3c3a33; --s6:#a9502a; --sink:#f2f3ef;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.mono,.pg{font-family:var(--mono);font-size:.78rem}
+.pg{color:var(--rust);background:var(--rust-soft);padding:1px 6px;border-radius:4px;white-space:nowrap;font-weight:500}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero .wrap{padding-block:2.6rem 0;display:grid;gap:1rem}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--rust)}
+.hero .by{color:var(--muted);font-size:1rem}
+.oneliner{font-size:1.15rem;max-width:62ch}
+.strata{display:grid;grid-template-rows:repeat(6,auto);margin-top:1.2rem}
+.strata div{font-family:var(--mono);font-size:.72rem;padding:4px 12px;color:var(--fg);display:flex;justify-content:space-between;gap:1rem}
+.strata div:nth-child(1){background:var(--s6);color:var(--surface);font-weight:500}
+.strata div:nth-child(2){background:var(--s1)}
+.strata div:nth-child(3){background:var(--s2)}
+.strata div:nth-child(4){background:var(--s3);color:var(--sink)}
+.strata div:nth-child(5){background:var(--s4);color:var(--sink)}
+.strata div:nth-child(6){background:var(--s5);color:var(--sink)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.55rem;scrollbar-width:thin}
+nav.bar a{font-family:var(--display);font-size:.85rem;font-weight:500;text-decoration:none;color:var(--fg);padding:.3rem .7rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+nav.bar a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-block:2.6rem;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section > .wrap{display:grid;gap:1.2rem}
+.lead{color:var(--muted);max-width:65ch}
+
+.memorize{background:var(--accent-soft);border-left:4px solid var(--accent);padding:1.1rem 1.3rem;border-radius:0 8px 8px 0;max-width:72ch}
+.memorize p+p{margin-top:.7rem}
+
+/* argument steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem;padding:1rem 0;border-top:1px dashed var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--rust);line-height:1.2}
+ol.steps h3{margin-bottom:.3rem}
+ol.steps ul{margin:.4rem 0 0;padding-left:1.1rem}
+ol.steps ul li{display:list-item;padding:0;border:0;counter-increment:none}
+ol.steps ul li::before{content:none}
+
+/* glossary */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.35rem;align-content:start;min-width:0}
+.term h3{font-size:1.02rem}
+.term p{font-size:.95rem}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.q{font-style:italic;min-width:16rem}
+td .pg{display:inline-block}
+
+/* connections */
+.conn{display:grid;gap:1rem}
+details.text{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.text summary{cursor:pointer;padding:.9rem 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.text summary::-webkit-details-marker{display:none}
+details.text summary h3{font-size:1.08rem}
+details.text summary .tag{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+details.text .body{padding:0 1rem 1rem;display:grid;gap:.6rem}
+details.text .body ul{margin:0;padding-left:1.1rem}
+.use{background:var(--rust-soft);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+.use b{font-family:var(--display)}
+
+/* two column */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;min-width:0}
+.box h3{margin-bottom:.5rem}
+.box ul{margin:0;padding-left:1.1rem;display:grid;gap:.4rem}
+
+/* questions */
+.qa{display:grid;gap:1rem}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;padding:1rem 1.1rem;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.4;list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .n{font-family:var(--mono);font-size:.78rem;color:var(--surface);background:var(--accent);border-radius:4px;padding:2px 7px;height:fit-content;margin-top:2px}
+details.q .body{padding:0 1.1rem 1.1rem;display:grid;gap:.7rem;font-size:.97rem}
+details.q .body h4{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+details.q .body ul,details.q .body ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap}
+button{font-family:var(--display);font-size:.85rem;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul.tips{margin:0;padding-left:1.1rem;display:grid;gap:.5rem;max-width:70ch}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+@media (max-width:520px){body{font-size:16px} h2{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HS1.304 Environmental Humanities · Endsem study guide</div>
+    <h1>The Anthropocene: <span>love it or leave it</span></h1>
+    <p class="by">Dale Jamieson (philosopher, NYU) · Chapter 1 of <i>The Routledge Companion to the Environmental Humanities</i>, eds. Heise, Christensen &amp; Niemann (2017), pp. 13–20. Your PDF also includes Ursula Heise's Introduction, pp. 1–10.</p>
+    <p class="oneliner"><b>In one line:</b> Humans now dominate the planet, which makes us feel all-powerful and powerless at once. We can't simply exit the Anthropocene, so we need an <b>ethics</b> for living in it, built on <b>green virtues</b>, above all <b>respect for nature</b>. Virtue alone won't fix it, though: <b>"Politics is required, not just virtue."</b></p>
+  </div>
+  <div class="strata" aria-label="Geological time, youngest layer on top">
+    <div><span>ANTHROPOCENE?</span><span>proposed · humans as a planetary force</span></div>
+    <div><span>Holocene</span><span>~11,700 yrs · named 1867, adopted by USGS 1967</span></div>
+    <div><span>Pleistocene</span><span>ice ages</span></div>
+    <div><span>Pliocene</span><span></span></div>
+    <div><span>Miocene</span><span></span></div>
+    <div><span>older strata …</span><span></span></div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#summary">Summary</a>
+    <a href="#argument">Argument</a>
+    <a href="#concepts">Key terms</a>
+    <a href="#respect">Respect for nature</a>
+    <a href="#quotes">Quotes</a>
+    <a href="#heise">Heise intro</a>
+    <a href="#links">Other texts</a>
+    <a href="#critique">Critique</a>
+    <a href="#exam">Exam Qs</a>
+    <a href="#tips">Tips</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="summary">
+  <div class="wrap">
+    <h2>The 60-second version</h2>
+    <p class="lead">Learn this paragraph. It works as the opening of almost any answer on this reading.</p>
+    <div class="memorize">
+      <p>Dale Jamieson argues that whether or not geologists formally declare it, the <b>Anthropocene</b> is "of great cultural and moral moment" (14). Citing Vitousek et al.'s finding that "we live on a human-dominated planet" (13), he shows that population, consumption and technology have made humans more powerful than ever, yet the Anthropocene is marked by "a widespread sense of the loss of agency" (15), confusion between causation and complicity, and a crisis of meaning in which "everything seems possible but nothing seems to matter" (15).</p>
+      <p>The "most fundamental choice" is "whether to love it or leave it" (16). It is a real choice, since "there are no natural teleologies" and calling it inevitable is "bad faith" (16). But either way we will live in it for the foreseeable future, so "we need an ethics of the Anthropocene" (16). Because harms like carbon emissions are hard to make "proximate," we need proxies: the <b>green virtues</b> of love, respect, humility and responsibility (17). He develops <b>respect for nature</b>, the opposite of domination, through four attitudes (nature as amoral, adversary, sublime, partner) and three reasons (prudence, meaning, psychological wholeness). "Respecting nature is respecting ourselves" (19), but "politics is required, not just virtue" (19).</p>
+    </div>
+  </div>
+</section>
+
+<section id="argument">
+  <div class="wrap">
+    <h2>The argument, step by step</h2>
+    <p class="lead">The chapter moves in a clear order. Page numbers are the book's printed page numbers, which you should cite in the exam.</p>
+    <ol class="steps">
+      <li><div>
+        <h3>Change is old; human-driven change is new <span class="pg">p. 13</span></h3>
+        <p>Philosophy has always puzzled over change vs. permanence. The Earth is "a violent neighborhood in a universe given to cataclysms." Life itself changes the planet (cyanobacteria made oxygen). But humans are now a dominant force.</p>
+        <ul>
+          <li><b>Vitousek et al. (1997)</b>: one-third to one-half of land transformed; atmospheric CO₂ up 30%+ since the industrial revolution; humans fix more nitrogen than all other land organisms combined; over half of accessible fresh water used; about a quarter of bird species driven extinct. Conclusion: "we live on a human-dominated planet."</li>
+          <li>The International Commission on Stratigraphy (ICS) was reviewing whether to make the Anthropocene a formal epoch. Jamieson: even if it declines, the concept still matters for "understanding our present condition." <i>(Exam bonus: in 2024 the stratigraphers did vote it down, which proves his point that its value is cultural and moral, not only geological.)</i></li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Answering the humanists' suspicion of the name <span class="pg">p. 14</span></h3>
+        <p>Some humanists think the name <i>glorifies</i> human domination. Jamieson agrees categories matter (calling a plant a "weed" or a person a "thug" shapes how we treat them), but "sometimes a category is just a category."</p>
+        <ul>
+          <li>"Holocene" was also a human invention: coined 1867 (in French), proposed 1885, adopted by the US Geological Survey only in 1967. We don't suspect it because old categories are "naturalized." With the Anthropocene, "the sausage is being made before our very eyes."</li>
+          <li>Naming an era after humans does not glorify humans, just as historians can speak of the "Warring States Period" in China "without glorifying warring states."</li>
+          <li>Against the view that the Anthropocene is as old as humanity: what marks it out is a <b>qualitative difference that can rest on quantitative differences</b>. About 6 million hunter-gatherers lived at the start of the Holocene; today there are over 7 billion.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Technology and "action at a distance" <span class="pg">pp. 14–15</span></h3>
+        <p>Humanity is organised into huge systems (pipelines, fibre cables, satellites). Bergson (1907) predicted the steam engine would define an age like bronze or chipped stone. Technology enables "action at a distance"; Andy Clark says we are "natural born cyborgs."</p>
+      </div></li>
+      <li><div>
+        <h3>The paradox: power and powerlessness <span class="pg">p. 15</span></h3>
+        <p><b>Empowered:</b> a phone call can save a child far away; a credit card swipe brings goods from anywhere ("thank you, Amazon"); a man in Las Vegas can fly a drone that kills someone across the world. "Together we can change climate, drive species to extinction, and acidify the ocean. Never have humans been so powerful. Hence the name 'Anthropocene.'"</p>
+        <p style="margin-top:.5rem"><b>Powerless:</b> "Yet, at the heart of the Anthropocene is a widespread sense of the loss of agency." People feel trapped in classes and roles. "The main obstacle to taking action on climate change is the deep sense of its inevitability and our powerlessness to affect its course."</p>
+      </div></li>
+      <li><div>
+        <h3>Confusion, loss of privacy, and a crisis of meaning <span class="pg">pp. 15–16</span></h3>
+        <ul>
+          <li><b>Causation vs. complicity:</b> "When I drive my SUV to the 7–11 for a slurpy, am I causing climate change, contributing to it, complicit in it, or does it matter at all what I do?" Powerlessness and confusion push people to "retreat to private life."</li>
+          <li>But private life is shrinking too: more transparency, less privacy.</li>
+          <li><b>Fungibility:</b> "everything becomes increasingly fungible, from wombs to kidneys to artworks to lives themselves." Henry Sidgwick in Cambridge could only lament famine in Bengal; today we can act instantly, or gamble online, or leave everything to the canary. "Everything seems possible but nothing seems to matter."</li>
+          <li><b>Crisis in meaning:</b> human life was lived against a nature "largely independent of human action." Matthew's gospel says the sun shines on the just and unjust alike; geoengineering might "fix this oversight of nature," but what then happens to the lesson of humility?</li>
+          <li>"Together we are remaking the planet, though no one seems to have ever decided that this was a good idea." "The old order is shaking."</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Love it or leave it: a genuine choice <span class="pg">p. 16</span></h3>
+        <p>"The most fundamental choice the Anthropocene presents us with is whether to love it or leave it." Some say we have no choice because the Anthropocene is a "natural end state." Jamieson calls this "fundamentally unscientific": "There are no natural teleologies. The Anthropocene will pass away like previous historical epochs, and so will humanity." We can intensify domination, accept it, or reduce it. "To present this as anything other than a choice is bad faith."</p>
+        <p style="margin-top:.5rem">But we will live in it "for the foreseeable future even if we desire to exit," so "we need an ethics of the Anthropocene."</p>
+      </div></li>
+      <li><div>
+        <h3>Why ethics struggles here: the problem of the proximate <span class="pg">p. 16</span></h3>
+        <p>An ethical system regulates behaviour in a group, coordinates action on collective problems, governs relations with outsiders, and gives members meaning. Our sense of agency "is tightly bound to the proximate: what presents itself to our senses." Stories, music, relics, sacred spaces and globalisation have widened the circle of ethics, but "there is a limit to what can be made proximate." <b>Carbon emissions are hard to see or bring close</b>, so we need <b>proxies</b>.</p>
+      </div></li>
+      <li><div>
+        <h3>The green virtues as those proxies <span class="pg">pp. 16–17</span></h3>
+        <p>Green virtues are "character traits, dispositions, and emotions" that motivate us to reduce our impact "regardless of the behavior of others," give us resilience when others don't reciprocate, guide "experiments for how to live in the Anthropocene," and ground our sense of agency. A full list includes <b>love, respect, humility, and responsibility</b>. He focuses on <b>respect</b>.</p>
+      </div></li>
+      <li><div>
+        <h3>Respect for nature, and its opposite, domination <span class="pg">pp. 17–19</span></h3>
+        <p>Respect for nature appears in Kant, the Romantics (his footnote names Coleridge's <i>Rime of the Ancient Mariner</i>), indigenous peoples and Asian traditions. If we dominate the planet, we fail to respect it. We treat nature as "mere means," as toys; "it is as if we have scaled up slash-and-burn agriculture to the planetary level." A <b>vicious circle</b> follows: domination reduces respect, which leads to more domination (an idea from 1960s social movements, Fanon and Malcolm X). He then gives four attitudes and three reasons (see below).</p>
+      </div></li>
+      <li><div>
+        <h3>Conclusion <span class="pg">p. 19</span></h3>
+        <p>"Respecting nature is respecting ourselves." Whatever we answer, "for the foreseeable future we will have to live with it." The task is to preserve "as much of what we value as possible" and keep sources of meaning. "The green virtues are not an algorithm for solving the problems of the Anthropocene. Politics is required, not just virtue." Yet they can help us "live gracefully in a changing world, while helping to restore in us a sense of agency."</p>
+      </div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="concepts">
+  <div class="wrap">
+    <h2>Key terms to use in answers</h2>
+    <div class="grid">
+      <div class="term"><h3>Anthropocene</h3><p>Proposed geological epoch after the Holocene in which humans are the dominant force shaping Earth. Term popularised by Crutzen and Stoermer around 2000 (Heise, p. 3).</p></div>
+      <div class="term"><h3>Human-dominated planet</h3><p>Vitousek et al.'s 1997 conclusion, Jamieson's main evidence (p. 13).</p></div>
+      <div class="term"><h3>Naturalized categories</h3><p>Old labels like "Holocene" feel natural only because we were born into them. The Anthropocene is a category still being made (p. 14).</p></div>
+      <div class="term"><h3>Qualitative change from quantity</h3><p>Sheer scale (7 billion people, high consumption) creates a new kind of era (p. 14).</p></div>
+      <div class="term"><h3>Action at a distance</h3><p>Technology lets us affect far-off people and places instantly (p. 15).</p></div>
+      <div class="term"><h3>Power / powerlessness paradox</h3><p>Collectively all-powerful, individually helpless. The sense of inevitability is the main block to climate action (p. 15).</p></div>
+      <div class="term"><h3>Causation vs. complicity</h3><p>In a world where everything affects everything, it is unclear whether my small act causes harm or just makes me complicit (p. 15).</p></div>
+      <div class="term"><h3>Fungibility</h3><p>Everything becomes exchangeable for everything else, "from wombs to kidneys … to lives themselves" (p. 15).</p></div>
+      <div class="term"><h3>Crisis of meaning</h3><p>Nature used to be the fixed background of life. Once we remake it, meaning wobbles (pp. 15–16).</p></div>
+      <div class="term"><h3>Love it or leave it</h3><p>Embrace and intensify human domination, accept it, or try to reduce it. A real choice, not destiny (p. 16).</p></div>
+      <div class="term"><h3>No natural teleologies / bad faith</h3><p>History has no built-in endpoint; claiming the Anthropocene is inevitable is a dishonest way of dodging responsibility (p. 16).</p></div>
+      <div class="term"><h3>The proximate</h3><p>Ethics evolved for what is near and visible. Climate harm is distant and invisible, so ethics struggles (p. 16).</p></div>
+      <div class="term"><h3>Green virtues</h3><p>Love, respect, humility, responsibility: character traits that motivate good action even when others don't act (pp. 16–17).</p></div>
+      <div class="term"><h3>Domination</h3><p>Treating nature as "mere means"; shows up in attitudes and in actions. The opposite of respect (p. 17).</p></div>
+      <div class="term"><h3>Vicious circle</h3><p>Mistreatment lowers respect, which allows more mistreatment. True of oppressed groups and of nature (p. 17).</p></div>
+      <div class="term"><h3>The sublime</h3><p>Burke (1757): delight mixed with fear and awe before vast nature. Shaped American wilderness preservation (pp. 17–18).</p></div>
+      <div class="term"><h3>Nature as background</h3><p>Nature is the background against which human lives gain meaning, like background in a painting. Hence "meaning and mourning are closely related" (pp. 18–19).</p></div>
+      <div class="term"><h3>Precautionary principle</h3><p>Act cautiously when harms are uncertain. Grounded in the prudential reason for respect (p. 18).</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="respect">
+  <div class="wrap">
+    <h2>Respect for nature: four attitudes, three reasons</h2>
+    <p class="lead">This is the part examiners can most easily turn into a question. Learn the table, then practise applying each row to a novel.</p>
+    <h3>Four ways of seeing (and respecting) nature <span class="pg">pp. 17–18</span></h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Attitude</th><th>What it means</th><th>Jamieson's example</th><th>Danger</th><th>Course-text example</th></tr></thead>
+      <tbody>
+        <tr><td><b>Amoral</b></td><td>Nature is indifferent to us; respect it for its blind power and radical "otherness"</td><td><i>Tao Te Ching</i>: "Heaven and Earth are impartial; they treat all of creation as straw dogs"</td><td>Can justify domination</td><td>The cyclone and tides in <i>The Hungry Tide</i>; Ghosh's "uncanny" weather in <i>The Great Derangement</i></td></tr>
+        <tr><td><b>Adversary</b></td><td>Nature is powerful, even malevolent; humans weak and must subdue it</td><td>Herzog's <i>Grizzly Man</i> (note 8)</td><td>"A rationale for dominating nature"</td><td>Nehru's dams taming rivers (<i>Cost of Living</i>); tiger as enemy in Morichjhapi/<i>Hungry Tide</i></td></tr>
+        <tr><td><b>Aesthetic / sublime</b></td><td>Awe, terror and delight at vastness</td><td>Burke; painters Cole and Church; Muir, Foreman's "big outside"; wilderness preservation</td><td>Romanticises "empty" wilderness, can ignore people living there</td><td>Polar ice and becalmed sea in <i>Rime</i>; Piya's wonder at the dolphins</td></tr>
+        <tr><td><b>Partner</b></td><td>Nature as friend, lover, parent; "nature lovers"; feeling at home</td><td>Muir: "an ancient mother-love"; Jamieson at Torrey Pines beach</td><td>Can be sentimental</td><td>Fokir and the river; Narmada as mother in <i>River of Stories</i>; Mariner blessing the water-snakes</td></tr>
+      </tbody>
+    </table></div>
+    <h3 style="margin-top:.6rem">Three reasons to respect nature <span class="pg">pp. 18–19</span></h3>
+    <div class="two">
+      <div class="box"><h3>1. Prudence</h3><p>It is in our interest. Broecker: climate change is like "poking a dragon with a sharp stick." Commoner's third law: "nature knows best." Basis of the precautionary principle.</p></div>
+      <div class="box"><h3>2. Meaning</h3><p>Nature is the background that gives lives meaning: Blake's "green and pleasant land," Chekhov's cherry orchard, landscapes of indigenous peoples, Boulder's Flatirons. When it is destroyed we feel grief and nostalgia, so "meaning and mourning are closely related."</p></div>
+      <div class="box"><h3>3. Psychological wholeness</h3><p>Following Kant and Freud, respecting the other is central to knowing and respecting ourselves. "The failure to respect the other can be seen as a form of narcissism." So: "Respecting nature is respecting ourselves."</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2>Quote bank</h2>
+    <p class="lead">Short quotes are easier to remember and look sharper in an essay. Pick five or six and learn them with page numbers.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Quote</th><th>Page</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr><td class="q">"it is clear that we live on a human-dominated planet"</td><td><span class="pg">13</span></td><td>Defining the Anthropocene (Vitousek, quoted)</td></tr>
+        <tr><td class="q">"When it comes to the Anthropocene, the sausage is being made before our very eyes."</td><td><span class="pg">14</span></td><td>Categories are human-made; defending the term</td></tr>
+        <tr><td class="q">"Whether or not this is of geological interest, it is of great cultural and moral moment."</td><td><span class="pg">14</span></td><td>Why humanities should care</td></tr>
+        <tr><td class="q">"Never have humans been so powerful. Hence the name 'Anthropocene.'"</td><td><span class="pg">15</span></td><td>Power side of the paradox</td></tr>
+        <tr><td class="q">"at the heart of the Anthropocene is a widespread sense of the loss of agency"</td><td><span class="pg">15</span></td><td>Powerlessness side</td></tr>
+        <tr><td class="q">"The main obstacle to taking action on climate change is the deep sense of its inevitability and our powerlessness to affect its course."</td><td><span class="pg">15</span></td><td>Climate inaction; link to Ghosh</td></tr>
+        <tr><td class="q">"When I drive my SUV to the 7–11 for a slurpy, am I causing climate change, contributing to it, complicit in it …?"</td><td><span class="pg">15</span></td><td>Causation vs. complicity; also shows his privileged standpoint</td></tr>
+        <tr><td class="q">"Everything seems possible but nothing seems to matter."</td><td><span class="pg">15</span></td><td>Crisis of meaning</td></tr>
+        <tr><td class="q">"Together we are remaking the planet, though no one seems to have ever decided that this was a good idea."</td><td><span class="pg">16</span></td><td>Unintended, undemocratic change; development critiques</td></tr>
+        <tr><td class="q">"The most fundamental choice the Anthropocene presents us with is whether to love it or leave it."</td><td><span class="pg">16</span></td><td>The title idea</td></tr>
+        <tr><td class="q">"There are no natural teleologies … To present this as anything other than a choice is bad faith."</td><td><span class="pg">16</span></td><td>Against fatalism</td></tr>
+        <tr><td class="q">"We need an ethics of the Anthropocene."</td><td><span class="pg">16</span></td><td>His central proposal</td></tr>
+        <tr><td class="q">"there is a limit to what can be made proximate. Carbon dioxide emissions are among those phenomena that are difficult to bring close and make visible."</td><td><span class="pg">16</span></td><td>Link to Nixon's slow violence, Ghosh's imagination crisis</td></tr>
+        <tr><td class="q">"it is as if we have scaled up slash-and-burn agriculture to the planetary level"</td><td><span class="pg">17</span></td><td>Domination of nature</td></tr>
+        <tr><td class="q">"Heaven and Earth are impartial; they treat all of creation as straw dogs."</td><td><span class="pg">17</span></td><td>Nature as amoral (Lao-Tse, quoted)</td></tr>
+        <tr><td class="q">"[t]here is a love of wild nature in everybody, an ancient mother-love"</td><td><span class="pg">18</span></td><td>Nature as partner (Muir, quoted)</td></tr>
+        <tr><td class="q">"meaning and mourning are closely related concepts"</td><td><span class="pg">19</span></td><td>Loss of landscape = loss of meaning (dams, Sundarbans, Pterodactyl)</td></tr>
+        <tr><td class="q">"Respecting nature is respecting ourselves."</td><td><span class="pg">19</span></td><td>Conclusion on respect</td></tr>
+        <tr><td class="q">"Politics is required, not just virtue."</td><td><span class="pg">19</span></td><td>Limits of individual ethics</td></tr>
+        <tr><td class="q">"live gracefully in a changing world, while helping to restore in us a sense of agency"</td><td><span class="pg">19</span></td><td>Closing line; what virtues can do</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="heise">
+  <div class="wrap">
+    <h2>Context: Heise's Introduction (pp. 1–10)</h2>
+    <p class="lead">Your PDF includes the editor's introduction. It gives you the "big picture" sentences that make an answer look well read.</p>
+    <div class="two">
+      <div class="box"><h3>What the environmental humanities are</h3><ul>
+        <li>They see ecological crises "fundamentally as questions of socioeconomic inequality, cultural difference, and divergent histories, values, and ethical frameworks," not just techno-scientific problems (p. 2).</li>
+        <li>Sörlin: "[o]ur belief that science alone could deliver us from the planetary quagmire is long dead" (p. 3).</li>
+        <li>Conservation imposed by the global North on the global South often led to "disempowerment, expropriation, and displacement" (p. 3). Very useful for Morichjhapi.</li>
+      </ul></div>
+      <div class="box"><h3>The Anthropocene debate</h3><ul>
+        <li>Crutzen and Stoermer: human impact will leave permanent traces in rock (p. 3).</li>
+        <li>Heise summarises Jamieson: the Anthropocene gives "the impression of human power" and "overwhelming feelings of powerlessness" (pp. 3–4).</li>
+        <li>Chakrabarty's "The Climate of History: Four Theses" calls for thinking of humans as a species. Marxist and postcolonial critics reply that "species agency" is "ideological cover-up" given unequal responsibility and exposure (Moore's "Capitalocene") (pp. 5–6).</li>
+        <li>The field is defined by the "productive conceptual tension" between species-level agency and inequality among humans (p. 6).</li>
+        <li>Decline narratives vs. eco-modernists who want "more modernity" (p. 7).</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <h2>Connecting Jamieson to other course texts</h2>
+    <p class="lead">Endsem questions are likely to ask you to compare. Tap a text to open it. Each one ends with a ready-made sentence you can adapt.</p>
+    <div class="btnrow"><button type="button" id="openAll">Open all</button><button type="button" id="closeAll">Close all</button></div>
+    <div class="conn">
+
+      <details class="text" open><summary><h3>Amitav Ghosh, <i>The Great Derangement</i></h3><span class="tag">strongest link · climate, imagination, politics</span></summary><div class="body">
+        <ul>
+          <li><b>Shared diagnosis:</b> both say the climate crisis is also a crisis of culture and imagination. Ghosh: the novel and modern culture cannot imagine the "improbable," so future generations will see us as deranged. Jamieson: "everything seems possible but nothing seems to matter," and climate harm cannot be made "proximate."</li>
+          <li><b>Nonhuman agency:</b> Ghosh's "uncanny" weather that seems to address us matches Jamieson's point that nature is no longer a fixed background independent of human action.</li>
+          <li><b>Key difference (great for "critically evaluate"):</b> Ghosh criticises politics turned into a personal "moral adventure" of individual conscience, and stresses empire, Asia and collective action. Jamieson's answer is mainly individual virtue. But Jamieson himself admits "Politics is required, not just virtue," which shows he sees the limit.</li>
+          <li><b>Inequality:</b> Ghosh (like Chakrabarty in Heise's intro) puts colonialism and unequal carbon histories at the centre, which Jamieson's universal "we" leaves out.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> While Jamieson locates the Anthropocene's problem in a "loss of agency" that green virtues can partly restore, Ghosh's <i>The Great Derangement</i> suggests that the deeper failure is collective and imaginative, so that virtue without politics, as Jamieson himself concedes (19), cannot match the scale of the crisis.</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Amitav Ghosh, <i>The Hungry Tide</i></h3><span class="tag">respect · conservation vs. people · four attitudes</span></summary><div class="body">
+        <ul>
+          <li><b>The four attitudes in one novel:</b> the tide and the cyclone are amoral, indifferent force; the tiger is the adversary; Piya's wonder at the Irrawaddy dolphins is close to the sublime/aesthetic; Fokir's intimate, inherited knowledge of the river and the Bon Bibi legend show nature as partner.</li>
+          <li><b>Bon Bibi's law</b> (take only what you need, share the forest with the tiger) is a lived version of "respect for nature" that Jamieson says is "frequently attributed to indigenous peoples" (17).</li>
+          <li><b>Morichjhapi</b> exposes the weakness of an abstract ethic of respect: the state "protected" the forest and tigers by evicting refugees, exactly the "disempowerment, expropriation, and displacement" Heise names (3). Respect for nature without justice becomes another form of domination over poor people.</li>
+          <li><b>Meaning and mourning:</b> the islands are the "background" that gives the tide country people meaning; losing them is grief.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> <i>The Hungry Tide</i> tests Jamieson's "respect for nature" by asking whose respect counts: Fokir lives Jamieson's ideal of nature as partner, while the Morichjhapi eviction shows how conservation framed as respect can itself dominate the marginalised.</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Amitav Ghosh, <i>Gun Island</i></h3><span class="tag">climate migration · interconnection · nonhuman agency</span></summary><div class="body">
+        <ul>
+          <li><b>Action at a distance / everything affects everything:</b> the novel links the Sundarbans, Los Angeles wildfires and Venice through migration, warming seas and strange animal movements (snakes, spiders, dolphins, shipworms). This is Jamieson's world where "everything affects everything else" (15).</li>
+          <li><b>Power and powerlessness:</b> migrants like Tipu and Rafi are pushed by forces (climate, markets, traffickers) no one controls; Deen, the rationalist, feels helpless before events he cannot explain.</li>
+          <li><b>Respect as humility:</b> the Manasa Devi legend (the merchant who refuses to honour the snake goddess and is pursued across the world) reads as a myth about the cost of refusing respect and humility toward nonhuman power.</li>
+          <li><b>Who is "we"?</b> Those displaced are poor Bengalis, not SUV drivers, which sharpens the critique of Jamieson's universal subject.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> <i>Gun Island</i> dramatises the Anthropocene paradox Jamieson describes, where collective human power produces individual powerlessness, but it shows that this powerlessness falls hardest on climate migrants rather than on the consumers whose choices drive it.</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Arundhati Roy, <i>The Cost of Living</i></h3><span class="tag">dams · domination · who pays</span></summary><div class="body">
+        <ul>
+          <li><b>Domination of nature as "mere means":</b> Nehru's "Temples of Modern India." Roy writes that big dams became "an article of faith inextricably linked with nationalism." This is nature as adversary to be tamed, and domination on a national scale.</li>
+          <li><b>Who pays:</b> Roy estimates 33 to 40 million people displaced by big dams, about 60% Dalit or Adivasi. "When history is written, they won't be in it, not even as statistics." Jamieson's "we" hides this unequal cost.</li>
+          <li><b>Meaning and mourning:</b> the Narmada project will submerge "sacred groves and temples and ancient pilgrimage routes." Jamieson's own footnote 11 gives a dam example of grief: Lake Powell flooding Utah's canyons (Abbey's <i>The Monkey Wrench Gang</i>).</li>
+          <li><b>Fungibility:</b> a valley, a village and a way of life are traded for electricity and irrigation figures.</li>
+          <li><b>"Politics is required":</b> Roy's essay is itself political action (Narmada Bachao Andolan, Supreme Court case), showing what Jamieson means when he says virtue is not enough.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> Roy's account of the Narmada dams shows Jamieson's domination of nature in its Indian, nationalist form, and confirms his claim that "meaning and mourning are closely related" (19), while also exposing that the costs of the Anthropocene are borne overwhelmingly by Adivasis and Dalits.</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Orijit Sen, <i>River of Stories</i></h3><span class="tag">Narmada · Adivasi myth · nature as partner</span></summary><div class="body">
+        <ul>
+          <li>The graphic novel sets Adivasi stories of the Narmada as a living, sacred river against the modern dam project. This is the "partner" and "mother" view of nature (Muir's "ancient mother-love") against the "adversary" view of development planners.</li>
+          <li>The river is the background that gives the community its meaning, Jamieson's second reason for respect. Submergence is not only economic loss but loss of meaning.</li>
+          <li>Its form (myth woven with the present) answers Jamieson's "proximity" problem: stories make distant harm visible, which he says stories, relics and sacred spaces can do (16).</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> <i>River of Stories</i> gives Jamieson's abstract "nature as partner" a concrete cultural form, and its use of myth shows how storytelling can make the distant and slow harms of development "proximate."</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Rob Nixon, <i>Slow Violence</i></h3><span class="tag">visibility · representation · environmentalism of the poor</span></summary><div class="body">
+        <ul>
+          <li><b>Same problem, different angle:</b> Jamieson says ethics is bound to "the proximate" and CO₂ is "difficult to bring close and make visible" (16). Nixon says slow violence is "incremental," "attritional," "out of sight," and so poses a representational challenge. Both say the real harm of our era is hard to see.</li>
+          <li><b>Their answers differ:</b> Jamieson proposes internal proxies (virtues). Nixon proposes writer-activists and storytelling that make slow violence visible.</li>
+          <li><b>Nixon corrects Jamieson:</b> slow violence falls on the poor (the "environmentalism of the poor"), so Nixon puts power and inequality at the centre, where Jamieson speaks of a general "we." Nixon has elsewhere questioned the universal "we" of the Anthropocene idea.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> Jamieson's problem of making carbon emissions "proximate" is essentially Nixon's representational challenge of slow violence, but where Jamieson turns inward to virtue, Nixon turns outward to the unequal distribution of harm and the political power of storytelling.</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Coleridge, <i>The Rime of the Ancient Mariner</i></h3><span class="tag">Jamieson cites it himself · note 4, p. 19</span></summary><div class="body">
+        <ul>
+          <li><b>Direct link:</b> Jamieson's footnote 4 names the <i>Rime</i> as an example of "respect for nature in Romantic poetry." Mention this; it shows close reading.</li>
+          <li><b>The albatross killing = domination without reason</b>, the failure of respect. The vicious circle follows: the crew first blame then praise the act, judging the bird only by its use to them ("mere means").</li>
+          <li><b>Nature as amoral/adversary:</b> the becalmed sea, "Water, water, every where," the sun, Death and Life-in-Death.</li>
+          <li><b>Nature as sublime:</b> the polar ice and storms.</li>
+          <li><b>Nature as partner:</b> the Mariner blesses the water-snakes "unaware," and the curse begins to lift. Love and respect restore his agency (he can pray again), echoing Jamieson's claim that virtues can "restore in us a sense of agency" (19).</li>
+          <li>"He prayeth best, who loveth best / All things both great and small" sums up love, respect and humility, three of Jamieson's four green virtues.</li>
+          <li><b>Limit:</b> the Mariner's change is individual and private; Jamieson says the Anthropocene needs politics too.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> Jamieson himself cites the <i>Rime</i> as a Romantic model of respect for nature (19, n. 4): the Mariner's arc from killing the albatross to blessing the water-snakes moves from domination to love and respect, and in doing so restores the agency he had lost.</p>
+      </div></details>
+
+      <details class="text" open><summary><h3>Mahasweta Devi, <i>Pterodactyl, Puran Sahay and Pirtha</i></h3><span class="tag">indigenous memory · development · mourning</span></summary><div class="body">
+        <ul>
+          <li><b>Respect attributed to indigenous peoples:</b> for the Adivasis of Pirtha the pterodactyl is an ancestral soul. Their reverence is a form of respect, but Mahasweta shows it is inseparable from their land, famine and survival, not a romantic attitude.</li>
+          <li><b>Meaning and mourning:</b> the dying pterodactyl embodies a whole world being lost to drought, famine and "development." Jamieson's idea that losing nature means losing meaning fits closely.</li>
+          <li><b>Who dominates whom:</b> development officials and the state dominate both land and Adivasis, Jamieson's "vicious circle" applied to people and nature together (he notes the circle applies to "subordinated groups," citing Fanon).</li>
+          <li><b>Puran Sahay's change</b> from outside journalist to someone who listens is a shift toward humility and respect.</li>
+          <li><b>Critique:</b> Jamieson speaks from Torrey Pines and the SUV; Pirtha shows that the Anthropocene looks very different from below.</li>
+        </ul>
+        <p class="use"><b>Sentence to adapt:</b> In <i>Pterodactyl</i>, the Adivasi reverence for the creature embodies the "respect for nature" Jamieson attributes to indigenous peoples, but Mahasweta shows that this respect cannot survive without justice, since the same forces that dominate nature dominate the people of Pirtha.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="critique">
+  <div class="wrap">
+    <h2>Evaluating Jamieson: strengths and limits</h2>
+    <p class="lead">For "critically discuss" questions, a balanced paragraph like this earns the top band.</p>
+    <div class="two">
+      <div class="box"><h3>Strengths</h3><ul>
+        <li>Rejects fatalism: the Anthropocene is a choice, so responsibility stays with us.</li>
+        <li>Defends the term against the charge that it glorifies humans (sausage, Warring States).</li>
+        <li>Explains the psychology of climate inaction (powerlessness, confusion, complicity).</li>
+        <li>Names a real ethical problem: our moral sense is tuned to the near and visible.</li>
+        <li>Offers a pluralist account of respect drawing on Taoism, Romanticism, Kant, Burke, indigenous traditions.</li>
+        <li>Honest about limits: "Politics is required, not just virtue."</li>
+      </ul></div>
+      <div class="box"><h3>Limits</h3><ul>
+        <li><b>Universal "we":</b> ignores that the rich and the global North caused most emissions while the poor bear the costs (Chakrabarty's critics, Moore's "Capitalocene," Nixon, Roy).</li>
+        <li><b>Western, middle-class standpoint:</b> his examples are SUVs, Amazon, San Diego Gas and Electric, Torrey Pines.</li>
+        <li><b>Individualist:</b> virtues focus on personal character; Ghosh would say the crisis needs collective politics.</li>
+        <li><b>Romanticises indigenous respect</b> in one sentence without exploring how it is tied to land rights.</li>
+        <li><b>Respect can harm people:</b> conservation in the name of respect displaced communities (Morichjhapi; Heise p. 3).</li>
+        <li>Discusses only one virtue (respect) in detail; the others are just listed.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="exam">
+  <div class="wrap">
+    <h2>Likely exam questions with answer outlines</h2>
+    <p class="lead">Written in the style of your midsem: 10 marks each, "substantiate with evidence from the texts." Each outline is about one A4 page when written out. Aim for an intro with a clear thesis, 3 or 4 body paragraphs each with a quote and page number, one counterpoint, and a short conclusion.</p>
+    <div class="btnrow"><button type="button" id="openQ">Open all answers</button><button type="button" id="closeQ">Close all answers</button></div>
+    <div class="qa">
+
+      <details class="q" open><summary><span class="n">Q1</span><span>What does Jamieson mean by the choice to "love it or leave it"? Is it really a choice if we cannot exit the Anthropocene? Discuss.</span></summary><div class="body">
+        <h4>Thesis</h4><p>For Jamieson, the Anthropocene is a period of human domination of Earth; the choice is whether to intensify, accept, or reduce that domination. It is a genuine moral choice even though we cannot leave the period itself, which is exactly why we need an ethics for living in it.</p>
+        <h4>Body</h4><ol>
+          <li>Define the Anthropocene with Vitousek's evidence: "human-dominated planet" (13). Note the ICS debate, and that the concept is "of great cultural and moral moment" (14).</li>
+          <li>The choice: "whether to love it or leave it" (16). Against those who see it as a "natural end state": "There are no natural teleologies"; calling it inevitable is "bad faith" (16). Connect to his point that "the deep sense of its inevitability" is the main obstacle to climate action (15).</li>
+          <li>The twist: "we are living in the Anthropocene and will do so for the foreseeable future even if we desire to exit" (16). So "leaving" means reducing domination, not escaping the epoch. Hence "We need an ethics of the Anthropocene."</li>
+          <li>The ethics: green virtues as proxies because CO₂ cannot be made "proximate" (16); respect for nature as the opposite of domination (17).</li>
+          <li>Text example: Roy's dams as "loving" the Anthropocene (nature tamed for nationalism) vs. the Narmada Bachao Andolan or Fokir's way of life as "leaving" it.</li>
+        </ol>
+        <h4>Counterpoint</h4><p>The choice is not equally open to all. An Adivasi displaced by a dam or a Sundarbans refugee did not choose the Anthropocene. Jamieson's "we" is a privileged one.</p>
+        <h4>Conclusion</h4><p>The choice is real at the level of values and politics, not geology. "Politics is required, not just virtue" (19).</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q2</span><span>"Never have humans been so powerful." Yet Jamieson finds "a widespread sense of the loss of agency." Explain this paradox and illustrate it with one literary text from the course.</span></summary><div class="body">
+        <h4>Thesis</h4><p>The Anthropocene makes humanity collectively all-powerful but leaves individuals feeling helpless and confused, and this gap between collective power and individual agency is the core moral problem of the age.</p>
+        <h4>Body</h4><ol>
+          <li><b>Power:</b> population (6 million to 7 billion, 14), technology and "action at a distance" (15), drones, Amazon; "Together we can change climate, drive species to extinction, and acidify the ocean" (15).</li>
+          <li><b>Powerlessness:</b> "loss of agency" (15); money controls politics; people trapped in roles; inevitability blocks climate action.</li>
+          <li><b>Confusion:</b> SUV and slurpy, causation vs. complicity (15); retreat to private life; fungibility; "Everything seems possible but nothing seems to matter" (15).</li>
+          <li><b>Literary illustration (choose one):</b> <i>Gun Island</i> (forces linking Sundarbans, LA, Venice that no one controls; migrants as pawns); or <i>Rime</i> (one man's act has huge effects, then he is helpless on a becalmed sea until he blesses the snakes); or <i>The Great Derangement</i> (our failure to imagine our own power).</li>
+          <li><b>Jamieson's remedy:</b> green virtues can "restore in us a sense of agency" (19).</li>
+        </ol>
+        <h4>Counterpoint</h4><p>Power and powerlessness are unevenly distributed. The powerful (corporations, states) hold the power; the poor experience the powerlessness (Nixon, Roy).</p>
+        <h4>Conclusion</h4><p>The paradox explains climate inaction, but resolving it needs both personal virtue and collective politics.</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q3</span><span>What are the "green virtues"? Why does Jamieson think the Anthropocene needs them, and what are the limits of a virtue-based response?</span></summary><div class="body">
+        <h4>Thesis</h4><p>Green virtues (love, respect, humility, responsibility) are character traits that motivate us to reduce our impact on nature even when the harm is invisible and others don't reciprocate. They are a needed but insufficient response.</p>
+        <h4>Body</h4><ol>
+          <li>Why ethics struggles: ethical systems are built around "the proximate"; "there is a limit to what can be made proximate," and CO₂ is "difficult to bring close and make visible" (16). We need proxies.</li>
+          <li>What virtues do (16): motivate "regardless of the behavior of others"; give resilience; guide "experiments for how to live in the Anthropocene"; ground agency.</li>
+          <li>Respect as the worked example (17–19): opposite of domination; four attitudes; three reasons (prudence, meaning, wholeness). "Respecting nature is respecting ourselves."</li>
+          <li>Literary example: the Mariner's turn to love ("He prayeth best, who loveth best") or Fokir/Bon Bibi's ethic of taking only what you need in <i>The Hungry Tide</i>.</li>
+          <li>Limits: Jamieson admits "The green virtues are not an algorithm … Politics is required, not just virtue" (19). Ghosh's <i>Great Derangement</i> warns against reducing politics to individual moral journeys. Nixon and Roy show harm is structural (dams, state, capital).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Virtues answer the motivation problem and the meaning problem; they do not answer the power and justice problem.</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q4</span><span>Jamieson describes several ways of respecting nature: as amoral, as adversary, as sublime, and as partner. Analyse how one or two course texts represent competing attitudes toward nature in these terms.</span></summary><div class="body">
+        <h4>Thesis</h4><p>Literary texts rarely hold just one attitude; they stage conflicts between them, and these conflicts are often conflicts of class, culture and power.</p>
+        <h4>Body (using <i>The Hungry Tide</i> + <i>Rime</i>)</h4><ol>
+          <li>Set out Jamieson's four attitudes with his examples: <i>Tao Te Ching</i> straw dogs, <i>Grizzly Man</i>, Burke's sublime, Muir's "ancient mother-love" (17–18). Note his warning that amoral/adversary views can justify domination.</li>
+          <li><i>Hungry Tide</i>: tide/cyclone as amoral; tiger as adversary (the village burning the tiger); Piya's scientific wonder near the aesthetic; Fokir and Bon Bibi as partner. Characters (Piya, Kanai, Fokir, Nirmal) embody different attitudes, which is what makes the novel complex.</li>
+          <li><i>Rime</i>: albatross killing as domination; polar ice as sublime; becalmed ocean as amoral force; blessing the water-snakes as partnership. Jamieson cites the poem himself (19, n. 4).</li>
+          <li>Show the stakes: the attitude a group holds decides who gets protected. Morichjhapi: tigers protected, refugees evicted (Heise p. 3 on conservation and displacement).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Jamieson says these attitudes "can exist simultaneously within a single person" (17); the texts show they also exist in conflict between groups.</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q5</span><span>"Meaning and mourning are closely related concepts." Discuss Jamieson's claim that nature gives human lives meaning, with reference to texts about development and displacement.</span></summary><div class="body">
+        <h4>Thesis</h4><p>Jamieson argues nature is the "background" against which lives gain meaning, so destroying it causes grief. Texts about dams and development show this loss falls hardest on communities whose identity is tied to land.</p>
+        <h4>Body</h4><ol>
+          <li>Explain the argument (18–19): Blake's "green and pleasant land," Chekhov's cherry orchard, indigenous landscapes, the Flatirons; the painting analogy of foreground and background; "grief and nostalgia when familiar patterns are disrupted." Footnote 11: Lake Powell dam and Abbey.</li>
+          <li>Roy, <i>Cost of Living</i>: Narmada will submerge "sacred groves and temples and ancient pilgrimage routes"; 33 to 40 million displaced, 60% Dalit/Adivasi; "they won't be in it, not even as statistics."</li>
+          <li><i>River of Stories</i>: the Narmada as a living, storied river; submergence as loss of a world, not just land.</li>
+          <li><i>Pterodactyl</i>: the creature as ancestral soul and the community's grief for a vanishing world.</li>
+          <li>Link to Nixon: mourning is slow and often invisible, which is why it is not counted.</li>
+        </ol>
+        <h4>Counterpoint</h4><p>Jamieson's examples are mostly aesthetic and personal (Torrey Pines). For Adivasis, loss of nature is loss of livelihood and survival as well as meaning.</p>
+        <h4>Conclusion</h4><p>His claim is strengthened by these texts, but they add the dimension of justice that he leaves implicit.</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q6</span><span>Who is the "anthropos" in the Anthropocene? Critically assess Jamieson's account in light of environmental justice concerns raised by other texts in the course.</span></summary><div class="body">
+        <h4>Thesis</h4><p>Jamieson rightly defends the Anthropocene as a moral category, but his universal "we" obscures that responsibility for and exposure to planetary harm are deeply unequal.</p>
+        <h4>Body</h4><ol>
+          <li>Jamieson's "we": "Together we are remaking the planet" (16); his examples (SUV, Amazon, San Diego Gas and Electric) come from an affluent American standpoint. He defends the name against the charge of glorifying humans (14).</li>
+          <li>Heise's intro: Chakrabarty's species thinking vs. critics who call "species agency" "ideological cover-up" (Moore's Capitalocene) (pp. 5–6). Environmental humanities as tension between species agency and inequality (6).</li>
+          <li>Nixon: slow violence and the environmentalism of the poor; harms land on those least visible.</li>
+          <li>Roy and <i>River of Stories</i>: the costs of "development" fall on Adivasis and Dalits.</li>
+          <li><i>The Hungry Tide</i> and <i>Gun Island</i>: refugees and climate migrants are victims of the Anthropocene, not its authors. Morichjhapi shows conservation itself can be unjust.</li>
+          <li>Give Jamieson credit: he says the choice is ours, admits "Politics is required, not just virtue" (19), notes the vicious circle of domination applies to "subordinated groups" (17, citing Fanon).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Jamieson supplies a useful ethics of motivation; the course's postcolonial texts supply the missing politics of who dominates whom.</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q7</span><span>Compare Jamieson's problem of "the proximate" with Rob Nixon's concept of slow violence. How do both thinkers address the difficulty of representing environmental harm?</span></summary><div class="body">
+        <h4>Thesis</h4><p>Both argue that the defining harms of our era resist perception: Jamieson because ethics is tuned to the near, Nixon because slow violence is gradual and dispersed. They differ in their remedies and in how far they foreground inequality.</p>
+        <h4>Body</h4><ol>
+          <li>Jamieson: agency "tightly bound to the proximate"; stories, music, relics, sacred space have made the distant near, but "there is a limit"; CO₂ is "difficult to bring close and make visible" (16).</li>
+          <li>Nixon: slow violence is incremental, attritional, out of sight, unlike spectacular violence; it poses a representational challenge.</li>
+          <li>Remedies: Jamieson turns to green virtues as internal proxies. Nixon turns to writer-activists and narrative to make the invisible visible.</li>
+          <li>Literary demonstration: <i>River of Stories</i> or <i>The Hungry Tide</i> make slow harm visible through story; Ghosh's <i>Great Derangement</i> argues literature has mostly failed to do so.</li>
+          <li>Difference: Nixon centres the poor and the global South; Jamieson speaks of a general human subject.</li>
+        </ol>
+        <h4>Conclusion</h4><p>Read together, Jamieson explains why we don't act on what we can't see, and Nixon explains who is harmed by what we don't see.</p>
+      </div></details>
+
+      <details class="q" open><summary><span class="n">Q8</span><span>Jamieson cites <i>The Rime of the Ancient Mariner</i> as an expression of respect for nature in Romantic poetry. Using his account of respect and domination, analyse the Mariner's transformation.</span></summary><div class="body">
+        <h4>Thesis</h4><p>The <i>Rime</i> traces a movement from domination to respect, and shows Jamieson's point that respecting nature restores both meaning and agency.</p>
+        <h4>Body</h4><ol>
+          <li>Jamieson's definition: domination as treating nature as "mere means"; the vicious circle; respect as a green virtue (17). He names the <i>Rime</i> in note 4 (19).</li>
+          <li>The killing of the albatross: an unmotivated act of domination; the crew judge it only by its consequences for them.</li>
+          <li>Consequences: nature as amoral/adversary (calm, thirst, "Water, water, every where"); the Mariner's total loss of agency (he cannot pray).</li>
+          <li>Turning point: blessing the water-snakes "unaware," which is love and nature as partner; the albatross falls from his neck.</li>
+          <li>Moral: "He prayeth best, who loveth best / All things both great and small," which unites love, respect and humility. Penance and retelling = responsibility.</li>
+          <li>Jamieson's three reasons: prudence (the curse), meaning (the Mariner's need to tell the story), wholeness (respecting the other heals the self: "Respecting nature is respecting ourselves," 19).</li>
+        </ol>
+        <h4>Limit</h4><p>The Mariner's redemption is individual and spiritual; Jamieson says the Anthropocene also needs politics.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Exam tips and traps</h2>
+    <ul class="tips">
+      <li><b>Spell and cite correctly:</b> Dale Jamieson, "The Anthropocene: Love It or Leave It," in <i>The Routledge Companion to the Environmental Humanities</i> (2017). Use page numbers 13–19.</li>
+      <li><b>Don't say</b> Jamieson rejects the term "Anthropocene." He defends it, and argues it matters morally whether or not geologists adopt it.</li>
+      <li><b>Don't say</b> he thinks the Anthropocene is inevitable. He calls that view "unscientific" and "bad faith."</li>
+      <li><b>Don't say</b> virtues alone solve the crisis. His last paragraph says the opposite.</li>
+      <li><b>Know the four virtues</b> (love, respect, humility, responsibility) and that he discusses only <b>respect</b> in detail.</li>
+      <li><b>Know the 4 + 3:</b> four attitudes (amoral, adversary, sublime, partner) and three reasons (prudence, meaning, wholeness).</li>
+      <li><b>Use the Rime footnote.</b> Few students will notice that Jamieson cites Coleridge himself (p. 19, n. 4).</li>
+      <li><b>Always add one justice point.</b> Your course leans postcolonial; showing who bears the cost (Adivasis, refugees, migrants) lifts an answer from good to excellent.</li>
+      <li><b>Structure:</b> thesis in the first two lines, one quote with page number per paragraph, a counterpoint, and a conclusion that answers the exact question.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">Study guide built from the scanned reading (Jamieson, pp. 13–20; Heise, Introduction, pp. 1–10). Page numbers refer to the printed book pages. Links to other texts are summaries for revision; check any quotation from those texts against your own copies.</div></footer>
+
+<script>
+(function(){
+  function setAll(sel,open){document.querySelectorAll(sel).forEach(function(d){d.open=open;});}
+  document.getElementById('openAll').addEventListener('click',function(){setAll('details.text',true);});
+  document.getElementById('closeAll').addEventListener('click',function(){setAll('details.text',false);});
+  document.getElementById('openQ').addEventListener('click',function(){setAll('details.q',true);});
+  document.getElementById('closeQ').addEventListener('click',function(){setAll('details.q',false);});
+})();
+</script>

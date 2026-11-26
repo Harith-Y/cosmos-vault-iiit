@@ -1,0 +1,682 @@
+<title>Gun Island</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a sticky section bar; geological strata band in the hero; cards only where content is a set */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --fg:#1d2420; --muted:#5a645e; --line:#d6dbd4;
+  --accent:#1e6a63; --accent-soft:#dcebe7; --rust:#a9502a; --rust-soft:#f3e2d8;
+  --s1:#c9c2a8; --s2:#b3a98a; --s3:#8f8770; --s4:#6c6655; --s5:#3c3a33; --s6:#a9502a; --sink:#f2f3ef;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.mono,.pg{font-family:var(--mono);font-size:.78rem}
+.pg{color:var(--rust);background:var(--rust-soft);padding:1px 6px;border-radius:4px;white-space:nowrap;font-weight:500}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero .wrap{padding-block:2.6rem 0;display:grid;gap:1rem}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--rust)}
+.hero .by{color:var(--muted);font-size:1rem}
+.oneliner{font-size:1.15rem;max-width:62ch}
+.strata{display:grid;grid-template-rows:repeat(6,auto);margin-top:1.2rem}
+.strata div{font-family:var(--mono);font-size:.72rem;padding:4px 12px;color:var(--fg);display:flex;justify-content:space-between;gap:1rem}
+.strata div:nth-child(1){background:var(--s6);color:var(--surface);font-weight:500}
+.strata div:nth-child(2){background:var(--s1)}
+.strata div:nth-child(3){background:var(--s2)}
+.strata div:nth-child(4){background:var(--s3);color:var(--sink)}
+.strata div:nth-child(5){background:var(--s4);color:var(--sink)}
+.strata div:nth-child(6){background:var(--s5);color:var(--sink)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.55rem;scrollbar-width:thin}
+nav.bar a{font-family:var(--display);font-size:.85rem;font-weight:500;text-decoration:none;color:var(--fg);padding:.3rem .7rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+nav.bar a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-block:2.6rem;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section > .wrap{display:grid;gap:1.2rem}
+.lead{color:var(--muted);max-width:65ch}
+
+.memorize{background:var(--accent-soft);border-left:4px solid var(--accent);padding:1.1rem 1.3rem;border-radius:0 8px 8px 0;max-width:72ch}
+.memorize p+p{margin-top:.7rem}
+
+/* argument steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem;padding:1rem 0;border-top:1px dashed var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--rust);line-height:1.2}
+ol.steps h3{margin-bottom:.3rem}
+ol.steps ul{margin:.4rem 0 0;padding-left:1.1rem}
+ol.steps ul li{display:list-item;padding:0;border:0;counter-increment:none}
+ol.steps ul li::before{content:none}
+
+/* glossary */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.35rem;align-content:start;min-width:0}
+.term h3{font-size:1.02rem}
+.term p{font-size:.95rem}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.q{font-style:italic;min-width:16rem}
+td .pg{display:inline-block}
+
+/* connections */
+.conn{display:grid;gap:1rem}
+details.text{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.text summary{cursor:pointer;padding:.9rem 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.text summary::-webkit-details-marker{display:none}
+details.text summary h3{font-size:1.08rem}
+details.text summary .tag{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+details.text .body{padding:0 1rem 1rem;display:grid;gap:.6rem}
+details.text .body ul{margin:0;padding-left:1.1rem}
+.use{background:var(--rust-soft);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+.use b{font-family:var(--display)}
+
+/* two column */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;min-width:0}
+.box h3{margin-bottom:.5rem}
+.box ul{margin:0;padding-left:1.1rem;display:grid;gap:.4rem}
+
+/* questions */
+.qa{display:grid;gap:1rem}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;padding:1rem 1.1rem;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.4;list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .n{font-family:var(--mono);font-size:.78rem;color:var(--surface);background:var(--accent);border-radius:4px;padding:2px 7px;height:fit-content;margin-top:2px}
+details.q .body{padding:0 1.1rem 1.1rem;display:grid;gap:.7rem;font-size:.97rem}
+details.q .body h4{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+details.q .body ul,details.q .body ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap}
+button{font-family:var(--display);font-size:.85rem;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul.tips{margin:0;padding-left:1.1rem;display:grid;gap:.5rem;max-width:70ch}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+@media (max-width:520px){body{font-size:16px} h2{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+/* river hero for this guide */
+.river{margin-top:1.2rem;background:var(--accent-soft);border-top:1px solid var(--line)}
+.river svg{display:block;width:100%;height:auto}
+.river .r-line{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;opacity:.55}
+.river .r-thin{fill:none;stroke:var(--accent);stroke-width:2}
+.river .wall{fill:var(--rust)}
+.river text{font-family:var(--mono);font-size:12px;fill:var(--fg)}
+.river text.h{font-family:var(--display);font-weight:700;font-size:15px}
+.river text.r{fill:var(--rust);font-weight:500}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:.7rem}
+.mem{font-family:var(--mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:0 5px;white-space:nowrap}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.map div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;font-size:.9rem}
+.map b{display:block;font-family:var(--display);color:var(--rust)}
+.part{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-top:1.2rem}
+.short{background:var(--rust-soft);border-left:4px solid var(--rust);padding:1rem 1.2rem;border-radius:0 8px 8px 0;max-width:72ch}
+.short ol{margin:.5rem 0 0;padding-left:1.2rem;display:grid;gap:.35rem}
+
+/* ledger hero for this guide */
+.ledger{margin-top:1.2rem;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.ledger > div{padding:1rem 0 1.2rem;display:grid;gap:.45rem;align-content:start}
+.ledger > div + div{border-left:1px dashed var(--line);padding-left:1.2rem}
+@media (max-width:560px){.ledger > div + div{border-left:0;padding-left:0;border-top:1px dashed var(--line)}}
+.ledger h3{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.ledger .c h3{color:var(--rust)} .ledger .b h3{color:var(--accent)}
+.ledger .row{display:flex;justify-content:space-between;gap:1rem;font-size:.92rem;border-bottom:1px dotted var(--line);padding-bottom:.25rem}
+.ledger .row span:last-child{font-family:var(--mono);font-size:.8rem;white-space:nowrap}
+.ledger .row.x span:first-child::before{content:"✕ ";color:var(--rust);font-family:var(--mono)}
+.ledger .row.x span:last-child{color:var(--rust)}
+.ledger .tot{font-family:var(--display);font-weight:700;font-size:.95rem;padding-top:.3rem}
+/* journey hero for this guide: the legend's route above, the modern route below */
+.routes{margin-top:1.2rem;border-top:1px solid var(--line);display:grid;gap:.2rem;padding-block:1rem 1.3rem}
+.routes h3{font-size:.76rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500;margin-top:.5rem}
+.routes .old h3{color:var(--rust)} .routes .new h3{color:var(--accent)}
+.stops{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.35rem}
+.stops span{font-size:.86rem;padding:.25rem .55rem;border-radius:4px;background:var(--bg);border:1px solid var(--line)}
+.stops span small{display:block;font-family:var(--mono);font-size:.68rem;color:var(--muted)}
+.stops i{font-style:normal;color:var(--muted);font-family:var(--mono);font-size:.8rem}
+.old .stops span{border-color:var(--rust)} .new .stops span{border-color:var(--accent)}
+.decode td:first-child{font-family:var(--display);font-weight:600;white-space:nowrap}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HS1.304 Environmental Humanities · Endsem study guide</div>
+    <h1>Gun Island: <span>a Bengali legend, a climate migration, and the novel Ghosh said nobody could write</span></h1>
+    <p class="by">Amitav Ghosh · novel, 2019 · sequel to <i>The Hungry Tide</i> (2004). Your PDF is the 295-page ebook. It has <b>no printed page numbers</b>, so every "p." below is the <b>PDF page number</b> (the number your PDF reader shows). The novel runs pp. 9–291.</p>
+    <p class="oneliner"><b>In one line:</b> A sceptical Brooklyn rare-book dealer, Deen Datta, chases a forgotten 17th-century legend about a merchant who fled the snake goddess Manasa Devi, and finds that the legend's route (Bengal to Venice, driven by the droughts and storms of the Little Ice Age) is being repeated today by climate-displaced Bengali migrants, while snakes, spiders, dolphins and whales are also on the move because of warming.</p>
+    <div class="routes" aria-label="The two journeys in the novel">
+      <div class="old">
+        <h3>The legend's journey · 1600s · decoded on pp. 141–147, 252</h3>
+        <div class="stops">
+          <span>Bengal<small>drought, flood, snakes</small></span><i>→</i>
+          <span>Goa<small>sold by pirates</small></span><i>→</i>
+          <span>Maldives<small>cowrie shells</small></span><i>→</i>
+          <span>Egypt<small>"Taal-misri"</small></span><i>→</i>
+          <span>Istanbul<small>"Rumaali", fire 1660</small></span><i>→</i>
+          <span>Venice<small>"Bonduk-dwip"</small></span><i>→</i>
+          <span>Sicily<small>"Shikol-dwip", miracle</small></span>
+        </div>
+      </div>
+      <div class="new">
+        <h3>The migrants' journey · today · pp. 241–247</h3>
+        <div class="stops">
+          <span>Sundarbans<small>salt, storms, no fish</small></span><i>→</i>
+          <span>Dhaka<small>dalals</small></span><i>→</i>
+          <span>Kolkata<small>connection house</small></span><i>→</i>
+          <span>Pakistan · Iran<small>"jackals"</small></span><i>→</i>
+          <span>Turkey<small>shot at, separated</small></span><i>→</i>
+          <span>Egypt · Sinai<small>Tipu, Blue Boat</small></span><i>→</i>
+          <span>Sicily strait<small>"miracle" rescue</small></span>
+        </div>
+        <p class="note" style="margin-top:.5rem">Rafi splits off at Turkey and walks the Balkan route (Bulgaria, Serbia, Hungary, Austria) to Venice (p. 246).</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#short">Short on time</a>
+    <a href="#summary">Summary</a>
+    <a href="#map">Chapter map</a>
+    <a href="#plot">Plot step by step</a>
+    <a href="#people">Characters</a>
+    <a href="#terms">Key terms</a>
+    <a href="#quotes">Quote bank</a>
+    <a href="#links">Links to other texts</a>
+    <a href="#gd">vs Great Derangement</a>
+    <a href="#eval">Strengths & limits</a>
+    <a href="#qs">Likely questions</a>
+    <a href="#tips">Exam tips</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="short">
+  <div class="wrap">
+    <h2>Short on time? Do this</h2>
+    <div class="short">
+      <p><b>If you have 30 minutes, learn these five things in this order:</b></p>
+      <ol>
+        <li><b>The 60-second summary</b> below. It opens almost any answer on this novel.</li>
+        <li><b>The decoding of the legend</b> (table in "Key terms"): Bonduki Sadagar = "the Merchant who went to Venice", not "Gun Merchant". The fantasy place-names are real places hit by the 17th-century climate crisis. This is the novel's big idea: <b>old stories carry real climate history</b>.</li>
+        <li><b>Three themes</b>: (a) <b>climate migration</b>, of people <i>and</i> animals; (b) <b>the improbable</b>, i.e. coincidence, "just a story", and Deen's "faith in chance"; (c) <b>possession</b>, Cinta's claim that the modern world has lost its will in front of the crisis.</li>
+        <li><b>Eight quotes</b>: "war between profit and Nature" (14); "Even the animals are moving" (66); "Politics, religion and sex" (68); "No one knows where they belong any more, neither humans nor animals" (103); "Only through stories can… silent beings speak to us" (133); "chance was the very foundation of reality" (189); "the world of today presents all the symptoms of demonic possession" (221); "eating the foundations of the city" (235).</li>
+        <li><b>The Great Derangement link</b> (its own section below). In <i>GD</i> Ghosh says the realist novel banishes the improbable, so it cannot handle climate change. <i>Gun Island</i> is his attempt to write the novel he said was missing.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="wrap">
+    <h2>The 60-second summary</h2>
+    <div class="memorize">
+      <p>In <i>Gun Island</i> (2019), Amitav Ghosh returns to the Sundarbans of <i>The Hungry Tide</i> and then follows its people across the world. The narrator, <b>Dinanath "Deen" Datta</b>, a rationalist rare-book dealer in Brooklyn, hears of a shrine to the <b>Bonduki Sadagar</b> ("Gun Merchant"), a merchant who fled the snake goddess <b>Manasa Devi</b> (pp. 11–23). At the shrine, a king cobra bites the teenager <b>Tipu</b>, who then has visions, including one that predicts the death of Piya's dolphin Rani (pp. 82–99). Back in the US, Deen meets wildfires in Los Angeles and a venomous sea snake that has moved north with warming water (pp. 120–140). His friend, the Venetian historian <b>Cinta</b>, decodes the legend: "Bonduk" is Venice, and the merchant's route ran through Egypt, Istanbul and Venice during the droughts, fires and plagues of the <b>Little Ice Age</b> (pp. 141–148).</p>
+      <p>In Part Two, Venice (pp. 155–291), Deen finds the Sundarbans boy <b>Rafi</b> working illegally among thousands of Bengali migrants. Tipu and Rafi had left together, driven out by salinity, storms and the dying delta, and crossed India, Pakistan, Iran and Turkey (pp. 240–247). Venice itself is sinking, flooded and eaten by shipworms (pp. 169, 234–236), and a brown recluse spider turns up in Cinta's flat (pp. 201, 208–209). The novel ends at sea off Sicily: a refugee "Blue Boat" carrying Tipu is surrounded by whales, dolphins, glowing water and a "storm" of migrating birds, and an admiral rescues the refugees by calling it a "miracle" (pp. 277–289). Cinta dies the same night (p. 291). Piya insists everything has "a scientific explanation" (p. 288); the novel leaves both readings open. Its argument is that climate change makes the world feel <b>uncanny and improbable</b>, that <b>people and animals are migrating for the same reasons</b>, and that <b>old stories hold knowledge</b> that the modern idea of "chance" has trained us to ignore.</p>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2>Chapter map</h2>
+    <p class="lead">Two parts, 22 chapters. Use the chapter names in exams: examiners recognise them.</p>
+    <div class="part">Part One · The Gun Merchant (pp. 8–153)</div>
+    <div class="map">
+      <div><b>Calcutta · 9</b>Kanai and Nilima tell Deen of the shrine and the legend.</div>
+      <div><b>Cinta · 26</b>Cinta's call; flashback to how they met; "supernatural" debate.</div>
+      <div><b>Tipu · 53</b>Cyclone Aila's effects; Tipu's "people-moving industry".</div>
+      <div><b>The Shrine · 71</b>The dhaam, its friezes, Rafi, the king cobra bite.</div>
+      <div><b>Visions · 85</b>Tipu's delirium; he names "Ilyas" and warns about "Rani".</div>
+      <div><b>Rani · 96</b>Piya's dolphins; refinery; the pod is found beached.</div>
+      <div><b>Brooklyn · 109</b>Deen haunted; Tipu's chats on <i>bhuta</i>, shamans, greed.</div>
+      <div><b>Wildfires · 120</b>Flight into burning LA; the falling snake; "Snake! Snake!"</div>
+      <div><b>Los Angeles · 126</b>Little Ice Age keynote; Cinta on stories; sea-snake kills a dog.</div>
+      <div><b>Gun Island · 141</b>Cinta's talk: <i>bunduq</i> = Venice; the whole legend decoded.</div>
+    </div>
+    <div class="part">Part Two · Venice (pp. 155–291)</div>
+    <div class="map">
+      <div><b>The Ghetto · 156</b>Near-miss with falling masonry; Rafi; Lubna; Madaripur.</div>
+      <div><b>Rafi · 169</b>Cinta's sinking flat; Rafi's spider story; the scafista.</div>
+      <div><b>Strandings · 180</b>Piya's predicted mass beaching; Tipu missing; "faith in chance".</div>
+      <div><b>Friends · 192</b>Blue Boat on the news; Bilal's story of Libya and Kabir.</div>
+      <div><b>Dreams · 203</b>Palash; brown recluse identified; Hypnerotomachia episode.</div>
+      <div><b>Warnings · 218</b>Cinta on possession; walk to La Salute and the 1630 plague.</div>
+      <div><b>High Water · 230</b>Acqua alta; shipworms; Cinta injured; Bilal saves them.</div>
+      <div><b>Crossings · 239</b>Rafi tells the whole journey; Tipu is on the Blue Boat.</div>
+      <div><b>Winds · 250</b>Hail, tornado; the robed stranger shows the road.</div>
+      <div><b>The Lucania · 258</b>Rescue ship sails; twisters; Gisa's family hit in Rome.</div>
+      <div><b>Sightings · 265</b>Whales and dolphins; Sinai tornado story; Palash's dream.</div>
+      <div><b>The Storm · 277</b>Flotillas, the stormo of birds, the rescue, Cinta's death.</div>
+    </div>
+  </div>
+</section>
+
+<section id="plot">
+  <div class="wrap">
+    <h2>Plot step by step</h2>
+    <p class="lead">Each step gives what happens, the page, and the theme it carries. The bold line is what to remember.</p>
+    <ol class="steps">
+      <li><div><h3>A word starts it: <i>bundook</i> (pp. 9–25)</h3>
+        <p>Deen, near sixty, lonely, "rational, secular", once wrote a PhD on the Manasa Devi legend of <b>Chand Sadagar</b>. Kanai Dutt (from <i>The Hungry Tide</i>) asks if he has heard of <b>Bonduki Sadagar</b>. Kanai places the shrine in the Sundarbans because that is "the frontier where commerce and the wilderness look each other directly in the eye" (14). Nilima Bose heard of the shrine after the <b>1970 Bhola cyclone</b> (18–20): the shrine's bell rang before the storm and saved a whole village. It is cared for by a Muslim boatman, revered by Hindus (Manasa) and Muslims (a pir called Ilyas) (21). The legend must never be written down (21). Nilima wants it recorded because the islands are "being swallowed up by the sea" (24).</p>
+        <ul><li><b>Remember:</b> the novel opens with a storm, a legend and a disappearing coastline.</li></ul></div></li>
+      <li><div><h3>Cinta and the "supernatural" (pp. 26–52)</h3>
+        <p>Deen dates the shrine to 1605–1690 from a riddle-couplet (27–28). A random call from <b>Cinta</b> in Venice nudges him to go. Flashback: Deen scorned a jatra about Manasa as superstition; Cinta told him the Inquisition invented the words "superstition" and "supernatural" (41), and spoke of de Martino and tarantism. Cinta's husband and daughter Lucia died in a car crash; she heard Lucia's voice before the accident (45–48). Deen's first love <b>Durga</b>, a Naxalite, was killed in an "encounter" (49–50).</p>
+        <ul><li><b>Remember:</b> the rationalist vs. the believer is set up early. Cinta argues the line between natural and supernatural is a historical invention.</li></ul></div></li>
+      <li><div><h3>Aila and the "people-moving industry" (pp. 53–70)</h3>
+        <p>Moyna explains <b>Cyclone Aila (2009)</b>: few deaths but lasting ruin, as embankments broke and salt water made land "uncultivable for a generation" (54). Young people leave; traffickers swarm; "both land and water were turning against those who lived in the Sundarbans" (55). Tipu (Moyna's son, once "Tutul") is a smuggler's agent: fish catch down, land turning salty, "Even the animals are moving" (66). "The Internet is the migrants' magic carpet" (67). He coaches asylum seekers to tell stories of persecution, because Europe will not hear of floods or arsenic: "Politics, religion and sex is what they're looking for" (68).</p>
+        <ul><li><b>Remember:</b> climate causes are real but <b>not legally recognised</b>, so migrants have to invent other stories. This is a key point for climate-migration questions.</li></ul></div></li>
+      <li><div><h3>The shrine and the cobra (pp. 71–84)</h3>
+        <p>"It's the river that's moved" (71): the shrine is now on the water's edge. Deen crawls through mud. The temple is Bishnupur style. Rafi's late mother traced the eroded friezes. Rafi explains them: cowries, "Land of Palm Sugar Candy", "Land of Kerchieves", <b>an island within an island</b> (Gun Island) (79–80). A king cobra rears behind Deen. Tipu throws a net and is bitten (82). Rafi sucks the venom and swallows some (83).</p></div></li>
+      <li><div><h3>Visions and Rani (pp. 85–108)</h3>
+        <p>In delirium, Tipu sees "shadows" kept off by snakes, knows Rafi's real name is <b>Ilyas</b> (88), and says to warn Piya about "Rani". At that moment Piya gets a tracker alert (94). Rani is an <b>Irrawaddy dolphin</b> whose pod has been pushed upriver by rising salinity (98) and possibly by a refinery's effluents (101–102). The pod is found beached on Garjontola (104). Piya: "We're in a new world now. No one knows where they belong any more, neither humans nor animals" (103). She rejects Deen's talk of "visions" (105).</p>
+        <ul><li><b>Remember:</b> human migrants and dolphins are pushed by the <b>same</b> changes. Piya always gives the scientific reading.</li></ul></div></li>
+      <li><div><h3>Brooklyn: haunted (pp. 109–119)</h3>
+        <p>Deen feels something "ancient" has entered him, "memory itself, except that it was not my own" (109). Tipu sends chat questions: does <i>bhuta</i> mean ghost? Deen: from <i>bhu</i>, "to be", so a being, but also "the past"; Tipu: "the past was present in the present?" (110). On shamans; on greed: "it's not parasites we got inside of us, it's greed!" (117). Piya's friend <b>Lisa</b> warned a town about bark beetles and wildfire and was then blamed as a witch (114–115).</p></div></li>
+      <li><div><h3>Los Angeles: fire and sea snakes (pp. 120–140)</h3>
+        <p>Deen's plane lands through wildfire smoke; a raptor drops a snake in mid-air and Deen screams "Snake!" and is detained (122–124). A young historian lectures on <b>the Little Ice Age</b>: famine, war, plague and talk of apocalypse in the 1600s, and the start of coal use (128–130). The museum is evacuated: "We've got to show Mother Nature that we're not quitters!" (131). Cinta: never say "just a story" (133). At Venice Beach a <b>yellow-bellied sea snake</b> kills Gisa's dog (137); Piya explains they are "migrating northwards" with warmer seas (140). The shrine has been washed away by a storm (140).</p></div></li>
+      <li><div><h3>The legend decoded (pp. 141–153)</h3>
+        <p>Cinta's lecture: the Venetian <i>getto</i> was a foundry; Arabic <i>al-Bunduqeyya</i> means Venice, and also guns, bullets and hazelnuts; so <i>bundook</i> is "Venetian" (142). Deen realises Bonduki Sadagar = "the Merchant who went to Venice" (143). Cinta decodes the rest (144–147): Taal-misri = Misr (Egypt); Rumaali = Rumeli (Istanbul), where the 1660 fire blamed the Jews; the sign beside Ilyas is a Hebrew <b>aleph</b> (Ilyas is a Portuguese Jew who fled the Inquisition in Goa). Cinta: "Ecco! You have your legend!" (147). Deen sinks into money anxiety in Brooklyn; then Gisa hires him as translator for a migrant documentary in Venice, where there are "many, many Bengalis" (152). From the air the Venetian lagoon looks like the Sundarbans (153).</p>
+        <ul><li><b>Remember:</b> the legend is a <b>coded record of climate-driven migration</b> in the 1600s.</li></ul></div></li>
+      <li><div><h3>Venice of the migrants (pp. 156–179)</h3>
+        <p>In the Ghetto, Deen sits and imagines Manasa Devi not as a cruel goddess but as a <i>portavoce</i>, a "voice-carrier" between humans and snakes (157–158). A Bangla shout saves him from falling masonry: the worker is <b>Rafi</b> (159–160). <b>Lubna</b> lost family to a cyclone in Madaripur and a tree full of snakes (165). Bengalis make Venice run (167). Cinta's palazzo floods; its lobby is under water much of the time (169). Rafi recalls the iron gun-room and the <b>spider bite</b> in the legend (176). A thug in a green cap threatens Rafi. Gisa: the <b>Blue Boat</b> of refugees is heading from the Sinai; the minister refuses to let it land (177–179).</p></div></li>
+      <li><div><h3>Strandings, chance, and Bilal (pp. 180–202)</h3>
+        <p>Piya got an anonymous email predicting a mass dolphin beaching; it happened (181–184), and the footage may close the refinery. She finds Tipu faked his Bangalore photos and is somewhere between Turkey and Egypt (185–188). Deen clings to "chance" as his faith (189–190). Rafi was beaten for a debt he took to pay for Tipu's passage (195–196). <b>Bilal</b> tells of being tricked to Libya, enslaved, and losing his friend <b>Kabir</b> at sea; he sends money to Kabir's parents (196–200). A spider sits on Deen's laptop (201).</p></div></li>
+      <li><div><h3>Dreams, possession, La Salute (pp. 203–229)</h3>
+        <p><b>Palash</b>, a Dhaka graduate, explains the scafisti and that Lubna's activist husband Munir died after crossing the Mafia (205–206). Piya's expert identifies the spider as a <b>brown recluse</b>, spreading north "because it's getting so much hotter in Europe" (208–209). Deen tries to open a case holding the <i>Hypnerotomachia Poliphili</i>, sure the Merchant saw Manasa's face in it (213). Cinta: the spider is "here because of our history" (219); the modern world shows "all the symptoms of demonic possession" (221). At <b>Santa Maria della Salute</b>, built after the 1630 plague, she shows him <i>Unde origo inde salus</i> (227–229).</p></div></li>
+      <li><div><h3>High water and shipworms (pp. 230–238)</h3>
+        <p>An artwork of a sea-monster; then at the Fondamente Nove, Cinta shows <b>shipworms</b> spreading with warmer lagoon water: "They are literally eating the foundations of the city" (235). The pier collapses; worms swarm over them (236); the flood rises to their chests; Bilal, squatting nearby, calls an ambulance (237–238).</p></div></li>
+      <li><div><h3>Rafi's story of the crossing (pp. 239–249)</h3>
+        <p>In hospital, Rafi says the flooded city is "like home – we're used to floods" (239). Tipu's seizures continued; he planned their escape and the fake Bangalore job (240–241). The journey: dalals, connection houses, "jackals" (coyotes), extortion, Tipu nearly raped and saved by a seizure (243), border shooting in the Iran-Turkey mountains where they were separated (245). Tipu dreamt of an Ethiopian woman, a "forishta", and went to Egypt (246). Rafi shows a newspaper photo: Tipu is on the Blue Boat (247). Deen joins Lubna's rescue ship.</p></div></li>
+      <li><div><h3>Winds and the Lucania (pp. 250–264)</h3>
+        <p>Hail, then a <b>tornado</b> crosses the road in front of the minibus (255–256). A robed, turbaned stranger shows them another road; Rafi: "It's him – Bonduki Sadagar" (256). Deen: just a Moroccan farm-worker (257). Cinta decodes the last riddle: Shikol-dwip = <b>Sicily</b> (Arabic Siqilliya) (252). Twisters over the lagoon; trees fall in Rome and Gisa says her family "have become refugees" (260). Piya opens up about Fokir's death (261).</p></div></li>
+      <li><div><h3>Sightings and the storm (pp. 265–291)</h3>
+        <p>Whale and dolphin species gather, all heading towards Sicily (266–281). News: a <b>tornado</b> in the Sinai had freed the captives in a trafficking "connection house", led by an Ethiopian woman, who took the Blue Boat with traffickers' data (267–268). Right-wing flotillas shout; Deen reads them as afraid of the reversal of colonial migration (283–285). A storm of millions of migrating birds, whirling dolphins and whales, and glowing water surround the Blue Boat (286–287). The admiral, an old Venetian Cinta knew, rescues the refugees and says "what we witnessed today was indeed a miracle" (288). Piya: "migratory patterns intersecting in an unusual way" (288). Piya invites Deen to Oregon (275). Cinta says Lucia has come to take her, and dies (290–291).</p>
+        <ul><li><b>Remember:</b> the ending repeats the legend's last scene: captives freed "by the creatures of the sky and sea" near Sicily.</li></ul></div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="people">
+  <div class="wrap">
+    <h2>Characters</h2>
+    <div class="grid">
+      <div class="term"><h3>Dinanath "Deen" Datta</h3><p>Narrator. Bengali-American rare-book dealer in Brooklyn, PhD on Bengali folklore, proud rationalist. His arc: from "faith in chance" to a reluctant <i>risveglio</i> (awakening). He is the modern sceptical reader the novel works on.</p></div>
+      <div class="term"><h3>Giacinta "Cinta" Schiavon</h3><p>Venetian historian of the Inquisition and spice trade. Decodes the legend. Voice of stories, history and the "possession" argument. Grieves her daughter Lucia; dies at the end.</p></div>
+      <div class="term"><h3>Piya Roy</h3><p>Cetologist from <i>The Hungry Tide</i>. Studies Irrawaddy dolphins; fights a refinery. Always offers the scientific explanation. Guilt about Fokir, Tipu's father.</p></div>
+      <div class="term"><h3>Tipu (Tutul)</h3><p>Moyna and Fokir's son. Americanised, hacker, migrant-smuggling agent. Bitten by the cobra, gets visions. Becomes a migrant himself; ends on the Blue Boat.</p></div>
+      <div class="term"><h3>Rafi (Ilyas)</h3><p>Grandson of the shrine's Muslim caretaker. Sundarbans fisherman, knows the old ways. Tipu's partner. Works illegally in Venice; reads the legend's signs.</p></div>
+      <div class="term"><h3>Nilima, Moyna, Horen, Kanai</h3><p>All from <i>The Hungry Tide</i>. Nilima runs the Badabon Trust; Moyna is a nurse; Horen is a boatman who measures time by cyclones (60); Kanai sets the plot going.</p></div>
+      <div class="term"><h3>Lubna Alam ("Lubna-khala")</h3><p>Bangladeshi in Venice who helps migrants. Lost family to a cyclone in Madaripur. Widow of Munir, an activist killed after crossing the Mafia.</p></div>
+      <div class="term"><h3>Bilal and Palash</h3><p>Two migrant stories. Bilal: land dispute, Libya, slavery, lost friend at sea. Palash: middle-class graduate who chased a "Finland" dream and is now stuck.</p></div>
+      <div class="term"><h3>Gisa, Admiral Vigonovo, the scafista</h3><p>Gisa: Cinta's niece, documentary maker. The admiral: rescues the refugees and calls it a "miracle". The green-capped scafista: trafficker tied to the Mob.</p></div>
+      <div class="term"><h3>Non-human characters</h3><p>King cobra, Rani and the dolphins, the yellow-bellied sea snake, the brown recluse spider, shipworms, migrating birds and whales. They act and they move. Treat them as characters in your answers.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="wrap">
+    <h2>Key terms</h2>
+    <h3>Decoding the legend (learn this table)</h3>
+    <div class="tbl"><table class="decode">
+      <thead><tr><th>In the legend</th><th>Real meaning</th><th>Page</th></tr></thead>
+      <tbody>
+        <tr><td>Bonduki Sadagar</td><td>"Gun Merchant", really "the Merchant who went to Venice". Arabic <i>al-Bunduqeyya</i> = Venice, guns, bullets, hazelnuts</td><td><span class="pg">142–144</span></td></tr>
+        <tr><td>Bonduk-dwip (Gun Island)</td><td>Venice. "Island within an island" = the Ghetto, an island inside the island-city</td><td><span class="pg">80, 141–142, 156</span></td></tr>
+        <tr><td>Nakhuda Ilyas</td><td>A Portuguese Jewish ship captain who fled the Inquisition in Goa. His sign is the Hebrew aleph</td><td><span class="pg">146–147</span></td></tr>
+        <tr><td>Island of cowries</td><td>The Maldives. Cowries were money in Africa and fed the Atlantic slave trade</td><td><span class="pg">79–80, 147–148, 225</span></td></tr>
+        <tr><td>Taal-misrir-desh</td><td>Egypt (Arabic Misr)</td><td><span class="pg">144</span></td></tr>
+        <tr><td>Rumaali-desh</td><td>Rumelia / Istanbul. The 1660 fire, blamed on Jews</td><td><span class="pg">145–146</span></td></tr>
+        <tr><td>Iron room and spider</td><td>Venice's gun store; even there a "creature" reaches him</td><td><span class="pg">22–23, 176</span></td></tr>
+        <tr><td>Shikol-dwip (Island of Chains)</td><td>Sicily (Arabic Siqilliya)</td><td><span class="pg">252</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="grid" style="margin-top:1rem">
+      <div class="term"><h3>Manasa Devi</h3><p>Bengali goddess of snakes. Deen re-reads her as a <i>portavoce</i>, a translator between humans and snakes. If humans ignore her, profit "would recognize no restraint" towards other living things (157–158).</p></div>
+      <div class="term"><h3>Chand Sadagar</h3><p>The classic merchant who defied Manasa; his son Lakhindar dies of snakebite, saved by Behula (12). The Gun Merchant is a local variant.</p></div>
+      <div class="term"><h3>Dhaam</h3><p>Shrine. Bishnupur-style brick temple, 1605–1690, shared by Hindus and Muslims (21, 28, 74). Washed away by a storm (140).</p></div>
+      <div class="term"><h3>Little Ice Age</h3><p>17th-century global cooling with drought, famine, war, plague and apocalyptic fear (128–130). The "general crisis" that pushed the Merchant out (147).</p></div>
+      <div class="term"><h3>Bhuta</h3><p>From Sanskrit <i>bhu</i>, "to be". A being, and also the past. So "the past was present in the present" (110). At the end, the birds are "a storm of living beings, bhutas" (286).</p></div>
+      <div class="term"><h3>Bauley</h3><p>A man who leads people into the Sundarbans jungle with a special bond to animals; Rafi's grandfather was one (112).</p></div>
+      <div class="term"><h3>Dalal, connection house, jackals, scafista</h3><p>The migration industry: brokers (67), holding houses (198, 242), border guides or coyotes (242), Italian traffickers who trap migrants in debt (205).</p></div>
+      <div class="term"><h3>Possession / risveglio</h3><p>Cinta: Inquisition cases were about losing "will and freedom" (220). Today we live among "impersonal systems" and are powerless before the crisis, so the world shows "symptoms of demonic possession" (221). Deen's unease is a <i>risveglio</i>, an awakening (222).</p></div>
+      <div class="term"><h3>Aila and Bhola</h3><p>Cyclone Aila 2009 (54) and the Bhola cyclone 1970 (19). Aila killed few but salted the land and drove people out.</p></div>
+      <div class="term"><h3>Acqua alta and shipworms</h3><p>Venice's high-water floods (169, 234) and shipworms that warmer water lets in, hollowing the city's wooden piles (235).</p></div>
+      <div class="term"><h3>Unde origo inde salus</h3><p>"From the origin salvation comes" (229). Deen reads it as: "our deliverance lies not in the future but in the past" (291).</p></div>
+      <div class="term"><h3>Stormo</h3><p>Italian for a flock in flight. Deen: the right word for the "storm of living beings" at the end (286).</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2>Quote bank</h2>
+    <p class="lead">Every quote below was matched word for word against your PDF. Page = PDF page.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Quote</th><th>Who / context</th><th>Use for</th></tr></thead>
+      <tbody>
+        <tr><td class="q">"The Sundarbans are the frontier where commerce and the wilderness look each other directly in the eye; that's exactly where the war between profit and Nature is fought." <span class="pg">14</span></td><td>Kanai</td><td>Profit vs nature; the merchant theme</td></tr>
+        <tr><td class="q">"The islands of the Sundarbans are constantly being swallowed up by the sea; they're disappearing before our eyes." <span class="pg">24</span></td><td>Nilima</td><td>Sea-level rise; erosion</td></tr>
+        <tr><td class="q">"It was the Inquisitor also who decided what was 'natural' and what was 'supernatural'." <span class="pg">41</span></td><td>Cinta</td><td>Nature/culture binary is historical</td></tr>
+        <tr><td class="q">"vast tracts of once fertile land had been swamped by salt water" <span class="pg">54</span></td><td>Narrator on Aila</td><td>Slow violence; salinity</td></tr>
+        <tr><td class="q">"it seemed as though both land and water were turning against those who lived in the Sundarbans." <span class="pg">55</span></td><td>Moyna</td><td>Climate displacement</td></tr>
+        <tr><td class="q">"now the fish catch is down, the land's turning salty, and you can't go into the jungle without bribing the forest guards." <span class="pg">66</span></td><td>Tipu</td><td>Push factors, ecological and political</td></tr>
+        <tr><td class="q">"Even the animals are moving – just ask Piya." <span class="pg">66</span></td><td>Tipu</td><td>Human and animal migration linked</td></tr>
+        <tr><td class="q">"The Internet is the migrants' magic carpet; it's their conveyor belt." <span class="pg">67</span></td><td>Tipu</td><td>Technology and migration</td></tr>
+        <tr><td class="q">"Politics, religion and sex is what they're looking for – you've gotta have a story of persecution if you want them to listen to you." <span class="pg">68</span></td><td>Tipu, on asylum</td><td>Climate migrants unrecognised; representation</td></tr>
+        <tr><td class="q">"It's the river that's moved" <span class="pg">71</span></td><td>Horen</td><td>Shifting land; instability</td></tr>
+        <tr><td class="q">"As sea levels rose, and the flow of fresh water diminished, salt water had begun to intrude deeper upstream" <span class="pg">98</span></td><td>Narrator, on Piya's dolphins</td><td>Science of change; animals displaced</td></tr>
+        <tr><td class="q">"Rani must have felt that everything she knew… the water, the currents, the earth itself – was rising up against her." <span class="pg">103</span></td><td>Piya</td><td>Animal as subject; parallels Moyna (55)</td></tr>
+        <tr><td class="q">"We're in a new world now. No one knows where they belong any more, neither humans nor animals." <span class="pg">103</span></td><td>Piya</td><td><b>Core quote</b> on migration</td></tr>
+        <tr><td class="q">"it was memory itself, except that it was not my own; it was much older than me" <span class="pg">109</span></td><td>Deen, haunted</td><td>Deep time; the past returning</td></tr>
+        <tr><td class="q">"wouldnt it mean that the past wasnt past? That the past was present in the present?" <span class="pg">110</span></td><td>Tipu on <i>bhuta</i></td><td>History repeating; Little Ice Age</td></tr>
+        <tr><td class="q">"Because scientists aren't allowed to say things like that." <span class="pg">113</span></td><td>Deen, on Piya and animal "gratitude"</td><td>Limits of scientific language</td></tr>
+        <tr><td class="q">"It's like we're back in the Dark Ages – women being attacked as witches!" <span class="pg">115</span></td><td>Piya, on Lisa</td><td>Denial; blaming the messenger</td></tr>
+        <tr><td class="q">"it's not parasites we got inside of us, it's greed!" <span class="pg">117</span></td><td>Tipu</td><td>Consumption as possession</td></tr>
+        <tr><td class="q">"it was then that Londoners began to use coal on a large scale… which was how our dependence on fossil fuels started." <span class="pg">130</span></td><td>Keynote speaker</td><td>Origins of the Anthropocene</td></tr>
+        <tr><td class="q">"the climatic perturbations of the Little Ice Age were trivial compared to what is in store for us now." <span class="pg">130</span></td><td>Keynote speaker</td><td>Past as warning</td></tr>
+        <tr><td class="q">"We've got to show Mother Nature that we're not quitters!" <span class="pg">131</span></td><td>Museum director, as fires close in</td><td>Denial and business as usual (irony)</td></tr>
+        <tr><td class="q">"Only through stories can invisible or inarticulate or silent beings speak to us; it is they who allow the past to reach out to us." <span class="pg">133</span></td><td>Cinta</td><td><b>Core quote</b> on stories and the non-human</td></tr>
+        <tr><td class="q">"It is only through stories that the universe can speak to us, and if we don't learn to listen you may be sure that we will be punished for it." <span class="pg">134</span></td><td>Cinta</td><td>Stories as knowledge; GD link</td></tr>
+        <tr><td class="q">"their distribution was changing with the warming of the oceans and they were migrating northwards." <span class="pg">140</span></td><td>Piya, on sea snakes</td><td>Range shift; science explains the uncanny</td></tr>
+        <tr><td class="q">"She was in effect a negotiator, a translator – or better still a portavoce" <span class="pg">157</span></td><td>Deen, on Manasa Devi</td><td>Human/non-human relations</td></tr>
+        <tr><td class="q">"humans – driven, as was the Merchant, by the quest for profit – would recognize no restraint in relation to other living things." <span class="pg">158</span></td><td>Deen, on Manasa Devi</td><td>Capitalism and ecology</td></tr>
+        <tr><td class="q">"Everything's gone now; the house, the people – the water's taken it all." <span class="pg">165</span></td><td>Lubna</td><td>Climate loss as cause of migration</td></tr>
+        <tr><td class="q">"chance was the very foundation of reality, of normalcy." <span class="pg">189</span></td><td>Deen</td><td><b>Core quote</b> for the GD link (probability)</td></tr>
+        <tr><td class="q">"To cease to believe in it was to cross over into the territory of fate and destiny" <span class="pg">190</span></td><td>Deen</td><td>Rationalism as a faith</td></tr>
+        <tr><td class="q">"It is here because of our history; because of things human beings have done." <span class="pg">219</span></td><td>Cinta, on the spider</td><td>Anthropogenic cause; nature is not "natural"</td></tr>
+        <tr><td class="q">"That the world of today presents all the symptoms of demonic possession." <span class="pg">221</span></td><td>Cinta</td><td><b>Core quote</b> on paralysis and inaction</td></tr>
+        <tr><td class="q">"Everybody knows . . . and yet we are powerless, even the most powerful among us." <span class="pg">221</span></td><td>Cinta</td><td>Loss of agency; Jamieson link</td></tr>
+        <tr><td class="q">"the limits of human reason and ability become apparent not in the long, slow duration of everyday time, but in the swift and terrible onslaught of fleeting instants of catastrophe." <span class="pg">228</span></td><td>Deen at La Salute</td><td>Fast vs slow violence (Nixon contrast)</td></tr>
+        <tr><td class="q">"They are literally eating the foundations of the city." <span class="pg">235</span></td><td>Cinta, on shipworms</td><td>Slow, hidden harm</td></tr>
+        <tr><td class="q">"How was it possible that in this most civilized of cities we should be so utterly alone and helpless, so completely at the mercy of the earth?" <span class="pg">237</span></td><td>Deen in the flood</td><td>The rich world is not safe</td></tr>
+        <tr><td class="q">"We earn well on days like this. For us it's like home – we're used to floods." <span class="pg">239</span></td><td>Rafi</td><td>Venice and the Sundarbans as twins</td></tr>
+        <tr><td class="q">"In Rome – of all places! – my family have become refugees." <span class="pg">260</span></td><td>Gisa</td><td>Climate makes everyone vulnerable</td></tr>
+        <tr><td class="q">"But all of that was now completely reversed." <span class="pg">283</span></td><td>Deen, comparing refugees with coolie ships</td><td>Colonial history of migration</td></tr>
+        <tr><td class="q">"the systems that were in control now did not obey any human master; they followed their own imperatives, inscrutable as demons." <span class="pg">285</span></td><td>Deen</td><td>Systems; possession; xenophobia</td></tr>
+        <tr><td class="q">"it was as if some limb of the earth had risen into the heavens and were reaching out to touch us." <span class="pg">286</span></td><td>Deen, at the bird storm</td><td>Agency of the earth</td></tr>
+        <tr><td class="q">"And I believe that what we witnessed today was indeed a miracle." <span class="pg">288</span></td><td>Admiral Vigonovo</td><td>The miracle ending</td></tr>
+        <tr><td class="q">"there's a scientific explanation for everything that happened there. It was just a series of migratory patterns intersecting in an unusual way." <span class="pg">288</span></td><td>Piya</td><td>The rational counter-reading</td></tr>
+        <tr><td class="q">"animal migrations are being hugely impacted by climate change so nothing is surprising now." <span class="pg">289</span></td><td>Piya</td><td>Improbable becomes normal</td></tr>
+        <tr><td class="q">"I have acted in accordance with the law of the sea, the law of humanity and the law of God." <span class="pg">289</span></td><td>Admiral</td><td>Ethics over state law</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <h2>Links to other course texts</h2>
+    <p class="lead">Points marked <span class="mem">from memory</span> come from general knowledge of that text, not from your project PDFs. Check them against your notes.</p>
+    <div class="btnrow"><button id="openAll" type="button">Open all</button><button id="closeAll" type="button">Close all</button></div>
+    <div class="conn">
+      <details class="text" open><summary><h3>The Hungry Tide (Ghosh)</h3><span class="tag">same place, same people · strongest comparison</span></summary><div class="body">
+        <ul>
+          <li><b>Sequel</b>: Piya, Kanai, Nilima, Moyna, Horen return; Fokir died in the storm that saved Piya (261); Tipu is his son.</li>
+          <li><b>Legend + science</b>: <i>HT</i> pairs the Bon Bibi legend with Piya's dolphin science <span class="mem">from memory</span>; <i>GI</i> pairs the Manasa Devi legend with the same science. In both, local knowledge (Fokir, Rafi, Horen) sees what instruments do not.</li>
+          <li><b>Shift in scale</b>: <i>HT</i> stays in the delta (conservation vs. settlers, Morichjhapi <span class="mem">from memory</span>). <i>GI</i> shows the delta's people forced <b>out</b> into the world, so climate change globalises the Sundarbans' problems.</li>
+          <li><b>Dolphins</b>: in <i>HT</i> the Irrawaddy dolphins are a mystery to study; in <i>GI</i> they beach themselves, displaced by salinity (98) and effluents (102).</li>
+        </ul>
+        <p class="use"><b>Use when:</b> "compare Ghosh's two Sundarbans novels", "human and non-human", "local knowledge vs science" (midsem Q1 style).</p>
+      </div></details>
+      <details class="text"><summary><h3>Rob Nixon, Slow Violence</h3><span class="tag">concept to apply</span></summary><div class="body">
+        <ul>
+          <li><b>Slow violence in GI</b>: Aila's salt water ruining land "for a generation" (54); refinery effluents, fish kills and a crab die-off (102, 114); shipworms hollowing Venice from inside, solid outside, "probably hollow" inside (235). These are gradual, dispersed and easy to ignore.</li>
+          <li><b>Representation problem</b>: Tipu says asylum systems want "a story of persecution" (68), not floods or arsenic. Slow environmental harm does not count as a reason to flee. This is Nixon's point that attritional violence lacks a recognisable story.</li>
+          <li><b>Who suffers</b>: Dalit Tipu, fisher Rafi, villagers in Madaripur. The "environmentalism of the poor" <span class="mem">Nixon's phrase, from memory</span>.</li>
+          <li><b>Contrast</b>: Ghosh's novel stages <b>spectacle</b> (tornado, cobra, bird storm). Deen even says reason fails in "fleeting instants of catastrophe", not "the long, slow duration of everyday time" (228). Argue that Ghosh uses spectacle to make slow violence visible, or critique this as the opposite of Nixon.</li>
+        </ul>
+        <p class="use"><b>Use when:</b> "apply slow violence to a text", "gradual and dispersed harm".</p>
+      </div></details>
+      <details class="text"><summary><h3>Jamieson / Heise, Anthropocene: Love It or Leave It</h3><span class="tag">agency</span></summary><div class="body">
+        <ul>
+          <li>Jamieson sees in the Anthropocene "a widespread sense of the loss of agency" (Jamieson 15). Cinta's "possession" argument is the same diagnosis in a novelist's language: "Everybody knows . . . and yet we are powerless" (221).</li>
+          <li>Jamieson's confusion between causation and complicity matches Cinta's "you have a prior connection with that spider, whether you like it or not" (219).</li>
+          <li>Jamieson's respect for nature as partner matches Manasa as <i>portavoce</i> (157).</li>
+        </ul>
+        <p class="use"><b>Use when:</b> "agency", "ethics of the Anthropocene".</p>
+      </div></details>
+      <details class="text"><summary><h3>Arundhati Roy, The Cost of Living</h3><span class="tag">development vs displacement</span></summary><div class="body">
+        <ul>
+          <li>Roy: people displaced by dams "don't count" (Roy 4). <i>GI</i>: climate migrants don't count as refugees (68), and are "illegal" in Europe.</li>
+          <li>Piya's fight against the refinery, smeared as "foreign agents" (101), parallels the anti-dam movement Roy defends.</li>
+          <li>Difference: Roy names a clear culprit (the State, Big Dams); in <i>GI</i> the cause is diffuse, "systems" that "did not obey any human master" (285).</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>River of Stories (Orijit Sen)</h3><span class="tag">myth beside realism</span></summary><div class="body">
+        <ul>
+          <li>Both braid myth (Malgu gayan's creation songs / the Gun Merchant panchali) with present-day reportage, and both treat myth as knowledge, not decoration.</li>
+          <li>Both have an urban outsider (journalist Vishnu / Deen) who learns from marginalised people (Relku / Rafi, Tipu).</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>The Rime of the Ancient Mariner (Coleridge)</h3><span class="tag">midsem text</span></summary><div class="body">
+        <ul>
+          <li>Both: a man's disrespect for non-human life brings a curse <span class="mem">Rime, from memory</span>. The Merchant refuses Manasa; the Mariner shoots the albatross.</li>
+          <li>The turn in both comes through <b>snakes</b>: the Mariner blesses the water-snakes "unaware" and the curse lifts <span class="mem">from memory</span>; in <i>GI</i> snakes are Manasa's messengers and Tipu feels them protecting him (87).</li>
+          <li>Sea creatures and birds decide the fate of a ship in both. <i>GI</i>'s end, with birds over a drifting boat, inverts the Mariner's albatross.</li>
+          <li>Both narrators are compelled to tell their story (Deen writes this one; the Mariner stops wedding guests).</li>
+        </ul>
+      </div></details>
+      <details class="text"><summary><h3>Pterodactyl, Puran Sahay and Pirtha (Mahasweta Devi)</h3><span class="tag">midsem text</span></summary><div class="body">
+        <ul>
+          <li>A non-human creature appears as a messenger of loss: the pterodactyl <span class="mem">from memory</span>, the cobra and the dolphins in <i>GI</i>.</li>
+          <li>An educated outsider (journalist Puran / book dealer Deen) is forced to take indigenous or folk knowledge seriously.</li>
+          <li>Drought, famine and displacement in Pirtha <span class="mem">from memory</span> match the Merchant's drought (61) and the Sundarbans' exodus (55).</li>
+        </ul>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="gd">
+  <div class="wrap">
+    <h2>How Gun Island answers The Great Derangement</h2>
+    <p class="lead">This is the most likely essay question. <i>GD</i> page refs are from your <i>GD</i> guide (Part I only, pp. 3–37).</p>
+    <div class="two">
+      <div class="box"><h3>What Ghosh argued in GD (2016)</h3>
+        <ul>
+          <li>Climate change is missing from serious fiction; it is "a crisis of culture, and thus of the imagination" (GD 9).</li>
+          <li>"Probability and the modern novel are in fact twins" (GD 16); the novel banished "the improbable" (GD 17).</li>
+          <li>His own 1978 Delhi tornado would look like "a contrivance of last resort" in a novel (GD 16).</li>
+          <li>Climate events reveal "nonhuman interlocutors" (GD 30) and are our own work "returning to haunt us" (GD 32).</li>
+          <li>But they must not be treated as fantasy: they "are actually happening on this earth, at this time" (GD 27).</li>
+        </ul></div>
+      <div class="box"><h3>What Gun Island does (2019)</h3>
+        <ul>
+          <li><b>Fills the novel with the improbable</b>: the cobra, Tipu's visions, the falling snake, meeting Rafi in the Ghetto, the spider, Bilal at the right moment, the stranger after the tornado.</li>
+          <li><b>Puts tornadoes in the plot</b>: in the Veneto (255–256) and the Sinai (268). The thing GD said a novel could not use.</li>
+          <li><b>Stages the probability debate</b>: Deen clings to "faith in chance" (189–190); Cinta refuses "just a story" (133).</li>
+          <li><b>Gives non-human actors</b>: snakes, spiders, dolphins, shipworms, birds. Cinta: "only through stories can… silent beings speak to us" (133).</li>
+          <li><b>Keeps it real</b>: every uncanny event has a climate science explanation through Piya (140, 209, 235, 288–289). So it is not fantasy, matching GD 27.</li>
+          <li><b>Adds migration</b>: the novel ties climate to the movement of people and animals across borders.</li>
+        </ul></div>
+    </div>
+    <p class="note">Ghosh's Parts II–III of GD (politics, Asia and migration) are not in your PDF. If you mention them, say so carefully. <span class="mem">from memory</span></p>
+  </div>
+</section>
+
+<section id="eval">
+  <div class="wrap">
+    <h2>Strengths and limits</h2>
+    <div class="two">
+      <div class="box"><h3>Strengths</h3>
+        <ul>
+          <li>Makes climate migration personal: Tipu, Rafi, Bilal, Lubna, Palash each have a distinct story and cause.</li>
+          <li>Links human and animal displacement as one process (66, 103, 140, 209).</li>
+          <li>Gives deep history: the Little Ice Age shows climate crisis, migration and apocalyptic fear are not new (128–130, 147).</li>
+          <li>Connects the Global South and North: Venice floods too; Rome's Gisa becomes a "refugee" (260).</li>
+          <li>Takes folk knowledge seriously without rejecting science: Piya and Cinta both stand.</li>
+          <li>Reads the xenophobic backlash as fear of losing colonial privilege (283–285).</li>
+        </ul></div>
+      <div class="box"><h3>Limits (good for "critically evaluate")</h3>
+        <ul>
+          <li>Coincidences can feel contrived; the "miracle" ending may read as a <i>deus ex machina</i>. Ghosh himself said this risk exists (GD 16).</li>
+          <li>Characters often lecture: the keynote, Cinta, Palash. Ideas sometimes come before story.</li>
+          <li>Narrated by a privileged, US-based man; the migrants' voices reach us through him, as translator.</li>
+          <li>The ending relies on nature and an admiral's conscience, not on migrants' own politics or collective action. (Though the Ethiopian woman leads the escape, 268.)</li>
+          <li>Spectacle may undercut the slow, invisible harm Nixon asks us to see.</li>
+          <li>Piya's science and Cinta's mysticism are both left open; some readers find this undecided.</li>
+        </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="qs">
+  <div class="wrap">
+    <h2>Likely 10-mark questions</h2>
+    <p class="lead">Modelled on your midsem (any 3 of 6, 10 marks, "substantiate with evidence"). Aim for: thesis, 3 or 4 evidence paragraphs with page numbers, one cross-text link, a counterpoint, a conclusion.</p>
+    <div class="btnrow"><button id="openQ" type="button">Open all</button><button id="closeQ" type="button">Close all</button></div>
+    <div class="qa">
+      <details class="q" open><summary><span class="n">Q1</span>In The Great Derangement, Ghosh argues that the modern novel cannot accommodate the improbable. How does Gun Island respond to this challenge?</summary><div class="body">
+        <h4>Thesis</h4><p><i>Gun Island</i> is Ghosh's attempt to write the novel he said was missing: it builds its plot from improbable events, but ties each one to real climate science, so the uncanny becomes a way of showing a changed planet.</p>
+        <h4>Points</h4><ol>
+          <li>GD's claim: probability and the novel are "twins"; the improbable is banished (GD 16–17).</li>
+          <li>GI fills its plot with improbable events: cobra (82), Tipu's prediction of Rani's death (94), the Ghetto near-miss and Rafi (159–160), tornadoes (255, 268), the bird storm (286).</li>
+          <li>It stages the debate inside the novel: Deen's "faith in chance" (189–190) vs Cinta's "never say just a story" (133–134).</li>
+          <li>Non-human interlocutors (GD 30): snakes, spiders, dolphins "speak" through stories (133).</li>
+          <li>Not fantasy: Piya explains sea snakes (140), the brown recluse (209), migrations (288–289). This satisfies GD 27.</li>
+        </ol>
+        <h4>Counterpoint</h4><p>The miracle ending risks becoming the "contrivance of last resort" (GD 16) that Ghosh warned about.</p>
+        <h4>Conclusion</h4><p>The novel does not abandon realism; it widens it, so that in a warming world "nothing is surprising now" (289).</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q2</span>Discuss Gun Island as a novel of climate migration. How does it link human and non-human movement?</summary><div class="body">
+        <h4>Thesis</h4><p>The novel presents migration as an ecological event: people and animals are pushed by the same changes, and the borders that stop humans mean nothing to snakes, spiders and whales.</p>
+        <h4>Points</h4><ol>
+          <li>Push factors in the Sundarbans: Aila's salt (54), no fish, "land's turning salty" (66), Rafi's grandfather told him he would have to leave (92).</li>
+          <li>Human journeys: Tipu and Rafi (241–247), Bilal (196–200), Lubna's cyclone (165).</li>
+          <li>Animal journeys: Rani's pod upriver (98), sea snakes northward (140), brown recluse (209), shipworms (235), whales and birds (281, 286). "Even the animals are moving" (66); "neither humans nor animals" (103).</li>
+          <li>Climate migrants unrecognised: they need stories of "politics, religion and sex" (68).</li>
+          <li>History: the Merchant's 17th-century flight from drought and storms (61, 147). "The past was present in the present" (110).</li>
+        </ol>
+        <h4>Link</h4><p>Nixon: slow harms lack a recognised narrative. Roy: the displaced "don't count".</p>
+        <h4>Conclusion</h4><p>The Blue Boat's rescue by animals and a sympathetic admiral imagines solidarity across species and borders.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q3</span>What role does the legend of the Gun Merchant and Manasa Devi play in the novel? Discuss myth as a form of environmental knowledge.</summary><div class="body">
+        <h4>Thesis</h4><p>The legend is a coded historical record of climate-driven migration and a moral warning about profit that ignores the non-human.</p>
+        <h4>Points</h4><ol>
+          <li>The legend's calamities (drought, floods, snakes) match the Little Ice Age (61, 128–130).</li>
+          <li>The decoding: Venice, Egypt, Istanbul, Sicily (142–147, 252). The fantasy is geography.</li>
+          <li>Manasa as <i>portavoce</i>: without her, profit "would recognize no restraint" (157–158). The merchant represents commerce at war with Nature (14).</li>
+          <li>Oral, unwritten, revived in crises (13, 21, 27). Cinta: stories let "silent beings speak" (133).</li>
+          <li>The legend repeats: iron room and spider (176, 201), the Island of Chains and the miracle at sea (252, 286).</li>
+        </ol>
+        <h4>Link</h4><p><i>Hungry Tide</i> (Bon Bibi), <i>River of Stories</i> (Malgu's songs).</p>
+        <h4>Counterpoint</h4><p>Deen and Piya stay sceptical; the novel never proves the legend causes anything.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q4</span>Using Rob Nixon's concept of slow violence, analyse Gun Island. What are the strengths and limits of the framework for this novel?</summary><div class="body">
+        <h4>Thesis</h4><p>Slow violence explains the novel's causes (salinity, effluents, warming water) but not its form, which relies on sudden spectacle.</p>
+        <h4>Points</h4><ol>
+          <li>Slow violence: Aila's lasting salt damage (54–55), refinery leaks and fish kills (102, 114), shipworms (235), Rani's shrinking pod (98).</li>
+          <li>Invisibility: asylum law needs persecution stories (68); Lisa's warning ignored and turned against her (115).</li>
+          <li>Victims are poor and marginalised: Dalit Tipu, fisherman Rafi, Bilal.</li>
+          <li>Limit: the novel's key moments are fast (tornado, cobra, bird storm). Deen says reason fails in "fleeting instants of catastrophe" (228).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Ghosh may use fast, uncanny events to draw attention to slow causes. Argue whether this solves or betrays Nixon's representational problem.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q5</span>Compare Gun Island and The Hungry Tide in their representation of the Sundarbans and the relation between science and local knowledge.</summary><div class="body">
+        <h4>Points</h4><ol>
+          <li>Same place and people; Fokir's death (261) links them.</li>
+          <li>Piya as science in both; local knowers: Fokir in <i>HT</i>, Rafi and Horen in <i>GI</i> (Rafi hears worms like crabs in embankments, 240; spots whales first, 265).</li>
+          <li><i>HT</i>: conflict inside the delta (tigers vs people) <span class="mem">from memory</span>. <i>GI</i>: the delta's people expelled into the world.</li>
+          <li>Both use legend (Bon Bibi / Manasa Devi) as a counterweight to science.</li>
+          <li>Change: in <i>GI</i>, Piya's science also fails to explain everything (105, 288–289).</li>
+        </ol>
+      </div></details>
+      <details class="q"><summary><span class="n">Q6</span>Discuss Cinta's claim that "the world of today presents all the symptoms of demonic possession." How does the novel explore agency and inaction?</summary><div class="body">
+        <h4>Points</h4><ol>
+          <li>The argument: Inquisition cases were about losing "will and freedom" (220); today "impersonal systems" make presence unnecessary (221).</li>
+          <li>"Everybody knows . . . and yet we are powerless" (221): inaction despite knowledge.</li>
+          <li>Examples: the museum director's "not quitters" (131); Deen's insurance spiral (149–150); Tipu on greed (117); systems "inscrutable as demons" (285).</li>
+          <li>Deen's breakdown reframed as <i>risveglio</i>, awakening (222).</li>
+          <li>Agency returns at the end: the admiral acts on "the law of humanity" (289).</li>
+        </ol>
+        <h4>Link</h4><p>Jamieson's "loss of agency" (15).</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q7</span>Venice and the Sundarbans mirror each other in Gun Island. Discuss.</summary><div class="body">
+        <h4>Points</h4><ol>
+          <li>From the air, the lagoon looks like the Sundarbans (153).</li>
+          <li>Both built on mud, eaten from inside: crabs vs shipworms (240, 235); both flood (169, 234).</li>
+          <li>Rafi: "For us it's like home – we're used to floods" (239). Bengalis run flooded Venice.</li>
+          <li>Both historic hubs of trade and migration: cowries, spices, the Ghetto (147–148, 225).</li>
+          <li>The rich city is also vulnerable: "so completely at the mercy of the earth" (237).</li>
+        </ol>
+        <h4>Conclusion</h4><p>Climate change erases the line between "developed" and "vulnerable" places.</p>
+      </div></details>
+      <details class="q"><summary><span class="n">Q8</span>How does Gun Island represent non-human agency? Compare with The Rime of the Ancient Mariner.</summary><div class="body">
+        <h4>Points</h4><ol>
+          <li>The cobra protects the shrine and "would not have harmed anybody" if not attacked (82).</li>
+          <li>Rani's gaze of "gratitude" (98) and Piya's refusal to name it (113).</li>
+          <li>The spider seems to look at Deen (201, 219); worms test "whether we were real" (236).</li>
+          <li>The bird storm as a "limb of the earth" (286).</li>
+          <li>Rime: albatross, water-snakes, the sea as moral actors <span class="mem">from memory</span>. Both turn on respect for despised creatures.</li>
+        </ol>
+        <h4>Counterpoint</h4><p>Piya's reading: animals respond to physical change, not to humans (288–289).</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Exam tips and traps</h2>
+    <ul class="tips">
+      <li><b>The narrator is Deen</b>, not Ghosh. Write "Deen reflects…" or "the narrator…".</li>
+      <li><b>Bonduki Sadagar</b> is first translated "Gun Merchant" but means "the Merchant who went to Venice". Mention both.</li>
+      <li><b>Cite as</b> Amitav Ghosh, <i>Gun Island</i> (2019). Say your page numbers are from the course PDF if you want to be safe.</li>
+      <li><b>Don't call the ending simply supernatural.</b> Give both readings: the admiral's "miracle" and Piya's "migratory patterns intersecting" (288).</li>
+      <li><b>Use Piya as your counterpoint</b> in any essay that leans on the uncanny, and Cinta as the counterpoint in any essay that leans on science.</li>
+      <li><b>Don't mix up the cyclones</b>: Bhola 1970 (the shrine saves villagers), Aila 2009 (salt, exodus).</li>
+      <li><b>Always add one non-human example</b> (snake, spider, dolphin, shipworm, birds) to keep the answer environmental.</li>
+      <li><b>Structure</b>: two-line thesis, one quote with page per paragraph, one cross-text link (GD first), a counterpoint, and a conclusion that answers the exact question.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">Study guide built from your 295-page PDF of <i>Gun Island</i> (text-based ebook, read in full). All Gun Island quotations were matched word for word against the PDF; page numbers are PDF page numbers. Great Derangement page refs come from your GD study guide; Jamieson, Roy and River of Stories points come from your other guides. Points marked "from memory" are from general knowledge of those texts.</div></footer>
+
+<script>
+(function(){
+  function setAll(sel,open){document.querySelectorAll(sel).forEach(function(d){d.open=open;});}
+  document.getElementById('openAll').addEventListener('click',function(){setAll('details.text',true);});
+  document.getElementById('closeAll').addEventListener('click',function(){setAll('details.text',false);});
+  document.getElementById('openQ').addEventListener('click',function(){setAll('details.q',true);});
+  document.getElementById('closeQ').addEventListener('click',function(){setAll('details.q',false);});
+})();
+</script>

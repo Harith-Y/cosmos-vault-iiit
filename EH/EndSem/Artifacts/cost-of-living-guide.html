@@ -1,0 +1,765 @@
+<title>The Cost of Living</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a sticky section bar; geological strata band in the hero; cards only where content is a set */
+:root{
+  --bg:#f2f3ef; --surface:#ffffff; --fg:#1d2420; --muted:#5a645e; --line:#d6dbd4;
+  --accent:#1e6a63; --accent-soft:#dcebe7; --rust:#a9502a; --rust-soft:#f3e2d8;
+  --s1:#c9c2a8; --s2:#b3a98a; --s3:#8f8770; --s4:#6c6655; --s5:#3c3a33; --s6:#a9502a; --sink:#f2f3ef;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a17; --surface:#1c2420; --fg:#e4e9e5; --muted:#a2ada6; --line:#2f3a35;
+  --accent:#6cc2b6; --accent-soft:#1f3632; --rust:#e08a5e; --rust-soft:#3a271d;
+  --s1:#3b3a31; --s2:#4a463a; --s3:#5b5543; --s4:#6f6750; --s5:#7a735c; --s6:#e08a5e; --sink:#ecefe9;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.01em}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+.mono,.pg{font-family:var(--mono);font-size:.78rem}
+.pg{color:var(--rust);background:var(--rust-soft);padding:1px 6px;border-radius:4px;white-space:nowrap;font-weight:500}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+
+/* hero */
+.hero{background:var(--surface);border-bottom:1px solid var(--line);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
+.hero .wrap{padding-block:2.6rem 0;display:grid;gap:1rem}
+.hero h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{color:var(--rust)}
+.hero .by{color:var(--muted);font-size:1rem}
+.oneliner{font-size:1.15rem;max-width:62ch}
+.strata{display:grid;grid-template-rows:repeat(6,auto);margin-top:1.2rem}
+.strata div{font-family:var(--mono);font-size:.72rem;padding:4px 12px;color:var(--fg);display:flex;justify-content:space-between;gap:1rem}
+.strata div:nth-child(1){background:var(--s6);color:var(--surface);font-weight:500}
+.strata div:nth-child(2){background:var(--s1)}
+.strata div:nth-child(3){background:var(--s2)}
+.strata div:nth-child(4){background:var(--s3);color:var(--sink)}
+.strata div:nth-child(5){background:var(--s4);color:var(--sink)}
+.strata div:nth-child(6){background:var(--s5);color:var(--sink)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.55rem;scrollbar-width:thin}
+nav.bar a{font-family:var(--display);font-size:.85rem;font-weight:500;text-decoration:none;color:var(--fg);padding:.3rem .7rem;border:1px solid var(--line);border-radius:999px;white-space:nowrap}
+nav.bar a:hover{border-color:var(--accent);color:var(--accent)}
+
+section{padding-block:2.6rem;border-bottom:1px solid var(--line);scroll-margin-top:60px}
+section > .wrap{display:grid;gap:1.2rem}
+.lead{color:var(--muted);max-width:65ch}
+
+.memorize{background:var(--accent-soft);border-left:4px solid var(--accent);padding:1.1rem 1.3rem;border-radius:0 8px 8px 0;max-width:72ch}
+.memorize p+p{margin-top:.7rem}
+
+/* argument steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:.8rem;padding:1rem 0;border-top:1px dashed var(--line)}
+ol.steps li::before{content:counter(s);font-family:var(--display);font-weight:800;font-size:1.4rem;color:var(--rust);line-height:1.2}
+ol.steps h3{margin-bottom:.3rem}
+ol.steps ul{margin:.4rem 0 0;padding-left:1.1rem}
+ol.steps ul li{display:list-item;padding:0;border:0;counter-increment:none}
+ol.steps ul li::before{content:none}
+
+/* glossary */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:.9rem}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem;display:grid;gap:.35rem;align-content:start;min-width:0}
+.term h3{font-size:1.02rem}
+.term p{font-size:.95rem}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:.7rem .85rem;border-bottom:1px solid var(--line)}
+th{font-family:var(--display);font-weight:700;font-size:.85rem;background:var(--accent-soft)}
+tr:last-child td{border-bottom:0}
+td.q{font-style:italic;min-width:16rem}
+td .pg{display:inline-block}
+
+/* connections */
+.conn{display:grid;gap:1rem}
+details.text{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.text summary{cursor:pointer;padding:.9rem 1rem;display:flex;justify-content:space-between;gap:1rem;align-items:baseline;flex-wrap:wrap;list-style:none}
+details.text summary::-webkit-details-marker{display:none}
+details.text summary h3{font-size:1.08rem}
+details.text summary .tag{font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+details.text .body{padding:0 1rem 1rem;display:grid;gap:.6rem}
+details.text .body ul{margin:0;padding-left:1.1rem}
+.use{background:var(--rust-soft);border-radius:6px;padding:.6rem .8rem;font-size:.95rem}
+.use b{font-family:var(--display)}
+
+/* two column */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1rem 1.1rem;min-width:0}
+.box h3{margin-bottom:.5rem}
+.box ul{margin:0;padding-left:1.1rem;display:grid;gap:.4rem}
+
+/* questions */
+.qa{display:grid;gap:1rem}
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+details.q summary{cursor:pointer;padding:1rem 1.1rem;font-family:var(--display);font-weight:600;font-size:1.02rem;line-height:1.4;list-style:none;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.7rem}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .n{font-family:var(--mono);font-size:.78rem;color:var(--surface);background:var(--accent);border-radius:4px;padding:2px 7px;height:fit-content;margin-top:2px}
+details.q .body{padding:0 1.1rem 1.1rem;display:grid;gap:.7rem;font-size:.97rem}
+details.q .body h4{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500}
+details.q .body ul,details.q .body ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.hint{font-size:.85rem;color:var(--muted)}
+.btnrow{display:flex;gap:.5rem;flex-wrap:wrap}
+button{font-family:var(--display);font-size:.85rem;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem;cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+ul.tips{margin:0;padding-left:1.1rem;display:grid;gap:.5rem;max-width:70ch}
+footer{padding-block:2rem 3rem;color:var(--muted);font-size:.85rem}
+@media (max-width:520px){body{font-size:16px} h2{font-size:1.4rem}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+/* river hero for this guide */
+.river{margin-top:1.2rem;background:var(--accent-soft);border-top:1px solid var(--line)}
+.river svg{display:block;width:100%;height:auto}
+.river .r-line{fill:none;stroke:var(--accent);stroke-width:10;stroke-linecap:round;opacity:.55}
+.river .r-thin{fill:none;stroke:var(--accent);stroke-width:2}
+.river .wall{fill:var(--rust)}
+.river text{font-family:var(--mono);font-size:12px;fill:var(--fg)}
+.river text.h{font-family:var(--display);font-weight:700;font-size:15px}
+.river text.r{fill:var(--rust);font-weight:500}
+.note{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:.7rem}
+.mem{font-family:var(--mono);font-size:.7rem;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:0 5px;white-space:nowrap}
+.map{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.map div{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;font-size:.9rem}
+.map b{display:block;font-family:var(--display);color:var(--rust)}
+.part{font-family:var(--mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);padding-top:1.2rem}
+.short{background:var(--rust-soft);border-left:4px solid var(--rust);padding:1rem 1.2rem;border-radius:0 8px 8px 0;max-width:72ch}
+.short ol{margin:.5rem 0 0;padding-left:1.2rem;display:grid;gap:.35rem}
+
+/* ledger hero for this guide */
+.ledger{margin-top:1.2rem;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.ledger > div{padding:1rem 0 1.2rem;display:grid;gap:.45rem;align-content:start}
+.ledger > div + div{border-left:1px dashed var(--line);padding-left:1.2rem}
+@media (max-width:560px){.ledger > div + div{border-left:0;padding-left:0;border-top:1px dashed var(--line)}}
+.ledger h3{font-size:.8rem;font-family:var(--mono);text-transform:uppercase;letter-spacing:.12em;font-weight:500}
+.ledger .c h3{color:var(--rust)} .ledger .b h3{color:var(--accent)}
+.ledger .row{display:flex;justify-content:space-between;gap:1rem;font-size:.92rem;border-bottom:1px dotted var(--line);padding-bottom:.25rem}
+.ledger .row span:last-child{font-family:var(--mono);font-size:.8rem;white-space:nowrap}
+.ledger .row.x span:first-child::before{content:"✕ ";color:var(--rust);font-family:var(--mono)}
+.ledger .row.x span:last-child{color:var(--rust)}
+.ledger .tot{font-family:var(--display);font-weight:700;font-size:.95rem;padding-top:.3rem}
+</style>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">HS1.304 Environmental Humanities · Endsem study guide</div>
+    <h1>The Cost of Living: <span>who pays for a Big Dam, and who doesn't get counted</span></h1>
+    <p class="by">Arundhati Roy · essay, given as the <b>Nehru Memorial Lecture</b> (she says so on p. 13). Your PDF is <b>13 pages</b>, headed "No. 22 · Arundhati Roy · 1998". Page numbers below are the numbers printed at the foot of each page (1–13).</p>
+    <p class="oneliner"><b>In one line:</b> A Booker-winning novelist, newly rich and uneasy about it, turns to the <b>Sardar Sarovar Dam on the Narmada</b> and argues that India's Big Dams are a machine that takes land, river and forest from the poorest people (mostly <b>Dalit and Adivasi</b>) and hands water, power and profit to the rich, while the State <b>refuses even to count</b> the people it displaces. She ends by saying writers must <b>look up from the page</b> and take back the political arena.</p>
+    <div class="ledger" aria-label="Roy's balance sheet: costs the State leaves off the books, and benefits it claims">
+      <div class="c">
+        <h3>Costs left off the books</h3>
+        <div class="row x"><span>Canal-land families, seriously affected</span><span>23,000 · p. 7</span></div>
+        <div class="row x"><span>Adivasis moved for the wildlife sanctuary</span><span>40,000 · p. 7</span></div>
+        <div class="row x"><span>Owners of "compensatory afforestation" land</span><span>? · p. 7</span></div>
+        <div class="row x"><span>Fisher folk downstream (0 MAF for the river)</span><span>40,000 · p. 7</span></div>
+        <div class="row x"><span>950 Adivasi families evicted for the colony (1961)</span><span>p. 7</span></div>
+        <div class="row x"><span>Drainage against water-logging (≈5× irrigation cost)</span><span>p. 11</span></div>
+        <div class="tot">"They don't count as project affected."</div>
+      </div>
+      <div class="b">
+        <h3>Benefits claimed, then shrunk</h3>
+        <div class="row"><span>Kutch irrigated: 11,00,000 ha promised</span><span>→ 100,000 ha · p. 10</span></div>
+        <div class="row"><span>Share of Kutch actually covered</span><span>1.8% · p. 10</span></div>
+        <div class="row"><span>Water in the river: 27.22 MAF assumed</span><span>→ 22.69 MAF · p. 10</span></div>
+        <div class="row"><span>Canal efficiency assumed</span><span>60% (best ever 35%) · p. 10</span></div>
+        <div class="row"><span>Villages to get drinking water</span><span>0 → 8,215 · p. 9</span></div>
+        <div class="tot">Roy's name for it: the "benefit-benefit analysis" (p. 10)</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Sections">
+  <div class="wrap">
+    <a href="#short">Short on time</a>
+    <a href="#summary">Summary</a>
+    <a href="#map">Section map</a>
+    <a href="#arg">Argument step by step</a>
+    <a href="#terms">Terms & figures</a>
+    <a href="#quotes">Quote bank</a>
+    <a href="#links">Other texts</a>
+    <a href="#eval">Strengths & limits</a>
+    <a href="#qs">Exam questions</a>
+    <a href="#tips">Tips & traps</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="short">
+  <div class="wrap">
+    <h2>Short on time? Do this</h2>
+    <div class="short">
+      <ol>
+        <li>Learn the <b>60-second summary</b> below. It opens almost any answer on Roy.</li>
+        <li>Learn <b>five numbers</b>: <b>33 million</b> displaced by Big Dams (her estimate, p. 5); <b>60%</b> of them Dalit or Adivasi, though these groups are only 15% + 8% of India (p. 5); Big Dams give only <b>12%</b> of foodgrain (p. 3); <b>90%</b> of 300 projects broke environmental rules (p. 6); <b>1.8%</b> of Kutch actually gets the promised irrigation (p. 10).</li>
+        <li>Learn <b>the "don't count" list</b> (p. 7): canal-land families, Adivasis moved for the sanctuary, afforestation-land owners, downstream fisher folk, the 950 families evicted in 1961. This is the core of the essay.</li>
+        <li>Learn <b>six quotes</b>: "They don't count as people. Therefore the costs of Big Dams don't count as costs" (4); "the story of the Narmada Valley is nothing less than the story of Modern India" (2); "When history is written, they won't be in it, not even as statistics" (5); "This is Fascist Maths" (9); "Acknowledge the price that someone, somewhere far away is paying" (12); "I would rather be loved by a river valley than by a nation state" (13).</li>
+        <li>Pick <b>two links</b>: <i>River of Stories</i> (same river, same dam, told as a graphic novel) and <b>Nixon's slow violence</b> (uncounted, unseen harm to the poor). Add <b>Ghosh p. 8</b> if the question is about the writer or fiction.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="summary">
+  <div class="wrap">
+    <h2>The 60-second summary</h2>
+    <p class="lead">Memorise this paragraph. Shorten it to two lines as the opening of any answer.</p>
+    <div class="memorize">
+      <p>In "The Cost of Living", Arundhati Roy, author of <i>The God of Small Things</i>, moves from fiction to political argument. Back home after the success of her novel, she sees a "New Nuclear India" where the rich have "learned to stop seeing" the poor (1). When the Supreme Court lifts its stay on the <b>Sardar Sarovar Dam</b> in February 1999, she studies the Narmada and concludes that its story "is nothing less than the story of Modern India" (2).</p>
+      <p>Her case has three parts. <b>First</b>, Big Dams, sold since Nehru as "Temples of Modern India", do not deliver what they promise: they give only about 12% of India's foodgrain, their electricity goes to the rich, and the Bargi Dam irrigates only as much land as it drowned (3–4). <b>Second</b>, their costs are hidden: the State keeps no record of the people it displaces, which Roy estimates at <b>33 million</b>, about 60% of them Dalit or Adivasi (4–5). The displaced "don't count as people. Therefore the costs of Big Dams don't count as costs" (4). <b>Third</b>, in the Sardar Sarovar itself, whole groups are defined out of being "project affected" (7), resettlement has failed (8–9), and the promised water for drought-hit Kutch and Saurashtra is mostly propaganda, diverted to sugar mills, golf courses and cities (9–11).</p>
+      <p>She ends by refusing the Supreme Court's warning against her: artists must "reclaim the political arena" and "acknowledge the price that someone, somewhere far away is paying" for our comforts (12). She proposes stopping the dam at its present height, quotes Nehru himself against "gigantism" (13), and closes: "I would rather be loved by a river valley than by a nation state" (13).</p>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="wrap">
+    <h2>Section map</h2>
+    <p class="lead">The essay has no headings. These are the natural blocks, in order, with the pages they sit on.</p>
+    <div class="map">
+      <div><b>1 · Frame (p. 1)</b>Fame, money, "New Nuclear India", the writer's curse of seeing.</div>
+      <div><b>2 · Turn to Narmada (pp. 1–2)</b>Court lifts stay (Feb 1999). Experts break the issue apart. The valley needs a fiction writer.</div>
+      <div><b>3 · The project (pp. 2–3)</b>3,200 dams, 25 million people, sacred groves and ancient sites drowned.</div>
+      <div><b>4 · Big Dam debate (pp. 3–4)</b>Nehru's "temples". Food 12%, electricity for the rich, silting.</div>
+      <div><b>5 · Bargi Dam (p. 4)</b>The first Narmada dam as a case study of failure.</div>
+      <div><b>6 · Why? (p. 4)</b>Corruption; the poor "don't count as people"; missing statistics.</div>
+      <div><b>7 · 33 million (p. 5)</b>Her calculation; 60% Dalit or Adivasi; slums; the Kargil contrast.</div>
+      <div><b>8 · Environment (p. 6)</b>Thought experiment about the rich; ecological costs off the balance sheet; no audit.</div>
+      <div><b>9 · Sardar Sarovar costs (pp. 6–9)</b>Three states; rising figures; who doesn't count; failed resettlement; "Fascist Maths".</div>
+      <div><b>10 · Sardar Sarovar benefits (pp. 9–11)</b>Kutch and Saurashtra; thirst as propaganda; four caveats; sugar, golf, Baroda.</div>
+      <div><b>11 · Courts (pp. 11–12)</b>NBA petition, stay, stay lifted, contempt case against Roy.</div>
+      <div><b>12 · Art and hope (pp. 12–13)</b>"Dignity of Art"; lower the dam; Nehru's "disease of gigantism"; river valley vs nation state.</div>
+    </div>
+  </div>
+</section>
+
+<section id="arg">
+  <div class="wrap">
+    <h2>The argument, step by step</h2>
+    <p class="lead">Each step is one move in the essay. The bold line is what to write; the bullets are your evidence.</p>
+
+    <div class="part">Part A · The writer and the frame</div>
+    <ol class="steps">
+      <li><div>
+        <h3>Success has made her complicit, and she knows it <span class="pg">1</span></h3>
+        <p>Roy opens with the "private story" behind <i>The God of Small Things</i>: the money from the book feels like she has "perforated the huge pipeline that circulates the world's wealth amongst the already wealthy". She fears turning into "a little silver figurine with a gleaming, silver heart".</p>
+        <ul>
+          <li>She once said literature is "the opposite of what [it] must feel like to be a nuclear bomb. Literature hugs the world and the world hugs it back." The world she comes home to is "the New Nuclear India".</li>
+          <li>The State spends "millions on nuclear weapons" while "Rivers die, forests disappear and the air is getting impossible to breathe."</li>
+          <li><b>Why it matters:</b> she starts with her own place among the privileged. The essay is about the gap between those who pay and those who benefit, and she puts herself on the benefit side.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The rich have learned not to see; the writer cannot stop seeing <span class="pg">1</span></h3>
+        <p>In Delhi, the poor live in "the crevices of the city", "under flyovers, along sewers and railway tracks". The privileged "wear their sunglasses and look away"; their children "don't need to look away. They've learned to stop seeing."</p>
+        <ul>
+          <li>"A writer's curse" is that she "cannot easily do that": "Every day you bear witness to the obscenity."</li>
+          <li>The job is "new ways of saying old and obvious things", about "power and powerlessness".</li>
+          <li><b>Use it for:</b> visibility. This is the same problem Nixon names in slow violence: harm that the comfortable don't see.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The Narmada needs a writer, because experts have broken the story into pieces <span class="pg">2</span></h3>
+        <p>In February 1999 the Supreme Court "vacated a four year long legal stay" on the half-built Sardar Sarovar Dam, a "body blow" to the Narmada Bachao Andolan (NBA), "one of the most spectacular, non-violent resistance movements since the freedom struggle".</p>
+        <ul>
+          <li>She notices "so much passion in the absence of information", swaps fiction for "journals and books and documentary films about dams".</li>
+          <li>She learns of a "Government's highly evolved, intricate way of pulverising a people behind the genial mask of democracy". What goes on "in the name of 'national interest' is monstrous".</li>
+          <li>Experts have "hi-jacked" parts of the issue (displacement, hydrology, drainage...) and "carried them off to their lairs". Splitting politics from economics and human tragedy "is like breaking up a band... You keep the noise but lose the music."</li>
+          <li>So the valley needs "a fiction writer" who can "use the craft and rigour of writing fiction to make the separate parts cohere", even though what happens there is "perhaps too vulgar for fiction".</li>
+          <li><b>Thesis line:</b> "the story of the Narmada Valley is nothing less than the story of Modern India."</li>
+        </ul>
+      </div></li>
+    </ol>
+
+    <div class="part">Part B · Big Dams in general</div>
+    <ol class="steps" start="4" style="counter-reset:s 3">
+      <li><div>
+        <h3>The scale is enormous <span class="pg">2–3</span></h3>
+        <ul>
+          <li>The Narmada Valley Development Project plans <b>3,200 dams</b> to turn the river and its 419 tributaries into "an immense staircase of amenable water": 30 major, 135 medium, the rest small.</li>
+          <li>Two mega dams: <b>Sardar Sarovar</b> (Gujarat) and <b>Narmada Sagar</b> (Madhya Pradesh).</li>
+          <li>It will affect <b>25 million people</b> and "alter the ecology of an entire river basin", drowning "sacred groves and temples and ancient pilgrimage routes" and sites with "an uninterrupted record of human occupation from the old stone age".</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Dams became a national religion <span class="pg">3</span></h3>
+        <p>For half a century "Nehru's foot soldiers sought to equate dam-building with Nation-building". Nehru's line about dams as "the Temples of Modern India" is in "primary school textbooks in every Indian language".</p>
+        <ul>
+          <li>"Big dams have become an article of faith inextricably linked with nationalism. To question their utility amounts almost to sedition."</li>
+          <li>The State took over "small, traditional water harvesting systems that had been managed for thousands of years and allowed them to atrophy", then built more dams to make up the loss.</li>
+          <li>India: <b>third largest dam-builder</b>; 3,600 big dams, 3,300 after Independence, 1,000 more being built.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>But do dams feed and power India? Not as claimed <span class="pg">3–4</span></h3>
+        <ul>
+          <li><b>Food:</b> foodgrain rose from 51 to ~200 million tonnes, but mostly from groundwater, hybrid seeds and fertiliser. There are "no official figures" for the share from Big Dams. Himanshu Thakker's study puts it at <b>12%</b> (24 million tonnes).</li>
+          <li>In 1995 granaries held 30 million tonnes while <b>350 million</b> lived below the poverty line; <b>20 million tonnes</b> are lost to rats and insects each year. "We must be the only country in the world that builds dams, uproots communities and submerges forests in order to feed rats."</li>
+          <li><b>Electricity:</b> 20 times more consumed than 50 years ago, yet over <b>70% of rural households</b> have none, and over 80% of Adivasi and Dalit households in the poorest states. "Electricity produced in the name of the poor consumed by the rich." 22% lost in transmission.</li>
+          <li>Dams silt up, halving or quartering their life-spans.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Case study: the Bargi Dam <span class="pg">4</span></h3>
+        <ul>
+          <li>First dam on the Narmada (completed 1990). Cost <b>ten times</b> the budget, drowned <b>three times</b> the land planned.</li>
+          <li>Expected 70,000 people from 101 villages displaced; actually <b>114,000 from 162 villages</b>. The reservoir was filled "without warning anybody": people were "chased out like rats, with no prior notice". No rehabilitation; some starved; others went to Jabalpur's slums.</li>
+          <li>It irrigates "only as much land as it submerged", <b>5%</b> of what was claimed. Yet work has begun on Narmada Sagar and Maheshwar.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Why? Because the victims are not counted as people <span class="pg">4</span></h3>
+        <p>"Big Dams are monuments to corruption": bankers, politicians, bureaucrats, consultants and aid agencies are "all involved in the racket". Their victims are "the poorest, most marginalised" people.</p>
+        <ul>
+          <li><b>Key sentence:</b> "They don't count as people. Therefore the costs of Big Dams don't count as costs. They're not even entered in the books."</li>
+          <li>Resettlement consultants ("global experts on despair") write "ever more humane-sounding" policies "that are never implemented". "there's a lot of money in poverty"</li>
+          <li>What shocked her most "was not the statistics that are available, but the ones that aren't". The State counts vasectomies and "cricket matches we've lost on a Friday in Sharjah" but not people displaced "at the altars of 'National Progress'".</li>
+          <li>"How can you measure Progress if you don't know what it costs and who has paid for it?" (This is the title's idea.)</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Her own count: 33 million, mostly Dalit and Adivasi <span class="pg">5</span></h3>
+        <ul>
+          <li>Method: an IIPA study of 54 large dams found 2.4 million displaced, about 44,000 per dam. She cuts the average to <b>10,000</b> to be safe, giving <b>33 million</b> over fifty years. N.C. Saxena of the Planning Commission thought <b>40 million</b>.</li>
+          <li><b>About 60% are Dalit or Adivasi</b>, though Dalits are 15% and Adivasis 8% of India. "The ethnic 'otherness' of the victims takes some of the strain off the Nation Builders."</li>
+          <li>"When history is written, they won't be in it, not even as statistics." India has <b>no National Resettlement Policy</b>; those without formal land title "get nothing".</li>
+          <li>Some are displaced "three and four times – a dam, an artillery proof range, another dam, a uranium mine". Most end in city slums as "an immense pool of cheap labour (that builds more projects that displaces more people)".</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The nation cares for soldiers, not for the flooded <span class="pg">5</span></h3>
+        <p>During Kargil, "the nation rose as one" to help soldiers (cooking festivals, blood drives). At the same time, hundreds in the Narmada Valley stood "in chest deep water" as the reservoir rose. No one helped. They were "labelled anti-national and anti-development and carted off to jail".</p>
+        <ul><li>The consensus: "Someone has to pay the price for development." Roy's question is: why always the same someone?</li></ul>
+      </div></li>
+      <li><div>
+        <h3>Thought experiment, then the environmental costs <span class="pg">5–6</span></h3>
+        <ul>
+          <li>If the State seized the assets of its 100,000 richest citizens to fund dams, it would be "an international scandal", and "phenomenal, imaginative solutions" would appear overnight. The point: the costs are acceptable only because of who pays.</li>
+          <li>Environmental costs: "submerged forests, the ravaged ecosystems, the destroyed estuaries", silted reservoirs, lost biodiversity, water-logged and salty land. "None of this appears on the balance sheet."</li>
+          <li>Of 300 projects studied, <b>270 (90%)</b> broke the Ministry of Environment's guidelines; not one was revoked.</li>
+          <li>More drought-prone and flood-prone areas than in 1947; no plains river has drinking-quality water; 250 million lack safe water. No honest post-project audit of a single Big Dam.</li>
+        </ul>
+      </div></li>
+    </ol>
+
+    <div class="part">Part C · The Sardar Sarovar Dam</div>
+    <ol class="steps" start="12" style="counter-reset:s 11">
+      <li><div>
+        <h3>"The most studied project", studied only after the fact <span class="pg">6</span></h3>
+        <ul>
+          <li>Roy mocks the project's superlatives: "the most studied project, the most ambitious river valley project, the best rehabilitation package".</li>
+          <li>In 1985 the World Bank lent <b>$450 million</b> before any studies were done. Studies now "can only be to justify what has become a fait accompli". "Costs are suppressed and benefits exaggerated to farcical proportions."</li>
+          <li><b>Geography of injustice:</b> the river runs 90% through Madhya Pradesh, skirts Maharashtra, then ~180 km through Gujarat. The reservoir drowns <b>245 villages, only 19 in Gujarat</b>. Costs fall on MP and Maharashtra; benefits go to Gujarat.</li>
+          <li>The cost-benefit analysis is done "in a friendly, cheerful way. Almost as though it's a family board game."</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The costs: figures that keep growing, and people defined away <span class="pg">7</span></h3>
+        <ul>
+          <li>Official estimate of displaced families: about 6,000 (1979) → 12,000 (1987) → 27,000 (1992) → 40,000–42,000 now (~200,000 people). The NBA says about <b>85,000 families</b>, close to half a million people.</li>
+          <li>The gap is about <b>who counts as "Project Affected"</b>: the State counts only those whose land and homes are drowned. But "when you tear up the fabric of an ancient, agrarian community... the threads begin to unravel in every direction."</li>
+          <li><b>Not counted:</b> (1) canal land: 200,000 families affected, 23,000 seriously; (2) the <b>Shoolpaneshwar Wildlife Sanctuary</b> expansion to make up for 13,000 ha of drowned forest: about 40,000 Adivasis from 101 villages "'persuaded' to leave"; (3) people whose land is taken for <b>Compensatory Afforestation</b>; (4) <b>40,000 fisher folk</b> downstream, since Gujarat allocates 0 MAF to the river below the dam, harming the estuary, Hilsa and prawns; (5) <b>950 Adivasi families</b> whose land was taken in 1961 for the engineers' colony, now "squatters on their own land", some working as servants and waiters "in the guest house built on land where their own houses once stood".</li>
+          <li>The refrain: "They don't count as project affected."</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Costs dressed as benefits: the "eco-romantic" charge <span class="pg">7–8</span></h3>
+        <p>Supporters say displacement is "a positive intervention", a favour to poor people. Critics are called "eco-romantic" and accused of "glorifying the notion of the Noble Savage".</p>
+        <ul>
+          <li>Roy's reply is a run of questions: if Adivasi welfare mattered, why "for fifty years there have been no roads, no schools, no clinics"? Why did the first sign of development, "a road", bring "only terror, police, beatings, rape, murder"?</li>
+          <li>"Why must the offer of Development be conditional, i.e. You give up your homes, your lands, your field, your language, your gods and we'll give you 'development'?"</li>
+          <li><b>Use it for:</b> any question that says Roy is "against development". She is against <i>this</i> development, offered as a trade.</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>"The best rehabilitation package in the world" has failed <span class="pg">8–9</span></h3>
+        <ul>
+          <li>Madhya Pradesh told the court it has <b>no land</b> for the displaced, so they must go to Gujarat: "like displacing people in England and forcing them to live in France".</li>
+          <li>Even Gujarat's own 19 villages are scattered over <b>175 sites</b>; "Not a single village has been resettled according to the directives of the Tribunal." Land is stony, water-logged, full of daab grass; some are beaten and chased off by host villagers.</li>
+          <li>Tin sheds, "furnaces in summer and fridges in winter"; children "perched like birds on the edges of charpais" as water enters. From Manibeli, 40 households moved; "In the first year, thirty-eight children died." Nine deaths from malnutrition in one site in a week: "1.2875 people a day, if you're counting".</li>
+          <li>In the forest people gathered "food, fuel, fodder, rope, gum, tobacco, tooth powder, medicinal herbs". Now they earn 10–20 rupees a day. "Instead of a river, they have a hand pump." The forest and river were insurance; "Their livestock was their fixed deposit."</li>
+          <li>Everything must be re-learned, "from shitting and pissing... to buying a bus ticket", and worst, "learning to be supplicants... learning to have Masters".</li>
+          <li>"In fifteen years, the government has yet to resettle people displaced by half a dam. What are they going to do about the remaining 3,199 dams?... <b>This is Fascist Maths.</b> It strangles stories, bludgeons detail".</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>The benefits: thirst as propaganda <span class="pg">9–10</span></h3>
+        <ul>
+          <li>Gujarat says the dam is for drought-hit <b>Kutch and Saurashtra</b>, at the very end of the canal, and spends about 80% of its irrigation budget on it, claiming "no alternative".</li>
+          <li>But the closer rivers, <b>Mahi and Sabarmati</b>, were already dammed and sent to Ahmedabad, Mehsana and Kheda, "the Patel-rich, irrigation rich, politically powerful areas". Kutch and Saurashtra "haven't seen a drop".</li>
+          <li>Drinking water was not in the original plan; when the project "ran into political trouble, the government discovered the emotive power of thirst". Numbers swing: 28m → 32.5m → 10m → 25m people; 0 → 8,215 villages (including 236 uninhabited ones).</li>
+          <li>"Nobody builds Big Dams to take drinking water to remote villages." The World Bank's Morse Committee asked for plans: "There weren't any." Cost: "'A few thousand crores' was the breezy answer." Roy: "the benefit-benefit analysis, shall we call it?"</li>
+          <li>Irrigation: Gujarat won extra water (9 MAF) by claiming 11,00,000 ha of Kutch, then cut it to 100,000 ha, <b>1.8%</b> of Kutch (9% of Saurashtra), on paper. If "alternatives" are good enough for 98.2% of Kutch, "why won't they work for the whole 100%?"</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Four reasons the water will never reach Kutch <span class="pg">10–11</span></h3>
+        <ul>
+          <li><b>Less water:</b> the Tribunal assumed 27.22 MAF from faulty rainfall data; actual flow (1992) is 22.69 MAF, 18% less.</li>
+          <li><b>Missing partner dam:</b> it was planned with Narmada Sagar, which has stalled.</li>
+          <li><b>Impossible efficiency:</b> canal efficiency set at 60% when India's best ever is 35%.</li>
+          <li><b>Competing claims:</b> sugar-cane is banned in the command area, yet licences went to sugar mills at the head of the canal, promoted by a former dam authority chairman (Sanat Mehta) and a former Chief Minister (Chiman Bhai Patel, whose ashes were scattered over the dam site). Then golf courses, luxury hotels, water parks, and the city of Baroda.</li>
+          <li>Meanwhile local people are harvesting rain: 15–20 MAF could be harvested in Kutch and Saurashtra, against 3 MAF promised by the dam; "Hundreds of thousands of wells are being recharged". Drainage, about five times the cost of irrigation, is left out of the sums ("an old World Bank practise").</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>Courts and the State close ranks <span class="pg">11–12</span></h3>
+        <ul>
+          <li>Gujarat blocked every review: the Five Member Group, the World Commission on Dams, the Commissioner for Scheduled Castes and Tribes, the Union Welfare Ministry. It "stood by" as the NBA's Baroda office was ransacked.</li>
+          <li>NBA petition (May 1994) → Supreme Court halts construction (early 1995) on resettlement grounds → the court narrows the issue to resettlement, acting as "a sort of Welfare Inspector of Resettlement Colonies" → lifts the stay (February 1999) though nothing had changed.</li>
+          <li>Villagers vow to drown rather than move; <b>Medha Patkar</b> says she will drown herself if construction continues. Gujarat asks for contempt action against the NBA and against Roy for writing <i>The Greater Common Good</i>.</li>
+          <li>As the waters rise, the three-judge bench discusses only "whether or not the dignity of the court had been undermined". Its order of <b>15 October 1999</b> scolds Roy ("vicious stultification and vulgar debunking") but drops contempt: "She may have by now realised her mistake."</li>
+        </ul>
+      </div></li>
+    </ol>
+
+    <div class="part">Part D · Conclusion</div>
+    <ol class="steps" start="19" style="counter-reset:s 18">
+      <li><div>
+        <h3>The dignity of Art: writers need the valley <span class="pg">12</span></h3>
+        <p>"So. Shall I heed the warning or persevere with the contumely?" To obey "would undermine the dignity of Art".</p>
+        <ul>
+          <li>"Just as much as the valley needs a writer, I believe that writers need the valley." All artists "need to reclaim the political arena which we seem to have so willingly abdicated".</li>
+          <li>Not a demand for "hectoring, political manifesto": "I'm all for Matisse and goldfish on a window sill." Only that we "lift our eyes from the page" and "Acknowledge the price that someone, somewhere far away is paying, in order for us to switch [our] lights on, cool our rooms and run our baths."</li>
+        </ul>
+      </div></li>
+      <li><div>
+        <h3>A practical alternative, and Nehru against himself <span class="pg">12–13</span></h3>
+        <ul>
+          <li>The dam is at <b>88 m</b>; full height is <b>138 m</b>, having drowned only a quarter of the final area. Finishing costs about six times more: "throwing good money after bad". Stopping at the present height and taking water straight to Kutch would save "hundreds of thousands of people from certain destitution", forests and farmland, and fund local water harvesting "in every village in Gujarat".</li>
+          <li>"It would mean a victory for non-violence and the principles of democracy. It would mean that we still have hope."</li>
+          <li>Ending quote: Nehru in 1958 warned of "the 'disease of gigantism'" and said "small irrigation projects, the small industries and the small plants" would change India more than big projects. "Needless to say this speech never made it into the school books."</li>
+          <li>Last line: "As a writer, I would rather be loved by a river valley than by a nation state - any day!"</li>
+        </ul>
+      </div></li>
+    </ol>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="wrap">
+    <h2>Key terms and figures</h2>
+    <div class="grid">
+      <div class="term"><h3>Sardar Sarovar Dam</h3><p>Mega dam in Gujarat on the Narmada; 88 m high at the time, planned 138 m. Drowns 245 villages, 19 in Gujarat (6, 12).</p></div>
+      <div class="term"><h3>Narmada Valley Development Project</h3><p>Plan for 3,200 dams on the Narmada and 419 tributaries; affects 25 million people (2).</p></div>
+      <div class="term"><h3>Narmada Bachao Andolan (NBA)</h3><p>"Save the Narmada" movement; non-violent; led by Medha Patkar (2, 11).</p></div>
+      <div class="term"><h3>"Project Affected"</h3><p>The official category that decides who gets counted. The State counts only those drowned out; Roy lists five groups left out (7).</p></div>
+      <div class="term"><h3>"Temples of Modern India"</h3><p>Nehru's phrase for dams; made dams "an article of faith" tied to nationalism (3).</p></div>
+      <div class="term"><h3>"Disease of gigantism"</h3><p>Nehru's own 1958 warning against big projects, quoted to end the lecture (13).</p></div>
+      <div class="term"><h3>"Fascist Maths"</h3><p>Planning by huge numbers that "strangles stories, bludgeons detail" and blinds people with "its spurious shining vision" (9).</p></div>
+      <div class="term"><h3>"Benefit-benefit analysis"</h3><p>Roy's joke: a cost-benefit analysis that leaves the costs out (10, 11).</p></div>
+      <div class="term"><h3>Compensatory Afforestation</h3><p>Planting three times the drowned forest on acquired land; displaces yet more people (7).</p></div>
+      <div class="term"><h3>Shoolpaneshwar Wildlife Sanctuary</h3><p>Expanded to make up for drowned forest; ~40,000 Adivasis to be moved. Conservation as another displacement (7).</p></div>
+      <div class="term"><h3>Kutch and Saurashtra</h3><p>Drought regions at the canal's tail, used as the project's justification; promised 1.8% and 9% coverage (9–10).</p></div>
+      <div class="term"><h3>Narmada Water Disputes Tribunal</h3><p>Set up 1969; award 1979; gave Gujarat 9 MAF; used faulty flow data (6, 10).</p></div>
+      <div class="term"><h3>MAF</h3><p>Million acre feet, a measure of water volume (7, 10).</p></div>
+      <div class="term"><h3>Morse Committee</h3><p>World Bank's Independent Review; found no plans for drinking water. After it, the Bank withdrew (2, 9–11).</p></div>
+      <div class="term"><h3>Bargi Dam</h3><p>First Narmada dam (1990); 10× cost, 114,000 displaced, irrigates 5% of claim (4).</p></div>
+      <div class="term"><h3><i>The Greater Common Good</i></h3><p>Roy's longer Narmada essay; the reason Gujarat sought contempt action (4, 11–12).</p></div>
+      <div class="term"><h3>Dalit and Adivasi</h3><p>About 60% of the displaced, though 15% and 8% of the population. Their "otherness" eases the planners' conscience (5).</p></div>
+      <div class="term"><h3>"Eco-romantic" / "Noble Savage"</h3><p>Labels used against critics of displacement; Roy answers them with questions (7–8).</p></div>
+    </div>
+    <p class="note">The PDF header says "1998", but the text describes events of February to October 1999 and calls itself the Nehru Memorial Lecture. <span class="mem">from memory</span> It was delivered at Cambridge in late 1999 and published in the book <i>The Cost of Living</i> (2000). Safe to write: "Roy's 1999 Nehru Memorial Lecture".</p>
+  </div>
+</section>
+
+<section id="quotes">
+  <div class="wrap">
+    <h2>Quote bank</h2>
+    <p class="lead">Every quote below was checked against your PDF. Short quotes are best in an exam: learn the bold ones.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Quote</th><th>Page</th><th>Use it for</th></tr></thead>
+      <tbody>
+        <tr><td class="q">"They've learned to stop seeing."</td><td><span class="pg">1</span></td><td>Invisibility of the poor; privilege as blindness.</td></tr>
+        <tr><td class="q">"Every day you bear witness to the obscenity. Every day you are reminded that there is no such thing as innocence."</td><td><span class="pg">1</span></td><td>The writer as witness.</td></tr>
+        <tr><td class="q">"a Government's highly evolved, intricate way of pulverising a people behind the genial mask of democracy"</td><td><span class="pg">2</span></td><td>State violence inside democracy.</td></tr>
+        <tr><td class="q">"You keep the noise but lose the music."</td><td><span class="pg">2</span></td><td>Experts split the issue; the writer joins it up.</td></tr>
+        <tr><td class="q">"the valley needed a writer. Not just a writer, a fiction writer"</td><td><span class="pg">2</span></td><td>Role of literature; Ghosh comparison.</td></tr>
+        <tr><td class="q"><b>"the story of the Narmada Valley is nothing less than the story of Modern India"</b></td><td><span class="pg">2</span></td><td>Thesis; development and nation.</td></tr>
+        <tr><td class="q">"Big dams have become an article of faith inextricably linked with nationalism. To question their utility amounts almost to sedition."</td><td><span class="pg">3</span></td><td>Development as ideology.</td></tr>
+        <tr><td class="q">"We must be the only country in the world that builds dams, uproots communities and submerges forests in order to feed rats."</td><td><span class="pg">3</span></td><td>Irony; dams don't solve hunger.</td></tr>
+        <tr><td class="q">"Electricity produced in the name of the poor consumed by the rich with endless appetites."</td><td><span class="pg">3</span></td><td>Unequal benefits.</td></tr>
+        <tr><td class="q"><b>"They don't count as people. Therefore the costs of Big Dams don't count as costs."</b></td><td><span class="pg">4</span></td><td>Core argument; who counts.</td></tr>
+        <tr><td class="q">"there's a lot of money in poverty"</td><td><span class="pg">4</span></td><td>The resettlement industry.</td></tr>
+        <tr><td class="q">"How can you measure Progress if you don't know what it costs and who has paid for it?"</td><td><span class="pg">4</span></td><td>The title's question.</td></tr>
+        <tr><td class="q">"The ethnic 'otherness' of the victims takes some of the strain off the Nation Builders."</td><td><span class="pg">5</span></td><td>Caste and environmental injustice.</td></tr>
+        <tr><td class="q"><b>"When history is written, they won't be in it, not even as statistics."</b></td><td><span class="pg">5</span></td><td>Erasure; slow violence.</td></tr>
+        <tr><td class="q">"Someone has to pay the price for development."</td><td><span class="pg">5</span></td><td>The common view she attacks.</td></tr>
+        <tr><td class="q">"None of this appears on the balance sheet."</td><td><span class="pg">6</span></td><td>Ecological costs hidden.</td></tr>
+        <tr><td class="q">"They don't count as project affected."</td><td><span class="pg">7</span></td><td>Bureaucratic erasure (her refrain).</td></tr>
+        <tr><td class="q">"You give up your homes, your lands, your field, your language, your gods and we'll give you 'development'"</td><td><span class="pg">8</span></td><td>Development as a forced trade.</td></tr>
+        <tr><td class="q">"Instead of a river, they have a hand pump."</td><td><span class="pg">9</span></td><td>Loss of ecological self-sufficiency.</td></tr>
+        <tr><td class="q">"Their livestock was their fixed deposit."</td><td><span class="pg">9</span></td><td>Forest and river as the poor's economy.</td></tr>
+        <tr><td class="q"><b>"This is Fascist Maths. It strangles stories, bludgeons detail"</b></td><td><span class="pg">9</span></td><td>Numbers vs stories; scale.</td></tr>
+        <tr><td class="q">"the government discovered the emotive power of thirst"</td><td><span class="pg">9</span></td><td>Propaganda.</td></tr>
+        <tr><td class="q">"the benefit-benefit analysis, shall we call it?"</td><td><span class="pg">10</span></td><td>Rigged accounting.</td></tr>
+        <tr><td class="q">"there's no excuse for bad art"</td><td><span class="pg">12</span></td><td>Art and politics.</td></tr>
+        <tr><td class="q">"writers need the valley"</td><td><span class="pg">12</span></td><td>The writer's duty.</td></tr>
+        <tr><td class="q"><b>"Acknowledge the price that someone, somewhere far away is paying, in order for us to switch [our] lights on, cool our rooms and run our baths."</b></td><td><span class="pg">12</span></td><td>Distance between consumers and victims; slow violence; Anthropocene.</td></tr>
+        <tr><td class="q">"It would mean a victory for non-violence and the principles of democracy. It would mean that we still have hope."</td><td><span class="pg">12</span></td><td>Roy is not only negative.</td></tr>
+        <tr><td class="q">"we are suffering from what we may call the 'disease of gigantism'" (Nehru, 1958)</td><td><span class="pg">13</span></td><td>Small-scale alternatives.</td></tr>
+        <tr><td class="q"><b>"I would rather be loved by a river valley than by a nation state - any day!"</b></td><td><span class="pg">13</span></td><td>Conclusion; place vs nation.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Your PDF has two typos: "what is must feel like" (p. 1) and "switch out lights on" (p. 12). Quote them as "what it must feel like" and "switch our lights on".</p>
+  </div>
+</section>
+
+<section id="links">
+  <div class="wrap">
+    <h2>Links to other course texts</h2>
+    <p class="lead">Ghosh, <i>River of Stories</i> and <i>The Hungry Tide</i> points are checked against your PDFs. Points marked <span class="mem">from memory</span> are not from a PDF in your folder; check them against your notes.</p>
+    <div class="btnrow"><button id="openAll" type="button">Open all</button><button id="closeAll" type="button">Close all</button></div>
+    <div class="conn">
+      <details class="text" open><summary><h3><i>River of Stories</i> (Orijit Sen)</h3><span class="tag">closest match · same river</span></summary><div class="body">
+        <ul>
+          <li>Same subject: a dam on the Narmada (fictionalised as the Rewa / Rewasagar) and an adivasi movement against it. Roy is the nonfiction version, Sen the graphic-novel version.</li>
+          <li>Roy's "don't count" list matches Relku's story: her family lost its land through the reserve forest, debt and violence before any dam (Sen 16–28). Both show displacement starting long before the reservoir.</li>
+          <li>Roy's "cost-benefit" mockery matches the dam supervisor's "nothing compared to the benefits" (Sen 34) and Anand on "so-called cost-benefit analyses" (Sen 53).</li>
+          <li>Roy wants a writer to "make the separate parts cohere"; Sen does that by braiding myth, Relku's life and Vishnu's journalism.</li>
+        </ul>
+        <p class="use"><b>Difference:</b> Roy argues with national statistics, irony and anger; Sen with myth, images and several voices. Roy says "Fascist Maths... strangles stories" (9); Sen answers with stories.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Amitav Ghosh, <i>The Great Derangement</i></h3><span class="tag">Ghosh names Roy (p. 8)</span></summary><div class="body">
+        <ul>
+          <li>Ghosh: Roy is "passionate and deeply informed" about climate change, "Yet all her writings on these subjects are in various forms of nonfiction" (GD 8). He uses her as proof that the problem with fiction is not a lack of information.</li>
+          <li>Roy partly confirms this: she says the valley needs "a fiction writer", yet what happens is "perhaps too vulgar for fiction" (2). So she uses the <i>craft</i> of fiction inside an essay.</li>
+          <li>Both critique a modernity built on faith in big, regular, planned systems. Roy's "Temples of Modern India" and "gigantism" fit Ghosh's critique of the modern belief in regularity and control.</li>
+        </ul>
+        <p class="use"><b>Argue:</b> Roy shows one answer to Ghosh's problem: the essay can hold numbers, law and anger together, which the realist novel struggles to do. Counterpoint: Ghosh would say the novel still has to change, not hand the job to nonfiction.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Rob Nixon, slow violence</h3><span class="tag">best concept to apply</span></summary><div class="body">
+        <ul>
+          <li><b>Slow violence:</b> harm that is gradual, dispersed and out of sight, unlike spectacular violence. Roy's displaced are harmed not just by the flood but by slow loss: malnutrition, broken communities, slums, repeat displacement (5, 8–9).</li>
+          <li><b>Representation problem:</b> Nixon says such harm is hard to show. Roy's answer: the State won't even count it ("not even as statistics", 5), so the writer must.</li>
+          <li><b>Environmentalism of the poor:</b> the victims are Dalit, Adivasi, fisher folk. Nixon's "developmental refugees" and "unimagined communities" (people left out of the nation's story) fit exactly. <span class="mem">from memory</span> Nixon's book has a chapter on megadams that discusses Roy and the Narmada, and calls figures like her "writer-activists".</li>
+        </ul>
+        <p class="use"><b>Limit:</b> some of Roy's violence is fast and visible (people standing in chest-deep water, 5; children dying in a year, 8). So the dam mixes spectacular and slow violence.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Amitav Ghosh, <i>The Hungry Tide</i></h3><span class="tag">conservation vs people</span></summary><div class="body">
+        <ul>
+          <li>Morichjhapi: refugees evicted so the island can be "saved for its trees... saved for its animals... a project to save tigers". Kusum: "Who are these people, I wondered, who love animals so much that they are willing to kill us for them?" (PDF p. 215).</li>
+          <li>Roy's Shoolpaneshwar Sanctuary (7): conservation used to compensate for a dam pushes out 40,000 Adivasis. Both show <b>conservation and development working together against the poor</b>.</li>
+        </ul>
+        <p class="use"><b>Argue:</b> in both, the State decides which lives count. Roy: "They don't count as project affected." Kusum: "our lives... were worth less than dirt or dust".</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Mahasweta Devi, "Pterodactyl, Puran Sahay and Pirtha"</h3><span class="tag">adivasi, development</span></summary><div class="body">
+        <ul>
+          <li>Both show Adivasi communities harmed by a State that speaks of their welfare. Roy's "for fifty years there have been no roads, no schools, no clinics" (8) fits Pirtha's famine and neglect. <span class="mem">from memory</span></li>
+          <li>Both link ecological loss to memory and sacred places: Roy's drowned "sacred groves and temples and ancient pilgrimage routes" (2–3) and "your gods" (8); the pterodactyl as ancestral soul. <span class="mem">from memory</span></li>
+        </ul>
+        <p class="use"><b>Difference:</b> Devi uses fiction and a mysterious creature to say what statistics cannot; Roy uses statistics to expose what the State hides.</p>
+      </div></details>
+
+      <details class="text"><summary><h3>Amitav Ghosh, <i>Gun Island</i></h3><span class="tag">displacement and migration</span></summary><div class="body">
+        <ul>
+          <li>Roy's displaced end in city slums as "an immense pool of cheap labour" (5); <i>Gun Island</i> follows Bengali migrants moved by environmental change into precarious work abroad. <span class="mem">from memory</span></li>
+          <li>Both show environmental loss turning people into moving, cheap labour.</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Jamieson / Heise, the Anthropocene</h3><span class="tag">who is the "anthropos"?</span></summary><div class="body">
+        <ul>
+          <li>The Anthropocene says "humans" changed the planet. Roy shows the humans are not one group: dams are built by and for "the already wealthy" (1) and paid for by Dalits and Adivasis (5).</li>
+          <li>Her line about lights, cool rooms and baths (12) is an Anthropocene point made at human scale: the consumer and the victim are far apart. Use this to criticise any species-level "we".</li>
+        </ul>
+      </div></details>
+
+      <details class="text"><summary><h3>Coleridge, <i>The Rime of the Ancient Mariner</i></h3><span class="tag">consequences of disrupting nature</span></summary><div class="body">
+        <ul>
+          <li>The Mariner kills the albatross casually and the whole ship pays. Roy: decisions made far away (in courts, banks, Gandhinagar) are paid for by people and ecosystems in the valley. <span class="mem">from memory</span></li>
+          <li>Both stories are about a witness who must keep telling: the Mariner's compulsion to tell, Roy's writer who must say "old and obvious things... over and over again" (1).</li>
+        </ul>
+        <p class="use"><b>Use carefully:</b> a stretch link. Only use it if the question asks for a comparison across the whole course.</p>
+      </div></details>
+    </div>
+  </div>
+</section>
+
+<section id="eval">
+  <div class="wrap">
+    <h2>Strengths and limits</h2>
+    <p class="lead">Most 10-mark questions reward one paragraph of evaluation. Pick two from each side.</p>
+    <div class="two">
+      <div class="box"><h3>Strengths</h3><ul>
+        <li><b>Joins up the pieces:</b> politics, economics, ecology and human suffering in one story, as she promised (2).</li>
+        <li><b>Uses the State's own numbers</b> against it (IIPA study, Planning Commission, Tribunal figures, 90% violations).</li>
+        <li><b>Shows who pays:</b> caste and ethnicity (60% Dalit or Adivasi), region (MP and Maharashtra vs Gujarat), class (sugar mills, golf courses).</li>
+        <li><b>Not anti-development:</b> she offers alternatives (lower dam height, rainwater harvesting, better storage) and quotes Nehru for small projects (11–13).</li>
+        <li><b>Vivid and readable:</b> irony ("feed rats", "benefit-benefit analysis") and images (children "perched like birds") reach readers the experts don't.</li>
+      </ul></div>
+      <div class="box"><h3>Limits</h3><ul>
+        <li><b>Rough estimates:</b> her 33 million is a "back-of-the-envelope calculation" (5). She admits it, but critics can attack it.</li>
+        <li><b>Polemical tone:</b> "Fascist Maths", "monuments to corruption" may persuade allies more than opponents.</li>
+        <li><b>Her own position:</b> a wealthy celebrity speaking for Adivasis; she knows it (1), but the displaced rarely speak in their own words in the essay.</li>
+        <li><b>Little non-human voice:</b> the river, Hilsa, forests appear as losses on a list, not as beings with their own value, unlike <i>River of Stories</i> or <i>The Hungry Tide</i>.</li>
+        <li><b>Mostly one dam:</b> the general case rests on Bargi and Sardar Sarovar; other dams' benefits are not weighed.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="qs">
+  <div class="wrap">
+    <h2>Likely 10-mark questions</h2>
+    <p class="lead">Styled on your midsem: analytical, with "substantiate with evidence from the texts". Each outline is about one page of writing. Use 5 paragraphs: thesis, three evidence paragraphs, evaluation and conclusion.</p>
+    <div class="btnrow"><button id="openQ" type="button">Open all</button><button id="closeQ" type="button">Close all</button></div>
+    <div class="qa">
+
+      <details class="q"><summary><span class="n">Q1</span>"They don't count as people. Therefore the costs of Big Dams don't count as costs." Discuss how Roy exposes the politics of counting and invisibility in "The Cost of Living".</summary><div class="body">
+        <h4>Thesis</h4><p>Roy argues that development looks profitable only because the State refuses to count its victims. Counting is political: who is defined as "project affected" decides whose loss is real.</p>
+        <h4>Evidence</h4><ul>
+          <li>Missing statistics: the State counts vasectomies and cricket losses but not the displaced (4). "How can you measure Progress if you don't know what it costs and who has paid for it?"</li>
+          <li>Her own count: 33 million (5), 60% Dalit or Adivasi. "When history is written, they won't be in it, not even as statistics."</li>
+          <li>The five uncounted groups at Sardar Sarovar (7): canal land, sanctuary, afforestation, fisher folk, 1961 evictees. Refrain: "They don't count as project affected."</li>
+          <li>Shifting figures: displaced families 6,000 → 42,000 vs NBA's 85,000; drinking water villages 0 → 8,215 (7, 9).</li>
+        </ul>
+        <h4>Link and evaluate</h4><p>Nixon: slow violence is harm that is "out of sight" and hard to represent; Roy shows the State makes it invisible on purpose. Limit: her own figure is a "back-of-the-envelope" estimate, but that is her point: no one official has tried.</p>
+        <h4>Conclude</h4><p>For Roy, a true "cost of living" includes the people left off the books. "Fascist Maths... strangles stories" (9); the essay puts the stories back.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q2</span>How does Roy critique the Nehruvian idea of development as nation-building? Is she against development?</summary><div class="body">
+        <h4>Thesis</h4><p>Roy attacks a model of development (big, centralised, nationalist) not development itself. She shows it as faith, not evidence, and offers small, local alternatives.</p>
+        <h4>Evidence</h4><ul>
+          <li>Dams as "Temples of Modern India"; "an article of faith inextricably linked with nationalism. To question their utility amounts almost to sedition" (3).</li>
+          <li>Results don't match: 12% of food, electricity for the rich, Bargi irrigates 5% of claim (3–4).</li>
+          <li>Development as conditional trade: "give up your homes... your gods and we'll give you 'development'" (8). Critics called "eco-romantic" (7).</li>
+          <li>Kargil contrast: protesters "labelled anti-national and anti-development" (5).</li>
+          <li>Alternatives: rainwater harvesting (11), better storage (3), stopping the dam at 88 m (12), Nehru's "disease of gigantism" (13).</li>
+        </ul>
+        <h4>Link</h4><p>Ghosh on modernity's faith in control; <i>River of Stories</i> on the same dam; Anthropocene: whose "progress"?</p>
+        <h4>Conclude</h4><p>She turns Nehru against Nehruvianism: "this speech never made it into the school books" (13). Her final hope is "a victory for non-violence and the principles of democracy" (12).</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q3</span>Ghosh notes that Roy writes about the environment only in nonfiction. Using "The Cost of Living", discuss the role Roy gives to the writer and to art in environmental crisis.</summary><div class="body">
+        <h4>Thesis</h4><p>Roy treats the writer as a witness who joins together what experts break apart. She uses fiction's craft inside nonfiction, which both supports and answers Ghosh's point.</p>
+        <h4>Evidence</h4><ul>
+          <li>The writer's "curse" of seeing: the rich "learned to stop seeing"; the writer must "bear witness to the obscenity" (1).</li>
+          <li>Experts "hi-jacked" the issue; "You keep the noise but lose the music." The valley needs "a fiction writer" to "make the separate parts cohere", though the reality is "perhaps too vulgar for fiction" (2).</li>
+          <li>The court's warning and her answer: obeying "would undermine the dignity of Art"; "writers need the valley"; "reclaim the political arena"; "Matisse and goldfish" is fine, but "lift our eyes from the page" (12).</li>
+          <li>Her craft in action: irony ("feed rats", 3), images (children "perched like birds", 8), repetition ("They don't count", 7).</li>
+        </ul>
+        <h4>Link</h4><p>Ghosh (GD 8): Roy is "passionate and deeply informed" yet writes about it only in nonfiction; he blames the forms of the novel. Nixon's "writer-activist" <span class="mem">from memory</span>. Contrast <i>River of Stories</i>, which does tell the Narmada as fiction.</p>
+        <h4>Evaluate and conclude</h4><p>Roy's choice suggests the essay can hold numbers, law and feeling together. But Ghosh would reply that if serious writers turn to nonfiction, the novel stays deranged. Conclude: for Roy, form matters less than refusing to look away.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q4</span>Compare "The Cost of Living" and <i>River of Stories</i> as representations of the Narmada dam struggle. How does form shape each text's argument?</summary><div class="body">
+        <h4>Thesis</h4><p>Both expose the human and ecological cost of a big dam on the Narmada, but Roy argues through statistics and irony while Sen argues through myth, image and personal story. Each form shows what the other cannot.</p>
+        <h4>Evidence</h4><ul>
+          <li>Same target: Roy's Sardar Sarovar (6–12) and Sen's Rewasagar, a fictionalised version.</li>
+          <li>Roy: numbers (33 million, 60%, 245 villages) and the "don't count" list (7). Sen: Relku's life story, a chain of loss before the dam (Sen 16–28).</li>
+          <li>Roy mocks cost-benefit sums ("benefit-benefit analysis", 10). Sen: "nothing compared to the benefits" (34), "so-called cost-benefit analyses" (53).</li>
+          <li>Roy: "Fascist Maths... strangles stories" (9). Sen restores stories: the adivasi creation myth and river song.</li>
+        </ul>
+        <h4>Evaluate</h4><p>Roy is strong on scale and evidence but the displaced barely speak. Sen gives voice and the non-human (the river) a place but less hard data.</p>
+        <h4>Conclude</h4><p>Read together, they answer Roy's own call for someone to "make the separate parts cohere" (2): numbers and stories together.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q5</span>Discuss "The Cost of Living" as a text about environmental injustice. How does Roy connect ecological loss to caste, class and region?</summary><div class="body">
+        <h4>Thesis</h4><p>Roy shows that environmental harm follows social hierarchy: costs flow down to Dalits, Adivasis and poor states; benefits flow up to cities, cash-crop farmers and elites.</p>
+        <h4>Evidence</h4><ul>
+          <li>Caste: 60% of the displaced are Dalit or Adivasi; their "otherness" eases the "Nation Builders" (5).</li>
+          <li>Class: electricity "consumed by the rich" (3); sugar mills, golf courses, water parks at the head of the canal (10).</li>
+          <li>Region: 245 villages drowned, 19 in Gujarat (6); Mahi and Sabarmati water to "Patel-rich" central Gujarat (9).</li>
+          <li>Ecology as livelihood: forest gave "food, fuel, fodder..."; "Instead of a river, they have a hand pump"; "livestock was their fixed deposit" (9).</li>
+        </ul>
+        <h4>Link</h4><p><i>The Hungry Tide</i>: Morichjhapi refugees "worth less than dirt or dust" (PDF p. 215). <i>Pterodactyl</i>: adivasi neglect <span class="mem">from memory</span>. Nixon's environmentalism of the poor.</p>
+        <h4>Conclude</h4><p>The thought experiment (5–6): if the rich paid, solutions would appear "in a flash". Injustice, not necessity, makes the dam possible.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q6</span>Using Rob Nixon's concept of slow violence, analyse "The Cost of Living". What are the strengths and limits of applying the concept?</summary><div class="body">
+        <h4>Thesis</h4><p>Slow violence explains why the dam's victims are ignored: their harm is spread over years, places and statistics no one keeps. But the essay also shows fast, spectacular violence, so the concept fits only part of it.</p>
+        <h4>Evidence of slow violence</h4><ul>
+          <li>Afterlives of displacement: malnutrition in resettlement sites, "1.2875 people a day" (8); repeat displacement, slums, cheap labour (5).</li>
+          <li>Slow ecological damage: silting, water-logging, salinity, dry estuary (4, 6, 7, 11).</li>
+          <li>Invisibility: no records (4), "not even as statistics" (5); consumers "far away" (12).</li>
+        </ul>
+        <h4>Limits</h4><ul>
+          <li>Spectacular moments: Bargi filled "without warning", people "chased out like rats" (4); chest-deep water (5); "beatings, rape, murder" (8).</li>
+          <li>The cause is a clear decision by a State, not diffuse harm with no author; Roy names people and institutions.</li>
+        </ul>
+        <h4>Conclude</h4><p>The concept is most useful for what happens <i>after</i> the flood and for the problem of representation. Roy's answer to Nixon's challenge is to count, name and narrate.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q7</span>"Conservation and development can both displace the poor." Discuss with reference to "The Cost of Living" and <i>The Hungry Tide</i>.</summary><div class="body">
+        <h4>Thesis</h4><p>In both texts the State protects nature on paper while removing people who live with it. Development drowns the forest; conservation then pushes out the forest-dwellers.</p>
+        <h4>Evidence</h4><ul>
+          <li>Roy: Shoolpaneshwar Sanctuary expanded to compensate for 13,000 ha of drowned forest; ~40,000 Adivasis to leave; Compensatory Afforestation on others' land (7). None count as project affected.</li>
+          <li>Roy: environmental guidelines broken in 90% of projects (6): conservation rules ignored when it suits the State, used when it displaces people.</li>
+          <li><i>Hungry Tide</i>: Morichjhapi cleared for a tiger project "paid for by people from all around the world"; Kusum's question about people who love animals enough "to kill us for them" (PDF p. 215).</li>
+        </ul>
+        <h4>Evaluate</h4><p>Ghosh's novel keeps the tension open (tigers, Piya's conservation, Fokir's knowledge); Roy is clearly on the people's side. Neither rejects nature protection; both reject protection that treats the poor as removable.</p>
+        <h4>Conclude</h4><p>Both ask who decides which lives and landscapes count.</p>
+      </div></details>
+
+      <details class="q"><summary><span class="n">Q8</span>How does Roy persuade? Analyse the rhetorical strategies of "The Cost of Living" and assess their effectiveness.</summary><div class="body">
+        <h4>Thesis</h4><p>Roy combines hard numbers with irony, images and personal voice. This makes a technical issue readable and moving, though the polemical edge can alienate.</p>
+        <h4>Evidence</h4><ul>
+          <li>Personal frame: begins with her fame and wealth (1), ends with "loved by a river valley" (13).</li>
+          <li>Numbers used against the State: IIPA, Planning Commission, Tribunal (5, 10).</li>
+          <li>Irony and coined phrases: "feed rats" (3), "global experts on despair" (4), "benefit-benefit analysis" (10), "Fascist Maths" (9), mock-precise "1.2875 people a day" (8).</li>
+          <li>Repetition: "They don't count as project affected" (7). Rhetorical questions (8). Analogies: breaking up a band (2), "England... France" (8).</li>
+          <li>Ending with Nehru turns the opponent's hero into a witness for her side (13).</li>
+        </ul>
+        <h4>Evaluate</h4><p>Strength: joins the pieces as she promised (2). Limit: rough estimates, strong labels, and the Adivasis are spoken for more than they speak.</p>
+        <h4>Conclude</h4><p>Her method shows the "craft and rigour of writing fiction" (2) applied to fact.</p>
+      </div></details>
+
+    </div>
+  </div>
+</section>
+
+<section id="tips">
+  <div class="wrap">
+    <h2>Exam tips and traps</h2>
+    <ul class="tips">
+      <li><b>Cite correctly:</b> Arundhati Roy, "The Cost of Living", Nehru Memorial Lecture. Your PDF says 1998, but the content is from 1999. Writing "Roy (1999)" is safest; you can add "(dated 1998 in the course reader)".</li>
+      <li><b>Don't confuse</b> the two essays. "The Cost of Living" is this lecture. <i>The Greater Common Good</i> is her longer Narmada essay that she mentions (4, 11–12).</li>
+      <li><b>Don't confuse</b> the dams: Sardar Sarovar (Gujarat, the main subject), Narmada Sagar (MP, its partner), Bargi (MP, first dam, case study), Maheshwar (named once, p. 4).</li>
+      <li><b>Don't say</b> Roy is against all development or all dams. She proposes stopping at 88 m, local water harvesting and small projects (11–13).</li>
+      <li><b>Get the numbers right:</b> 33 million is Roy's estimate; 40 million is Saxena's; 12% is Thakker's; 60% Dalit/Adivasi. Say whose figure it is.</li>
+      <li><b>Always add one ecology point</b>: Roy is mostly about people, so bring in the estuary, Hilsa, forests, silting or the 90% violations (6–7) to keep it "environmental".</li>
+      <li><b>Structure:</b> thesis in two lines, one quote with page number per paragraph, one cross-text link, a counterpoint, and a conclusion that answers the exact question.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">Study guide built from your 13-page PDF of "The Cost of Living" (text-based, read in full). All Roy quotations and page numbers were checked against the PDF. Ghosh (<i>Great Derangement</i> p. 8), <i>River of Stories</i> and <i>The Hungry Tide</i> points come from your PDFs and earlier guides. Items marked "from memory" come from general knowledge, not your files.</div></footer>
+
+<script>
+(function(){
+  function setAll(sel,open){document.querySelectorAll(sel).forEach(function(d){d.open=open;});}
+  document.getElementById('openAll').addEventListener('click',function(){setAll('details.text',true);});
+  document.getElementById('closeAll').addEventListener('click',function(){setAll('details.text',false);});
+  document.getElementById('openQ').addEventListener('click',function(){setAll('details.q',true);});
+  document.getElementById('closeQ').addEventListener('click',function(){setAll('details.q',false);});
+})();
+</script>
